@@ -1,6 +1,6 @@
 <template>
     <div class="home-page">
-        首页滴滴嘀嘀嘀
+        首页滴滴嘀嘀嘀djalksjdl
     </div>
 </template>
 
