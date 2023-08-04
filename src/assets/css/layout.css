@@ -1,0 +1,83 @@
+/* 头部样式开始 */
+#layout-header {
+  position: fixed;
+  width: 100%;
+  z-index: 999;
+  height: 60px !important;
+  background-color: none;
+  color: #fff;
+  overflow: hidden;
+}
+#layout-header:hover {
+  transition: 0.5s;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 导航样式 */
+#el-menu-item {
+  font-size: 15px;
+  color: #fff;
+  margin-left: 30px;
+  font-weight: bolder;
+}
+#el-menu-item:hover {
+  color: chartreuse;
+  background-color: rgba(0, 0, 0, 0) !important;
+}
+/* 导航下划线 */
+.el-menu-item-line {
+  height: 3px;
+  width: 0px;
+}
+#el-menu-item:hover .el-menu-item-line {
+  transition: 0.5s;
+  background-color: chartreuse;
+  width: 100%;
+}
+/* 头像 */
+#user-img {
+  width: 40px;
+  border-radius: 50%;
+  margin-top: -5px;
+}
+/* 头像旋转 */
+#user-img:hover {
+  animation: rotateAnimation 0.5s linear; /* 应用旋转动画 */
+}
+@keyframes rotateAnimation {
+  from {
+    transform: rotate(0deg); /* 从0度开始旋转 */
+  }
+  to {
+    transform: rotate(360deg); /* 旋转一圈，360度 */
+  }
+}
+/* 头部样式结束 */
+
+/* 内容样式 */
+#el-main {
+  height: 1000px;
+}
+
+/* 底部样式 */
+#footer {
+  color: #fff;
+  text-align: center;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
+  /* 线性渐变 */
+  background-image: linear-gradient(45deg, #b3e5fc, #81d4fa, #4fc3f7, #29b6f6, #03a9f4, #039be5, #0288d1);
+  animation: gradientAnimation ease 3s infinite; /* 应用渐变动画 */
+  background-size: 300% 300%;
+}
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
