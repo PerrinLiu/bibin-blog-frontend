@@ -77,4 +77,11 @@ const router = new VueRouter({
     routes
 })
 
+// 在路由切换前执行逻辑（导航守卫 beforeEach）
+router.beforeEach((to, from, next) => {
+  
+    // 继续路由导航
+    next();
+  });
+
 export default router

@@ -3,7 +3,7 @@
         <el-container>
             <transition name="el-zoom-in-center">
                 <el-header v-if="show" id="layout-header">
-                    <h1 class="float-left">Bibin</h1>
+                    <div class="float-left layout-header-left">Bibin</div>
                     <el-menu class="el-menu-demo float-right" active-text-color="none" background-color="rgba(0, 0, 0, 0)"
                         mode="horizontal" router>
                         <el-menu-item id="el-menu-item" index="/"><i class="el-icon-school"></i>首页
@@ -27,7 +27,7 @@
                                     <img id="user-img" src="@/assets/images/defaul.jpg" alt="">
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <span v-if="user">
+                                    <span v-if="user || token != null">
                                         <router-link style="text-decoration: none;" to="/login">
                                             <el-dropdown-item command="a"><i
                                                     class="el-icon-user"></i>个人信息</el-dropdown-item>
@@ -52,12 +52,15 @@
             <el-main id="el-main">
                 <router-view></router-view>
             </el-main>
-            <el-footer id="footer">
-                <div>
-                    刘林培言的个人博客
-                    @刘林培言
-                </div>
-            </el-footer>
+
+            <!-- <el-footer>
+                <span v-if="currentPath !== '/login'">
+                    <div id="footer">
+                        刘林培言的个人博客
+                        @刘林培言
+                    </div>
+                </span>
+            </el-footer> -->
         </el-container>
     </div>
 </template>
@@ -70,7 +73,7 @@ export default {
         return {
             show: true,
             scrollTop: 0,
-
+            token: null,
         }
     },
     mounted() {
@@ -79,28 +82,40 @@ export default {
     computed: {
         user() {
             return this.$store.state.user; // 通过 this.$store.state 访问用户信息
-        }
+        },
+        currentPath() {
+            return this.$route.path; // 通过 $route.path 访问当前路径
+        },
     },
     methods: {
         //监听滚动事件
         handleScroll() {
-            this.scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            if (this.scrollTop > 90) {
+            const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            if (currentScrollTop > this.scrollTop) {
+                // 向下滚动
                 this.show = false;
-            } else {
+            } else{
+                // 向上滚动
                 this.show = true;
             }
+            // 更新上一次的滚动距离
+            this.scrollTop = currentScrollTop;
         },
         logout(command) {
             if (command == 'b') {
-                this.$store.commit('clearUser');
                 userApi.logout().then(response => {
                     if (response.data.retCode == 200) {
                         this.$message({
                             message: "已退出~",
                             type: 'success'
                         });
+                        localStorage.removeItem('token');
+                        this.token = null;
+                        this.$store.commit('clearUser');
                     }
+                }).catch(err => {
+                    localStorage.removeItem('token');
+                    console.log(err);
                 })
             }
         }

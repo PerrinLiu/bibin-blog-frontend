@@ -4,13 +4,20 @@ module.exports = defineConfig({
   devServer:{
     port:8080,
     proxy:{
-      "/api":{
-        target:"http://localhost:10010",
+      "/api/user":{
+        target:"http://localhost:10010/user/user",
         changeOrigin:true,
         pathRewrite:{
-          '^/api':''
+          '^/api/user':''
         }
       },
+      "/api/imageApi":{
+        target:"https://api.lixingyong.com/api/images",
+        changeOrigin:true,
+        pathRewrite:{
+          '^/api/imageApi':''
+        }
+      }
     },
   }
 })

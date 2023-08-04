@@ -1,15 +1,13 @@
 import request from "@/request";
-import axios from "axios";
-axios.defaults.baseURL = "api/user/user"
 
 export default{
     login(data){
-        return request.post('/login',data).then(response=> response )
+        return request.post('/user/login',data).then(response=> response ).catch(err=> err)
     },
     getUser(){
-        return request.get('/getUser').then(response=> response )
+        return request.get('/user/getUser').then(response=> response ).catch(err=> err)
     },
     logout(){
-        return request.get('/logout').then(response=> response )
+        return request.get('/user/logout').then(response=> response ).catch(err=> err)
     }
 }

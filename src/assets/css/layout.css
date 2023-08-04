@@ -4,13 +4,28 @@
   width: 100%;
   z-index: 999;
   height: 60px !important;
-  background-color: none;
   color: #fff;
   overflow: hidden;
+  
 }
 #layout-header:hover {
   transition: 0.5s;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* 网站名称样式 */
+.layout-header-left{
+  position: relative;
+  top: 5px;
+  height: 50px;
+  width: 90px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 1.5rem;
+  line-height: 50px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: bolder;
+  cursor: pointer;
 }
 
 /* 导航样式 */
@@ -56,11 +71,15 @@
 
 /* 内容样式 */
 #el-main {
-  height: 1000px;
+  overflow: hidden;
 }
 
 /* 底部样式 */
 #footer {
+  background-color: #09eec8;
+  position: relative;
+  top: -20px;
+  height: 60px;
   color: #fff;
   text-align: center;
   border-top-left-radius: 1.5rem;
@@ -80,4 +99,16 @@
   100% {
     background-position: 0 50%;
   }
+}
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px; /* 滚动条宽度 */
+  background-color: #f1f1f1; /* 滚动条背景颜色 */
+}
+::-webkit-scrollbar-thumb {
+  background-color: #888888; /* 滚动条滑块颜色 */
+  border-radius: 5px; /* 滚动条滑块圆角 */
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: #09eec8; /* 滚动条滑块hover状态下的颜色 */
 }

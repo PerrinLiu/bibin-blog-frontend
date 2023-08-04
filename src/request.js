@@ -1,5 +1,5 @@
 import axios from "axios";
-
+axios.defaults.baseURL = "api"
 
 axios.interceptors.request.use(config => {
     if (localStorage.getItem('token')) {

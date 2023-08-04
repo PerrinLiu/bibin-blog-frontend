@@ -15,6 +15,14 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
+// 添加全局错误处理器
+Vue.config.errorHandler = function (err, vm, info) {
+  // 在这里处理错误，可以选择是否显示错误信息
+  // 你可以自定义如何处理错误，例如发送错误日志给服务器等
+  // 这里我们简单地不做任何处理，即阻止错误提示显示在页面上
+  console.error('An error occurred:', err, info);
+};
+
 new Vue({
   el:'#app',
   router,

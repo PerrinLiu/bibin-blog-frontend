@@ -1,7 +1,74 @@
-.float-left{
-    float: left;
+.float-left {
+  float: left;
 }
 
-.float-right{
-    float: right;
+.float-right {
+  float: right;
+}
+.div-with-lines {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 1%,
+    #ccc 5%,
+    #ccc 1%,
+    transparent 12%
+  );
+  background-size: 100% 6px;
+  padding: 10px;
+}
+
+.backgroundImg {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  text-align: center;
+}
+.backgroundImg-text {
+  position: fixed;
+  top: 300px;
+  left: 42%;
+  color: #000;
+  font-size: 70px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: bolder;
+  transition: 0.5s;
+  cursor: pointer;
+
+}
+.backgroundImg-text:hover {
+  transform: scale(1.5);
+  background: linear-gradient(45deg,#fdfdfd, #ff00ff, #00ffff, #ff0000, #00ff00 , #000);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-size: 50% 200%;
+  animation: colorChange 2s linear infinite;
+}
+/* 定义动画效果 */
+@keyframes colorChange {
+  0% {
+    background-position: 0%;
+  }
+  25%{
+    background-position: 25%;
+  }
+  50% {
+    background-position: 0%;
+  }
+  75%{
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
 }
