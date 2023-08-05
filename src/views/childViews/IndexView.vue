@@ -9,7 +9,7 @@
         </transition>
 
         <div class="field">
-            下滑页
+            下滑
             <el-button @click="getImg()">获取图片</el-button>
         </div>
 
@@ -18,12 +18,14 @@
 
 <script>
 import userApi from '@/api/userApi'
-import ImgApi from '@/api/ImgApi'
+import ImgApi from '@/api/backgroundApi'
 export default {
     data() {
         return {
             userImg: '',
-            showImg: false
+            showImg: false,
+            changeImg : true,
+            token: null,
         }
     },
     methods: {
@@ -41,6 +43,8 @@ export default {
     },
     mounted() {
         this.getImg();
+        this.token = localStorage.getItem('token');
+        console.log("index:"+this.token);
         this.showImg = true;
     }
 }

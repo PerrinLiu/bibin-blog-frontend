@@ -12,7 +12,7 @@
   color: #ccc;
 }
 body{
-  background-color: #2c3e50;
+  background-color: #83baf1;
   margin: 0;
   padding: 0;
   height: auto;

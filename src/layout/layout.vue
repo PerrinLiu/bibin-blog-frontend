@@ -24,10 +24,15 @@
                         <el-menu-item id="el-menu-item">
                             <el-dropdown placement="bottom" @command="logout">
                                 <span class="el-dropdown-link">
-                                    <img id="user-img" src="@/assets/images/defaul.jpg" alt="">
+                                    <span v-if="user||token!=null">
+                                        <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
+                                    </span>
+                                    <span v-else>
+                                        <img width="40px" height="40px" id="user-img" src="https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/userImg/2023-08/defaul.jpg" alt="">
+                                    </span>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <span v-if="user || token != null">
+                                    <span v-if="user||token != null">
                                         <router-link style="text-decoration: none;" to="/login">
                                             <el-dropdown-item command="a"><i
                                                     class="el-icon-user"></i>个人信息</el-dropdown-item>
@@ -50,7 +55,7 @@
             </transition>
 
             <el-main id="el-main">
-                <router-view></router-view>
+                <router-view ref="childRef"></router-view>
             </el-main>
 
             <!-- <el-footer>
@@ -77,7 +82,8 @@ export default {
         }
     },
     mounted() {
-        window.addEventListener('scroll', this.handleScroll)
+        window.addEventListener('scroll', this.handleScroll);
+        this.token = localStorage.getItem('token');
     },
     computed: {
         user() {
@@ -118,7 +124,21 @@ export default {
                     console.log(err);
                 })
             }
-        }
+        },
+        getUser() {
+            userApi.getUser().then(response => {
+                this.userInfo = response.data.data;
+                this.userInfo.userId = response.data.data.userId;
+                // 将 this.userInfo 深拷贝到 this.userOld
+                this.userOld = JSON.parse(JSON.stringify(this.userInfo));
+                // 登录成功后得到用户信息 user
+                this.$store.commit('setUser', response.data.data);
+            }).catch(err => {
+                this.token = null;
+                localStorage.removeItem('token');
+                console.log(err);
+            })
+        },
     },
     beforeDestroy() {
         window.removeEventListener('scroll', this.handleScroll)

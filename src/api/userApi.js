@@ -15,5 +15,8 @@ export default{
     },
     register(data){
         return request.post('/user/register',data).then(response=> response ).catch(err=> err)
+    },
+    updateUserImg(data){
+        return request.post('/user/updateUserImg',data).then(response=> response ).catch(err=> err)
     }
 }

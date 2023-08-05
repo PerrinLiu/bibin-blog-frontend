@@ -1,5 +1,6 @@
 <template>
     <transition name="el-zoom-in-center">
+
         <div v-show="login_show" class="login-page">
             <div class="div-with-lines">
             </div>
@@ -8,7 +9,15 @@
             <span v-if="token != null">
                 <div class="isLogin">
                     <div class="isLogin-left">
-                        <span class="isLogin-userImg"><img src="@/assets/images/defaul.jpg" alt=""></span>
+                        <span class="isLogin-userImg">
+                            <el-upload class="avatar-uploader" action="/api/user/updateUserImg" :show-file-list="false"
+                                :headers="uploadHeaders" :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                                <img :src="userInfo.userImg">
+                                <div class="imgHover" >更换图片</div>
+                            </el-upload>
+                            
+                        </span>
                         <el-form class="login-from" v-model="userInfo" label-width="80px">
                             <el-form-item label="昵称：">
                                 <el-input v-model="userInfo.nickname"></el-input>
@@ -152,6 +161,10 @@ import userApi from '@/api/userApi';
 export default {
     data() {
         return {
+            uploadHeaders: {
+                // 在这里添加您的请求头信息
+                'x-token': JSON.parse(localStorage.getItem('token'))
+            },
             userQuery: {
                 username: "",
                 password: "",
@@ -208,7 +221,6 @@ export default {
             userApi.getUser().then(response => {
                 this.userInfo = response.data.data;
                 this.userInfo.userId = response.data.data.userId;
-                console.log(response.data.data.userId);
                 // 将 this.userInfo 深拷贝到 this.userOld
                 this.userOld = JSON.parse(JSON.stringify(this.userInfo));
                 // 登录成功后得到用户信息 user
@@ -269,7 +281,7 @@ export default {
                         type: 'success',
                         duration: 1000
                     });
-                }else{
+                } else {
                     this.$message({
                         message: response.data.message,
                         type: 'warning',
@@ -279,6 +291,29 @@ export default {
             }).catch(err => {
                 console.log(err);
             })
+        },
+        updateUserImg(file) {
+            console.log(file);
+            userApi.updateUserImg().then(response => {
+                console.log(response.data);
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        handleAvatarSuccess() {
+            this.getUser();
+        },
+        beforeAvatarUpload(file) {
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+
+            if (!isJPG) {
+                this.$message.error('上传头像图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传头像图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
         }
     }
 }
@@ -300,4 +335,5 @@ export default {
 .el-zoom-in-bottom-leave-active {
     transition: 0.8s;
     /* 使用CSS过渡属性来定义动画效果 */
-}</style>
+}
+</style>
