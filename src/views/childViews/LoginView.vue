@@ -1,32 +1,74 @@
 <template>
     <transition name="el-zoom-in-center">
         <div v-show="login_show" class="login-page">
+            <div class="div-with-lines">
+            </div>
+            <div class="backgroundImg">
+            </div>
             <span v-if="token != null">
                 <div class="isLogin">
-                    <span class="isLogin-userImg"><img src="@/assets/images/defaul.jpg" alt=""></span>
-                    <el-form class="login-from" v-model="user" label-width="80px">
-                        <el-form-item label="昵称：">
-                            <el-input v-model="user.nickname"></el-input>
-                        </el-form-item>
-                        <el-form-item label="用户名：">
-                            {{ user.username }}
-                        </el-form-item>
-                        <el-form-item label="邮箱：">
-                            {{ user.email }}
-                        </el-form-item>
-                        <el-form-item label="城市：">
-                            <el-input v-model="user.city"></el-input>
-                        </el-form-item>
-                        <el-form-item label="性别：">
-                            <el-radio-group v-model="user.gender">
-                                <el-radio label="男"></el-radio>
-                                <el-radio label="女"></el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button class="noLogin-left-btn2" type="primary" @click="update()">提交</el-button>
-                        </el-form-item>
-                    </el-form>
+                    <div class="isLogin-left">
+                        <span class="isLogin-userImg"><img src="@/assets/images/defaul.jpg" alt=""></span>
+                        <el-form class="login-from" v-model="userInfo" label-width="80px">
+                            <el-form-item label="昵称：">
+                                <el-input v-model="userInfo.nickname"></el-input>
+                            </el-form-item>
+                            <el-form-item label="用户名：">
+                                {{ userInfo.username }}
+                            </el-form-item>
+                            <el-form-item label="邮箱：">
+                                <span v-if="changeEmail">
+                                    {{ userInfo.email }}
+                                </span>
+                                <span v-else>
+                                    <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
+                                </span>
+                                &nbsp;&nbsp;
+                                <span v-if="changeEmail">
+                                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit"
+                                        circle>
+                                    </el-button>
+                                </span>
+                                <span v-else>
+                                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check"
+                                        circle>
+                                    </el-button>
+                                </span>
+                            </el-form-item>
+                            <el-form-item label="城市：">
+                                <span v-if="changeCity">
+                                    {{ userInfo.city }}
+                                </span>
+                                <span v-else>
+                                    <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
+                                </span>
+                                &nbsp;&nbsp;
+                                <span v-if="changeCity">
+                                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit"
+                                        circle>
+                                    </el-button>
+                                </span>
+                                <span v-else>
+                                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check"
+                                        circle>
+                                    </el-button>
+                                </span>
+                            </el-form-item>
+                            <el-form-item label="性别：">
+                                <el-radio-group v-model="userInfo.gender">
+                                    <el-radio label="男"></el-radio>
+                                    <el-radio label="女"></el-radio>
+                                </el-radio-group>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button style="position: relative; left: 30%;" class="noLogin-left-btn2" type="primary"
+                                    @click="update()">提交</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </div>
+                    <div class="isLogin-right">
+                        123
+                    </div>
                 </div>
             </span>
             <span v-else>
@@ -38,7 +80,8 @@
                                     <el-input v-model="userQuery.username" type="text" placeholder="用户名"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-input v-model="userQuery.password" type="password" placeholder="密码"></el-input>
+                                    <el-input v-model="userQuery.password" type="password" placeholder="密码"
+                                        show-password></el-input>
                                 </el-form-item>
                                 <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
                                 <el-form-item>
@@ -63,7 +106,7 @@
 
                 <div class="noRegister" v-show="show1">
                     <transition name="el-zoom-in-bottom">
-                        <div v-show="show1" class="register-left" style="background-color: rgba(13, 117, 236, 0.9);">
+                        <div v-show="show1" class="register-left" style="background-color: rgba(13, 117, 236, 1);">
                             <div class="noLogin-right-reg">
                                 <h1>已有账号？</h1>
                                 <br><br><br>
@@ -75,15 +118,22 @@
                         </div>
                     </transition>
                     <transition name="el-zoom-in-center">
-                        <div v-show="show1" class="register-right" style="background-color: rgba(249, 250, 248, 0.9);">
-                            <el-form v-model="userQuery" class="noLogin-left-from">
+                        <div v-show="show1" class="register-right" style="background-color: rgba(249, 250, 248, 1);">
+                            <el-form v-model="userRegister" class="noLogin-right-from">
                                 <el-form-item>
-                                    <el-input v-model="userQuery.username" type="text" placeholder="用户名"></el-input>
+                                    <el-input v-model="userRegister.username" type="text" placeholder="用户名"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-input v-model="userQuery.password" type="password" placeholder="密码"></el-input>
+                                    <el-input v-model="userRegister.nickname" type="text" placeholder="昵称"></el-input>
                                 </el-form-item>
-                                <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
+                                <el-form-item>
+                                    <el-input v-model="userRegister.password" type="password" show-password
+                                        autocomplete="new-password" placeholder="密码"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-input v-model="userRegister.rPassword" type="password" show-password
+                                        autocomplete="new-password" placeholder="验证密码"></el-input>
+                                </el-form-item>
                                 <el-form-item>
                                     <el-button class="noLogin-left-btn2" type="primary" @click="register()">注册</el-button>
                                 </el-form-item>
@@ -106,15 +156,20 @@ export default {
                 username: "",
                 password: "",
             },
+            userRegister: {
+                username: "",
+                password: "",
+                rPassword: "",
+                nickname: "",
+            },
+            changeEmail: true,
+            changeCity: true,
             show2: true,
             show1: false,
             token: null,
-            login_show:false
-        }
-    },
-    computed: {
-        user() {
-            return this.$store.state.user; // 通过 this.$store.state 访问用户信息
+            login_show: false,
+            userInfo: {},
+            userOld: {},
         }
     },
     created() {
@@ -123,7 +178,7 @@ export default {
             this.getUser();
         }
     },
-    mounted(){
+    mounted() {
         this.login_show = true;
     },
     methods: {
@@ -144,27 +199,94 @@ export default {
                         type: 'warning'
                     });
                 }
-            }).catch(err => {
-                console.log(err);
             })
+                .catch(err => {
+                    console.log(err);
+                })
         },
         getUser() {
             userApi.getUser().then(response => {
                 this.userInfo = response.data.data;
-                // 假设登录成功后得到用户信息 user
-                this.$store.commit('setUser', this.userInfo);
+                this.userInfo.userId = response.data.data.userId;
+                console.log(response.data.data.userId);
+                // 将 this.userInfo 深拷贝到 this.userOld
+                this.userOld = JSON.parse(JSON.stringify(this.userInfo));
+                // 登录成功后得到用户信息 user
+                this.$store.commit('setUser', response.data.data);
             }).catch(err => {
                 this.token = null;
                 localStorage.removeItem('token');
                 console.log(err);
             })
         },
+        update() {
+            //判断是否修改过
+            let flag = false;
+            for (let key in this.userInfo) {
+                if (this.userInfo[key] != this.userOld[key]) {
+                    flag = true;
+                }
+            }
+            //如果没修改过则不发起请求
+            if (!flag) {
+                this.$message({
+                    message: "您的信息并没有变动",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            userApi.updateUser(this.userInfo).then(response => {
+                this.$message({
+                    message: response.data.data,
+                    type: 'success',
+                    duration: 1000
+                });
+                this.getUser();
+                this.userOld = JSON.parse(JSON.stringify(this.userInfo));
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        register() {
+            if (this.userRegister.password != this.userRegister.rPassword) {
+                this.$message({
+                    message: "密码不一致",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            let userRegister = {
+                username: this.userRegister.username,
+                password: this.userRegister.password,
+                nickname: this.userRegister.nickname,
+            };
+            userApi.register(userRegister).then(response => {
+                if (response.data.retCode == 200) {
+                    this.$message({
+                        message: response.data.message,
+                        type: 'success',
+                        duration: 1000
+                    });
+                }else{
+                    this.$message({
+                        message: response.data.message,
+                        type: 'warning',
+                        duration: 1000
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        }
     }
 }
 </script>
 
 <style scoped>
 @import '@/assets/css/login.css';
+
 /* 背景展示动画 */
 .el-zoom-in-center-enter-active,
 .el-zoom-in-center-leave-active {
@@ -172,9 +294,10 @@ export default {
 }
 
 /* 登录页展示动画 */
-.el-zoom-in-center-enter-active, .el-zoom-in-center-leave-active,
-.el-zoom-in-top-enter-active, .el-zoom-in-top-leave-active,
-.el-zoom-in-bottom-enter-active, .el-zoom-in-bottom-leave-active {
-  transition: 0.8s; /* 使用CSS过渡属性来定义动画效果 */
-}
-</style>
+.el-zoom-in-top-enter-active,
+.el-zoom-in-top-leave-active,
+.el-zoom-in-bottom-enter-active,
+.el-zoom-in-bottom-leave-active {
+    transition: 0.8s;
+    /* 使用CSS过渡属性来定义动画效果 */
+}</style>

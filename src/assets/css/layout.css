@@ -6,6 +6,7 @@
   height: 60px !important;
   color: #fff;
   overflow: hidden;
+  background-color: rgba(0, 0, 0, 0.6);
   
 }
 #layout-header:hover {

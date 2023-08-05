@@ -38,6 +38,28 @@ export default {
                 })
         })
     },
+    delete(url, data = {}, config = {}) {
+        return new Promise((resolve, reject) => {
+            axios.delete(url, data, config)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
+    },
+    put(url, data = {}, config = {}) {
+        return new Promise((resolve, reject) => {
+            axios.put(url, data, config)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        })
+    },
 
 };
 

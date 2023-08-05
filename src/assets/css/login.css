@@ -1,11 +1,13 @@
 .login-page {
-    position: absolute;
+    position: fixed;
     height: 100vh;
     width: 100vw;
     background-image: url('http://view.lixingyong.com/images/2023/04/05/wallhaven-l35jjp.jpeg');
     background-size: cover;
     top: 0;
     left: 0;
+    z-index: 100;
+    z-index: -1;
 }
 
 /* 登录前样式 */
@@ -29,13 +31,17 @@
     border-bottom-left-radius: 1rem;
     border-right: 1px solid #ccc;
     z-index: 1000;
-    background-color: rgba(249, 250, 248, 0.9);
+    background-color: rgba(249, 250, 248, 1);
     position: relative;
 }
 
 .noLogin-left-from {
     width: 90%;
     margin: 48% auto;
+}
+.noLogin-right-from {
+    width: 90%;
+    margin: 18% auto;
 }
 
 .noLogin-left-btn1 {
@@ -59,7 +65,7 @@
     height: 100%;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-    background-color: rgba(13, 117, 236, 0.9);
+    background-color: rgba(13, 117, 236, 1);
     position: relative;
 }
 
@@ -79,24 +85,46 @@
 /* 登录后的样式 */
 .isLogin {
     position: relative;
-    width: 60vw;
+    width: 70vw;
     height: 700px;
-    left: 20%;
+    left: 15%;
     top: 10%;
     border-radius: 1rem;
-    background-color: rgba(245, 245, 245, 0.9);
+    background-color: #ffffff;
     color: black;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, .5), -4px -4px 6px rgba(0, 0, 0, .5), 4px 4px 6px rgba(0, 0, 0, .5), 4px 4px 6px rgba(0, 0, 0, .5);
 }
 
-.isLogin-userImg img {
+.isLogin-left{
+    position: inherit;
+    top: 5%;
+    width: 49.5%;
+    height: 100%;
+    float: left;
+}
+.isLogin-left img {
     position: relative;
-    width: 6vw;
-    height: 6vw;
-    left: 28dvw;
-    top: 3vh;
+    width: 80px;
+    height: 80px;
+    left: 46%;
     cursor: pointer;
     border-radius: 5rem;
+}
+.isLogin-left .login-from{
+    position: relative;
+    width: 80%;
+    left: 10%;
+    top: 5%;
+}
+
+.isLogin-right{
+    height: 100%;
+    border-left: 1px solid #ccc;
+    width: 50%;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    background-color: #f7f7f8;
+    float:right;
 }
 
 /* 头像旋转 */
@@ -115,11 +143,4 @@
         transform: rotate(360deg);
         /* 旋转一圈，360度 */
     }
-}
-
-.login-from {
-    position: relative;
-    top: 10%;
-    left: 20%;
-    width: 60%;
 }
