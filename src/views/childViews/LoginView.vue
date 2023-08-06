@@ -14,9 +14,9 @@
                                 :headers="uploadHeaders" :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
                                 <img :src="userInfo.userImg">
-                                <div class="imgHover" >更换图片</div>
+                                <div class="imgHover">更换图片</div>
                             </el-upload>
-                            
+
                         </span>
                         <el-form class="login-from" v-model="userInfo" label-width="80px">
                             <el-form-item label="昵称：">
@@ -76,7 +76,54 @@
                         </el-form>
                     </div>
                     <div class="isLogin-right">
-                        123
+                        <div class="isLogin-right-top">
+                            <div class="isLogin-right-top-top" style="border-top-right-radius: 1rem;">
+                                <h3>我的照片</h3>
+                            </div>
+                            <!-- 照片，分为一组一组 -->
+                            <div style="height:85%;overflow-y: scroll;">
+                                <span v-if="userPhoto == null">
+                                    <el-empty description="没有任何照片~"></el-empty>
+                                </span>
+                                <span v-else>
+                                    <el-row>
+                                        <el-col style="height: 140px;width: 100px;" v-for="(o, index) in 10" :key="o"
+                                            :offset="index > 0 ? 3 : 3">
+                                            <el-card :body-style="{ padding: '0px' }"
+                                                style="margin:10px -30px;height:120px;">
+                                                <img width="100%"
+                                                    src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                                                    class="image">
+                                            </el-card>
+                                            <div class="el-card-hover">
+                                                <span class="el-card-hover-span">
+                                                    <span style="font-size: 16px;font-weight: 800;">照片</span>
+                                                </span>
+                                            </div>
+                                        </el-col>
+                                    </el-row>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="isLogin-right-bottom">
+                            <div class="isLogin-right-top-top">
+                                <h3>我的日记</h3>
+                            </div>
+                            <!-- 日记 -->
+                            <div style="height:85%;overflow-y: scroll;">
+                                <span v-if="userDiary == null">
+                                    <el-empty description="你还没写过日记~"></el-empty>
+                                </span>
+                                <span v-else>
+                                    <el-card style="width: 90%;margin: 10px 2%;" v-for="o in 10" :key="o">
+                                        <div>
+                                            {{ o }}
+                                        </div>
+                                    </el-card>
+                                </span>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </span>
@@ -183,13 +230,13 @@ export default {
             login_show: false,
             userInfo: {},
             userOld: {},
+            userPhoto:null,
+            userDiary:null,
         }
     },
     created() {
         this.token = localStorage.getItem('token');
-        if (this.token != null) {
-            this.getUser();
-        }
+        this.userInfo = this.$store.state.user;
     },
     mounted() {
         this.login_show = true;
@@ -212,10 +259,13 @@ export default {
                         type: 'warning'
                     });
                 }
+            }).catch(err => {
+                console.log(err);
+                this.$message({
+                    message: "服务端未启动",
+                    type: 'warning'
+                });
             })
-                .catch(err => {
-                    console.log(err);
-                })
         },
         getUser() {
             userApi.getUser().then(response => {

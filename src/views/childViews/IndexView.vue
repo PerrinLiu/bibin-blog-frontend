@@ -8,7 +8,23 @@
             </div>
         </transition>
 
-        <div class="field">
+
+        <div class="content">
+            <!-- 波浪 -->
+            <div class="wave">
+                <div style="width: 200%;height:100%;position: absolute;top: 20px;">
+                    <div v-for="i in 20" :key="i" class="wave1">
+                    </div>
+                </div>
+
+                <div style="width: 200%;height:100%;position: absolute;">
+                    <div v-for="i in 20" :key="i" class="wave2">
+                    </div>
+                </div>
+            </div>
+            <div class="wave-next">
+                <i class="el-icon-arrow-down"></i>
+            </div>
             下滑
             <el-button @click="getImg()">获取图片</el-button>
         </div>
@@ -24,8 +40,9 @@ export default {
         return {
             userImg: '',
             showImg: false,
-            changeImg : true,
+            changeImg: true,
             token: null,
+            waveHeight: 55, // 初始波浪高度
         }
     },
     methods: {
@@ -44,28 +61,101 @@ export default {
     mounted() {
         this.getImg();
         this.token = localStorage.getItem('token');
-        console.log("index:"+this.token);
+        console.log("index:" + this.token);
         this.showImg = true;
     }
 }
 </script>
 
 <style scoped>
-
-
-.field {
-    position: relative;
-    margin-top: 90vh;
-    height: 160vh;
-    width: 100vw;
-    left: -20px;
-    bottom: -20px;
-    background-size: cover;
-    background-image: url('@/assets/images/login.jpg');
-}
-
 .el-zoom-in-top-enter-active,
 .el-zoom-in-top-leave-active {
     transition: transform 1.2s;
+}
+
+.wave {
+    position: absolute;
+    height: 100px;
+    width: 100vw;
+    top: -100px;
+    overflow: hidden;
+}
+
+.wave:hover {
+    transition: 0.3s;
+    background-color: rgba(14, 13, 13, 0.5);
+}
+
+.wave-next {
+    position: absolute;
+    top: -80px;
+    width: 40px;
+    left: 50%;
+    text-align: center;
+    color: black;
+    font-size: 45px;
+    font-weight: 900;
+    cursor: pointer;
+    animation: waveNext 3.5s linear infinite;
+}
+
+@keyframes waveNext {
+    0% {
+        transform: translateY(10px);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(10px);
+    }
+}
+.wave1,
+.wave2 {
+    float: left;
+    top: 15px;
+    height: 200px;
+    width: 150px;
+    border-radius: 50%;
+
+}
+
+.wave1 {
+    background-color: rgba(255, 255, 255, 0.9);
+    animation: waveAnimation 3.5s linear infinite;
+}
+
+.wave2 {
+    position: relative;
+    left: -85px;
+    background-color: rgba(250, 250, 250, 0.4);
+    animation: waveAnimation 2s linear infinite;
+}
+
+@keyframes waveAnimation {
+    0% {
+        transform: translateX(0) translateY(5px) rotate(5deg);
+        /* 调整波浪的高度 */
+    }
+
+    25% {
+        transform: translateX(-30%) translateY(5px) rotate(45deg);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-5px) rotate(90deg);
+        /* 调整波浪的高度 */
+    }
+
+    75% {
+        transform: translateX(-75%) translateY(0px) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(-100%) translateY(3px) rotate(5deg);
+        ;
+        /* 调整波浪的高度 */
+    }
 }
 </style>

@@ -1,10 +1,17 @@
 <template>
     <div class="photo-page">
-        <div class="div-with-lines">
-        </div>
-        PHOTO
         <div class="backgroundImg">
-            <h1>照片~</h1>
+            <transition name="el-zoom-in-top">
+                <div v-show="showImg" class="backgroundImg"
+                    style="position: inherit;top:-350px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/4.jpg')">
+                </div>
+            </transition>
+            <h1 class="backgroundImg-text" style="top: 15vh;left: 44vw;color: aliceblue;">照片墙</h1>
+        </div>
+
+        <div class="content" style="margin-top: 50vh;">
+            下滑
+            <el-button @click="getImg()">获取图片</el-button>
         </div>
     </div>
 </template>
@@ -13,11 +20,18 @@
 export default {
     data() {
         return {
-            
+            showImg: false
         }
     },
+    mounted(){
+        this.showImg = true;
+    }
 }
 </script>
 
 <style scoped>
+.el-zoom-in-top-enter-active,
+.el-zoom-in-top-leave-active {
+    transition: transform 1.2s;
+}
 </style>

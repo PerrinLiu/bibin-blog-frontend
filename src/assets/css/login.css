@@ -96,7 +96,6 @@
     4px 4px 6px rgba(0, 0, 0, 0.5), 4px 4px 6px rgba(0, 0, 0, 0.5);
 }
 
-
 .isLogin-left {
   position: inherit;
   top: 7%;
@@ -105,53 +104,44 @@
   float: left;
 }
 
-.isLogin-left .avatar-uploader,.imgHover {
-    position: relative;
-    width: 80px;
-    height: 80px;
-    left: 46%;
-    cursor: pointer;
-    border-radius: 5rem;
+.isLogin-left .avatar-uploader,
+.imgHover {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  left: 45%;
+  cursor: pointer;
+  border-radius: 5rem;
 }
 
-.imgHover{
-    position:absolute;
-    top: 1px;
-    left: 1px;
-    color: #f7f7f8;
-    line-height: 80px;
-    background: rgba(0, 0, 0, 0.0);
-    z-index: -1;
+.imgHover {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  color: #b1b1b1;
+  line-height: 90px;
+  background: rgba(0, 0, 0, 0);
+  z-index: -1;
 }
 
 .isLogin-left img {
   position: relative;
-  width: 80px;
-  height: 80px;
-  border:1px solid #6d2626;
+  width: 90px;
+  height: 90px;
+  border: 1px solid #6d2626;
   cursor: pointer;
   border-radius: 5rem;
 }
-.avatar-uploader:hover .imgHover{
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-    transition:1s;
+.avatar-uploader:hover .imgHover {
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+  transition: 1s;
 }
 .isLogin-left .login-from {
   position: relative;
   width: 80%;
   left: 10%;
   top: 5%;
-}
-
-.isLogin-right {
-  height: 100%;
-  border-left: 1px solid #ccc;
-  width: 50%;
-  border-top-right-radius: 1rem;
-  border-bottom-right-radius: 1rem;
-  background-color: #f7f7f8;
-  float: right;
 }
 
 /* 头像旋转 */
@@ -170,4 +160,63 @@
     transform: rotate(360deg);
     /* 旋转一圈，360度 */
   }
+}
+
+.isLogin-right {
+  float: right;
+  width: 50%;
+  height: 100%;
+  color: #181818;
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.5);
+  background-color: #ffffff;
+}
+
+.isLogin-right-top,
+.isLogin-right-bottom {
+  margin-top: -20px;
+  height: 50%;
+}
+.isLogin-right-top-top {
+  position: relative;
+  top: 1px;
+  left: 0px;
+  height: 40px;
+  line-height: 40px;
+  background-color: rgb(255, 255, 255);
+  box-shadow: 2px 0px 2px rgba(0, 0, 0, 0.5);
+}
+.isLogin-right-top-top h3 {
+  margin-left: 5px;
+}
+.isLogin-right-top-top:hover {
+  transition: 0.5s;
+  background-color: #bdbdbd;
+}
+
+/* 我的照片样式 */
+.el-card-hover {
+  position: relative;
+  top: -131px;
+  height: 120px;
+  margin: 10px -30px;
+  color: rgba(0, 0, 0, 0.8);
+  cursor: pointer;
+}
+
+.el-card-hover-span {
+  position: absolute;
+  bottom: 15px;
+  right: 10px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.el-card-hover:hover {
+  background: rgba(0, 0, 0, 0.6);
+  color: #eeb517;
+  transition: 0.5s;
+}
+.el-card-hover:hover .el-card-hover-span{
+  background: rgba(0, 0, 0, 0);
 }

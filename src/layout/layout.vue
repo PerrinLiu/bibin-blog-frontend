@@ -27,8 +27,9 @@
                                     <span v-if="user||token!=null">
                                         <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
                                     </span>
+                                    <!-- 还没登录时，显示默认头像 -->
                                     <span v-else>
-                                        <img width="40px" height="40px" id="user-img" src="https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/userImg/2023-08/defaul.jpg" alt="">
+                                        <img width="40px" height="40px" id="user-img" src="@/assets/images/defaul.jpg" alt="">
                                     </span>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
@@ -84,6 +85,9 @@ export default {
     mounted() {
         window.addEventListener('scroll', this.handleScroll);
         this.token = localStorage.getItem('token');
+        if(this.token!=null && this.$route.path !='/login'){
+            this.getUser();
+        }
     },
     computed: {
         user() {
