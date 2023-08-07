@@ -47,11 +47,11 @@
 }
 .backgroundImg-text:hover {
   transform: scale(1.5);
-  background: linear-gradient(45deg,#fdfdfd, #ff00ff, #00ffff, #ff0000, #00ff00 , #000);
+  background: linear-gradient(90deg,#fdfdfd, #ff00ff, #00ffff, #ff0000, #00ff00 , #000);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
-  background-size: 50% 200%;
+  background-size: 200% 200%;
   animation: colorChange 2s linear infinite;
 }
 /* 定义动画效果 */
@@ -77,7 +77,7 @@
 .content {
   position: relative;
   margin-top: 96vh;
-  height: 160vh;
+  height: auto;
   width: 100vw;
   left: -20px;
   bottom: -20px;
