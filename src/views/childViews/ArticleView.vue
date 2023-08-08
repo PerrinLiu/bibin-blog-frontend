@@ -3,7 +3,7 @@
         <div class="backgroundImg">
             <transition name="el-zoom-in-top">
                 <div v-show="showImg" class="backgroundImg"
-                    style="position: inherit;top:-280px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF10.webp')">
+                    style="position: inherit;height:900px;top:-200px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF10.webp')">
                 </div>
             </transition>
             <h1 class="backgroundImg-text" style="top: 15vh;left: 46vw;color: aliceblue;">文章</h1>

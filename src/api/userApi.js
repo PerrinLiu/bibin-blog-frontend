@@ -2,21 +2,21 @@ import request from "@/request";
 
 export default{
     login(data){
-        return request.post('/user/login',data).then(response=> response ).catch(err=> err)
+        return request.post('/user/login',data)
     },
     getUser(){
-        return request.get('/user/getUser').then(response=> response ).catch(err=> err)
+        return request.get('/user/getUser')
     },
     logout(){
-        return request.get('/user/logout').then(response=> response ).catch(err=> err)
+        return request.get('/user/logout')
     },
     updateUser(data){
-        return request.put('/user/updateUser',data).then(response=> response ).catch(err=> err)
+        return request.put('/user/updateUser',data)
     },
     register(data){
-        return request.post('/user/register',data).then(response=> response ).catch(err=> err)
+        return request.post('/user/register',data)
     },
     updateUserImg(data){
-        return request.post('/user/updateUserImg',data).then(response=> response ).catch(err=> err)
+        return request.post('/user/updateUserImg',data)
     }
 }

@@ -183,13 +183,13 @@ export default {
 
 .wave-next {
     position: absolute;
-    top: -80px;
+    top: -70px;
     width: 40px;
     left: 50%;
     text-align: center;
     color: black;
-    font-size: 50px;
-    font-weight: bolder;
+    font-size: 55px;
+    font-weight: 1200;
     cursor: pointer;
     animation: waveNext 3.5s linear infinite;
 }
@@ -274,8 +274,8 @@ export default {
 
 .box-card1 {
     height: 300px;
-    background-size: 200% 200%;
-    background-image: linear-gradient(70deg, #29b6f6, #8bceee, #0aa6f5, #82c9f0);
+    background-size: 300% 300%;
+    background-image: linear-gradient(90deg, #3db7f0, #8bceee, #0aa6f5);
     animation: colorChange 5s linear infinite;
 }
 

@@ -10,7 +10,6 @@ axios.interceptors.request.use(config => {
     return config;
 }, function (error) {
     // 对请求错误做些什么
-    console.log("1")
     return Promise.reject(error);
 });
 
