@@ -56,7 +56,7 @@
                             <!-- 搜索框 -->
                             <el-card class="box-card box-card2" shadow="always">
                                 <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
-                                <el-input placeholder="请输入内容" v-model="input2">
+                                <el-input placeholder="请输入内容" v-model="searchText">
                                 </el-input>
                                 <i style="position: absolute;top: 50px;right: 35px;font-size: 20px;cursor: pointer;"
                                     @click="search()" class="el-icon-search"></i>
@@ -115,7 +115,6 @@
 </template>
 
 <script>
-import ImgApi from '@/api/backgroundApi'
 export default {
     data() {
         return {
@@ -123,15 +122,15 @@ export default {
             showImg: false,
             changeImg: true,
             token: null,
+            searchText:null,
             waveHeight: 55, // 初始波浪高度
         }
     },
     methods: {
+
         getImg() {
-            ImgApi.getImg().then(response => {
-                const randomIndex = Math.floor(Math.random() * response.data.length);
-                this.userImg = response.data[randomIndex].url;
-            })
+            const randomIndex = Math.floor(Math.random() * 6) + 1;
+            this.userImg = "https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/背景"+randomIndex+".webp";
         },
         // 页面下滑
         waveNext() {
@@ -220,14 +219,14 @@ export default {
 }
 
 .wave1 {
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgb(255, 255, 255);
     animation: waveAnimation 5s linear infinite;
 }
 
 .wave2 {
     position: relative;
     left: -85px;
-    background-color: rgba(250, 250, 250, 0.4);
+    background-color: rgba(255, 255, 255, 0.4);
     animation: waveAnimation 3s linear infinite;
 }
 
