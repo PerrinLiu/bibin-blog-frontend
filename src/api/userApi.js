@@ -16,6 +16,9 @@ export default{
     register(data){
         return request.post('/user/register',data)
     },
+    sendEmail(data){
+        return request.get('/user/sendEmail',data)
+    },
     updateUserImg(data){
         return request.post('/user/updateUserImg',data)
     }

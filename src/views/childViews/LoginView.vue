@@ -187,13 +187,17 @@
                                         autocomplete="new-password" placeholder="密码"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-input v-model="userRegister.rPassword" type="password" show-password
-                                        autocomplete="new-password" placeholder="验证密码"></el-input>
+                                    <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
+                                </el-form-item>
+                                <el-form-item>
+                                    <el-input v-model="userRegister.captcha" type="text" placeholder="验证码"></el-input>
                                 </el-form-item>
                                 <el-form-item>
                                     <el-button class="noLogin-left-btn2" type="primary" @click="register()">注册</el-button>
                                 </el-form-item>
                             </el-form>
+                            <el-button style="position: relative;top: -199px;left: 101px;"
+                                @click="sendEmail()">获取验证码</el-button>
                         </div>
                     </transition>
                 </div>
@@ -219,8 +223,9 @@ export default {
             userRegister: {
                 username: "",
                 password: "",
-                rPassword: "",
+                email: "",
                 nickname: "",
+                captcha: "",
             },
             changeEmail: true,
             changeCity: true,
@@ -230,8 +235,8 @@ export default {
             login_show: false,
             userInfo: {},
             userOld: {},
-            userPhoto:null,
-            userDiary:null,
+            userPhoto: null,
+            userDiary: null,
         }
     },
     created() {
@@ -310,24 +315,30 @@ export default {
                 console.log(err);
             })
         },
-        register() {
-            if (this.userRegister.password != this.userRegister.rPassword) {
-                this.$message({
-                    message: "密码不一致",
-                    type: 'warning',
-                    duration: 1000
-                });
-                return;
-            }
-            let userRegister = {
-                username: this.userRegister.username,
-                password: this.userRegister.password,
-                nickname: this.userRegister.nickname,
-            };
-            userApi.register(userRegister).then(response => {
-                if (response.data.retCode == 200) {
+        sendEmail() {
+            userApi.sendEmail({
+                params: {
+                    email: this.userRegister.email
+                }
+            }).then(response => {
+                const retCode = response.data.retCode;
+                if (retCode == 200) {
+                    localStorage.setItem('emailToken', JSON.stringify(response.data.data));
+                    console.log(localStorage.getItem('emailToken'));
                     this.$message({
                         message: response.data.message,
+                        type: 'success'
+                    });
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        register() {
+            userApi.register(this.userRegister).then(response => {
+                if (response.data.retCode == 200) {
+                    this.$message({
+                        message: response.data.data,
                         type: 'success',
                         duration: 1000
                     });
@@ -342,8 +353,7 @@ export default {
                 console.log(err);
             })
         },
-        updateUserImg(file) {
-            console.log(file);
+        updateUserImg() {
             userApi.updateUserImg().then(response => {
                 console.log(response.data);
             }).catch(err => {

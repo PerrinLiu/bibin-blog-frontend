@@ -7,6 +7,10 @@ axios.interceptors.request.use(config => {
         const token = JSON.parse(localStorage.getItem('token'));
         config.headers['x-token'] = token;
     }
+    if(localStorage.getItem('emailToken')){
+        const emailToken = JSON.parse(localStorage.getItem('emailToken'));
+        config.headers['email-token'] = emailToken;
+    }
     return config;
 }, function (error) {
     // 对请求错误做些什么
