@@ -10,18 +10,7 @@
         </div>
 
         <div class="content" style="margin-top: 50vh;">
-            <div style="height: 1000px;">
-
-                <el-form :model="a" :rules="rules" ref="ruleForm" label-width="100px">
-                    <el-form-item label="活动名称" prop="name1">
-                        <el-input v-model="a.name1"></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
-                        <el-button @click="resetForm('ruleForm')">重置</el-button>
-                    </el-form-item>
-                </el-form>
-            </div>
+            <div style="height: 1000px;"></div>
         </div>
     </div>
 </template>
@@ -30,35 +19,11 @@
 export default {
     data() {
         return {
-            showImg: false,
-            a: {
-                name1: '',
-            },
-            rules: {
-                name1: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' },
-                    { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-                ],
-            }
+            showImg: false
         }
     },
     mounted() {
         this.showImg = true;
-    },
-    methods: {
-        submitForm(formName) {
-            this.$refs[formName].validate((valid) => {
-                if (valid) {
-                    alert('submit!');
-                } else {
-                    console.log('error submit!!');
-                    return false;
-                }
-            });
-        },
-        resetForm(formName) {
-            this.$refs[formName].resetFields();
-        }
     }
 }
 </script>
