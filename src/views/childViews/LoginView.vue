@@ -18,14 +18,14 @@
                             </el-upload>
 
                         </span>
-                        <el-form class="login-from" v-model="userInfo" label-width="80px">
-                            <el-form-item label="昵称：">
+                        <el-form class="login-from" :model="userInfo" label-width="80px"  :rules="registerRules" ref="updateUser">
+                            <el-form-item prop="nickname" label="昵称：">
                                 <el-input v-model="userInfo.nickname"></el-input>
                             </el-form-item>
                             <el-form-item label="用户名：">
                                 {{ userInfo.username }}
                             </el-form-item>
-                            <el-form-item label="邮箱：">
+                            <el-form-item prop="email" label="邮箱：">
                                 <span v-if="changeEmail">
                                     {{ userInfo.email }}
                                 </span>
@@ -71,7 +71,7 @@
                             </el-form-item>
                             <el-form-item>
                                 <el-button style="position: relative; left: 30%;" class="noLogin-left-btn2" type="primary"
-                                    @click="update()">提交</el-button>
+                                    @click="update('updateUser')">提交</el-button>
                             </el-form-item>
                         </el-form>
                     </div>
@@ -131,17 +131,17 @@
                 <div class="noLogin">
                     <transition name="el-zoom-in-center">
                         <div v-show="show2" class="noLogin-left">
-                            <el-form v-model="userQuery" class="noLogin-left-from">
-                                <el-form-item>
+                            <el-form :model="userQuery" class="noLogin-left-from" :rules="loginRules" ref="userQuery">
+                                <el-form-item prop="username">
                                     <el-input v-model="userQuery.username" type="text" placeholder="用户名"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item prop="password">
                                     <el-input v-model="userQuery.password" type="password" placeholder="密码"
                                         show-password></el-input>
                                 </el-form-item>
                                 <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
                                 <el-form-item>
-                                    <el-button class="noLogin-left-btn2" type="primary" @click="login()">登录</el-button>
+                                    <el-button class="noLogin-left-btn2" type="primary" @click="login('userQuery')">登录</el-button>
                                 </el-form-item>
                             </el-form>
                         </div>
@@ -175,25 +175,25 @@
                     </transition>
                     <transition name="el-zoom-in-center">
                         <div v-show="show1" class="register-right" style="background-color: rgba(249, 250, 248, 1);">
-                            <el-form v-model="userRegister" class="noLogin-right-from">
-                                <el-form-item>
+                            <el-form :model="userRegister" class="noLogin-right-from" :rules="registerRules" ref="userRegister">
+                                <el-form-item prop="username">
                                     <el-input v-model="userRegister.username" type="text" placeholder="用户名"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item prop="nickname">
                                     <el-input v-model="userRegister.nickname" type="text" placeholder="昵称"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item  prop="password">
                                     <el-input v-model="userRegister.password" type="password" show-password
                                         autocomplete="new-password" placeholder="密码"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item  prop="email">
                                     <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
                                 </el-form-item>
-                                <el-form-item>
+                                <el-form-item  prop="captcha">
                                     <el-input v-model="userRegister.captcha" type="text" placeholder="验证码"></el-input>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button class="noLogin-left-btn2" type="primary" @click="register()">注册</el-button>
+                                    <el-button class="noLogin-left-btn2" type="primary" @click="register('userRegister')">注册</el-button>
                                 </el-form-item>
                             </el-form>
                             <el-button style="position: relative;top: -199px;left: 101px;"
@@ -212,14 +212,17 @@ import userApi from '@/api/userApi';
 export default {
     data() {
         return {
+            //上传图片时，携带请求头
             uploadHeaders: {
                 // 在这里添加您的请求头信息
                 'x-token': JSON.parse(localStorage.getItem('token'))
             },
+            //登录对象
             userQuery: {
-                username: "",
-                password: "",
+                username: '',
+                password: '',
             },
+            //注册对象
             userRegister: {
                 username: "",
                 password: "",
@@ -227,16 +230,52 @@ export default {
                 nickname: "",
                 captcha: "",
             },
+            //邮箱状态（修改
             changeEmail: true,
+            //城市状态（修改
             changeCity: true,
+            //默认展示登录页
             show2: true,
+            //注册页
             show1: false,
+            //token初始化
             token: null,
+            //界面动画
             login_show: false,
+            //用户信息
             userInfo: {},
+            //修改用户时验证是否有变化
             userOld: {},
+            //用户照片栏
             userPhoto: null,
+            //用户日记
             userDiary: null,
+            loginRules:{
+                username: [
+                    { required: true, message: '用户名不能为空', trigger: 'blur' },
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                ],
+            },
+            registerRules: {
+                username: [
+                    { required: true, message: '用户名不能为空', trigger: 'blur' },
+                ],
+                password: [
+                    { required: true, message: '密码不能为空', trigger: 'blur' },
+                ],
+                nickname: [
+                    { required: true, message: '昵称不能为空', trigger: 'blur' },
+                ],
+                email: [
+                    { required: true, message: '邮箱不能为空', trigger: 'blur' },
+                    { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }
+                ],
+                captcha: [
+                    { required: true, message: '验证码不能为空', trigger: 'blur' },
+                ]
+            }
         }
     },
     created() {
@@ -245,9 +284,20 @@ export default {
     },
     mounted() {
         this.login_show = true;
+        this.getUser();
     },
     methods: {
-        login() {
+        login(formName1) {
+            let flag = true;
+            this.$refs[formName1].validate((valid) => {
+                if (!valid) {
+                    flag = false;
+                    return;
+                }
+            });
+            //如果表单验证不通过 直接返回，不让提交
+            if(!flag) return;
+
             userApi.login(this.userQuery).then(response => {
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
@@ -286,7 +336,16 @@ export default {
                 console.log(err);
             })
         },
-        update() {
+        update(formName) {
+            let flag1 = true;
+            this.$refs[formName].validate((valid) => {
+                if (!valid) {
+                    flag1 = false;
+                    return;
+                }
+            });
+            //如果表单验证不通过 直接返回，不让提交
+            if(!flag1) return;
             //判断是否修改过
             let flag = false;
             for (let key in this.userInfo) {
@@ -316,6 +375,18 @@ export default {
             })
         },
         sendEmail() {
+            // 定义邮箱格式正则表达式
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            // 使用正则表达式验证邮箱格式
+            const isEmail = emailRegex.test(this.userRegister.email);
+            if (!isEmail) {
+                this.$message({
+                    message: "邮箱格式错误",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
             userApi.sendEmail({
                 params: {
                     email: this.userRegister.email
@@ -329,12 +400,27 @@ export default {
                         message: response.data.message,
                         type: 'success'
                     });
+                } else {
+                    this.$message({
+                        message: response.data.message,
+                        type: 'warning'
+                    });
                 }
             }).catch(err => {
                 console.log(err);
             })
         },
-        register() {
+        register(formName) {
+            let flag = true;
+            this.$refs[formName].validate((valid) => {
+                if (!valid) {
+                    flag = false;
+                    return;
+                }
+            });
+            //如果表单验证不通过 直接返回，不让提交
+            if(!flag) return;
+
             userApi.register(this.userRegister).then(response => {
                 if (response.data.retCode == 200) {
                     this.$message({
