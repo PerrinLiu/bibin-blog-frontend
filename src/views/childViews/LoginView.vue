@@ -284,7 +284,9 @@ export default {
     },
     mounted() {
         this.login_show = true;
-        this.getUser();
+        if(this.token!=null){
+            this.getUser();
+        }
     },
     methods: {
         login(formName1) {
