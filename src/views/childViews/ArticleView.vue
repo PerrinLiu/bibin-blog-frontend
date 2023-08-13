@@ -6,11 +6,17 @@
                     style="position: inherit;height:900px;top:-200px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF10.webp')">
                 </div>
             </transition>
-            <h1 class="backgroundImg-text" style="top: 15vh;left: 46vw;color: aliceblue;">文章</h1>
+            <div class="backgroundImg-text-div" style="height: 60vh;">
+                <h1 class="backgroundImg-text" style="color: rgb(17, 13, 13);">文章</h1>
+            </div>
         </div>
 
         <div class="content" style="margin-top: 50vh;">
             <div style="height: 1000px;"></div>
+            <!-- 用来撑起高度 -->
+            <div class="content-after" style="height: 60px;">
+
+            </div>
         </div>
     </div>
 </template>
@@ -22,7 +28,7 @@ export default {
             showImg: false
         }
     },
-    mounted(){
+    mounted() {
         this.showImg = true;
     }
 }

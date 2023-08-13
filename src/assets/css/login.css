@@ -4,29 +4,33 @@
   width: 100vw;
   background-image: url("http://view.lixingyong.com/images/2023/04/05/wallhaven-l35jjp.jpeg");
   background-size: cover;
+  background-position: center center;
   top: 0;
   left: 0;
   z-index: 100;
-  z-index: -1;
 }
 
 /* 登录前样式 */
 .noLogin,
 .noRegister {
-  position: absolute;
-  height: 420px;
-  width: 700px;
-  left: 30vw;
+  position: fixed;
   top: 25vh;
+  left: 30vw;
+  height: 50vh;
+  min-height: 400px;
+  max-height: 420px;
+  width: 100vw;
+  max-width: 720px;
   border-radius: 1rem;
   text-align: center;
+  background-size: cover;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
 }
 
 .noLogin-left,
 .register-left {
   height: 100%;
-  width: 49.9%;
+  width: 49.8%;
   float: left;
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
@@ -85,9 +89,10 @@
 /* 登录后的样式 */
 .isLogin {
   position: relative;
-  width: 70vw;
-  height: 700px;
-  left: 15%;
+  width: 95vw;
+  max-width: 1350px;
+  height: 85vh;
+  left: 5%;
   top: 10%;
   border-radius: 1rem;
   background-color: #ffffff;
@@ -97,12 +102,39 @@
 }
 
 .isLogin-left {
-  position: inherit;
+  position: relative;
   top: 7%;
   width: 49.5%;
   height: 100%;
   float: left;
 }
+
+/* 手机端样式 */
+.isLogin-phone {
+  position: relative;
+  top: 7%;
+  height: 100%;
+  width: 80vw;
+  float: left;
+}
+.isLogin-phone img{
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border: 1px solid #6d2626;
+  cursor: pointer;
+  border-radius: 5rem;
+}
+.isLogin-phone .avatar-uploader{
+  position: relative;
+  width: 50px;
+  height: 50px;
+  left: 50%;
+  top: -2vh;
+  cursor: pointer;
+  border-radius: 5rem;
+}
+
 
 .isLogin-left .avatar-uploader,
 .imgHover {
@@ -137,9 +169,18 @@
   z-index: 1;
   transition: 1s;
 }
+/* 电脑端表单 */
 .isLogin-left .login-from {
   position: relative;
   width: 80%;
+  left: 10%;
+  top: 5%;
+}
+
+/* 手机端表单 */
+.isLogin-phone .login-phone-from{
+  position: relative;
+  width: 100%;
   left: 10%;
   top: 5%;
 }

@@ -7,7 +7,6 @@
   color: #fff;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.6);
-  
 }
 #layout-header:hover {
   transition: 0.5s;
@@ -15,7 +14,7 @@
 }
 
 /* 网站名称样式 */
-.layout-header-left{
+.layout-header-left {
   position: relative;
   top: 5px;
   height: 50px;
@@ -46,7 +45,7 @@
   width: 0px;
 }
 #el-menu-item:hover .el-menu-item-line {
-  transition: 0.5s;
+  transition: 1s;
   background-color: chartreuse;
   width: 100%;
 }
@@ -78,16 +77,22 @@
 /* 底部样式 */
 #footer {
   position: relative;
-  top: -20px;
   height: 60px;
+  width: 150vw;
+  left: -25vw;
   color: #fff;
   text-align: center;
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
   /* 线性渐变 */
-  background-image: linear-gradient(45deg, #b3e5fc, #81d4fa, #4fc3f7, #29b6f6, #03a9f4, #039be5, #0288d1);
-  animation: gradientAnimation ease 3s infinite; /* 应用渐变动画 */
+  background-image: linear-gradient(
+    45deg,
+    #b3e5fc,
+    #4fc3f7,
+    #29b6f6,
+    #039be5,
+    #0288d1
+  );
   background-size: 300% 300%;
+  animation: gradientAnimation ease 3s infinite; /* 应用渐变动画 */
 }
 @keyframes gradientAnimation {
   0% {
@@ -111,4 +116,16 @@
 }
 ::-webkit-scrollbar-thumb:hover {
   background-color: #09eec8; /* 滚动条滑块hover状态下的颜色 */
+}
+
+/* 手机导航栏 */
+.phone-nav {
+  position: absolute;
+  top: 0px;
+  height: 100vh;
+  width: 100vw;
+  background-image: url("https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF10.webp");
+}
+.phone-nav #el-menu-item{
+  margin-left: 0px;
 }

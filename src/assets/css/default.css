@@ -32,22 +32,35 @@
   left: 0;
   z-index: -1;
   text-align: center;
+  background-position: center center;
+}
+.backgroundImg-text-div{
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  align-items: center; /* 垂直居中 */
+  width: 100%;
+  height: 100vh;
 }
 .backgroundImg-text {
-  position: fixed;
   top: 300px;
-  left: 42%;
   color: #000;
   font-size: 70px;
-  font-family: 'Courier New', Courier, monospace;
+  font-family: "Courier New", Courier, monospace;
   font-weight: bolder;
   transition: 0.5s;
   cursor: pointer;
-
 }
 .backgroundImg-text:hover {
   transform: scale(1.5);
-  background: linear-gradient(90deg,#fdfdfd, #ff00ff, #00ffff, #ff0000, #00ff00 , #000);
+  background: linear-gradient(
+    90deg,
+    #fdfdfd,
+    #ff00ff,
+    #00ffff,
+    #ff0000,
+    #00ff00,
+    #000
+  );
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
@@ -59,20 +72,19 @@
   0% {
     background-position: 0%;
   }
-  25%{
+  25% {
     background-position: 25%;
   }
   50% {
     background-position: 0%;
   }
-  75%{
+  75% {
     background-position: 100%;
   }
   100% {
     background-position: 0%;
   }
 }
-
 
 .content {
   position: relative;
@@ -85,5 +97,3 @@
   background-color: rgb(255, 255, 255);
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5), -1px -1px 2px rgba(0, 0, 0, 0.5);
 }
-
-

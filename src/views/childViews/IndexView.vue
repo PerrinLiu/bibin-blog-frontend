@@ -1,15 +1,24 @@
 <template>
     <div class="index-page">
         <div class="div-with-lines">
-            <h1 class="backgroundImg-text">Hi,Bibin!</h1>
+            <div class="backgroundImg-text-div">
+                <span v-if="isPhone">
+                    <h1 class="backgroundImg-text" style="font-size: 40px;">Hi,Bibin!</h1>
+                </span>
+                <span v-else>
+                    <h1 class="backgroundImg-text">Hi,Bibin!</h1>
+                </span>
+            </div>
+
         </div>
         <transition name="el-zoom-in-top">
-            <div v-show="showImg" class="backgroundImg" :style="`background-image: url(${userImg})`">
+            <div v-show="showImg" class="backgroundImg" :style="`background-image: url(${userImg})`"
+                style="background-position: center center;">
             </div>
         </transition>
 
 
-        <div class="content">
+        <div class="content" style="position: relative;">
             <!-- 波浪 -->
             <div class="wave">
                 <div style="width: 200%;height:100%;position: absolute;top: 20px;">
@@ -26,27 +35,29 @@
                 <i @click="waveNext()" class="el-icon-arrow-down"></i>
             </div>
             <div style="position: relative;top: 50px;">
-                <el-container>
-                    <el-aside width="400px" style="position: relative;left: 150px;">
-                        <div style="width: 300px;position: relative;top: -30px;">
+                <span v-if="isPhone">
+                    <el-container>
+                        <div style="width: 80%;position: relative;top: -30px;min-width: 280px;left: 10%;">
                             <!-- 名片 -->
                             <el-card class="box-card box-card1" shadow="always">
                                 <div style="text-align: center;">
-                                    <span><img class="card-img" width="100px" height="100px"
-                                            src="@/assets/images/defaul.jpg" alt=""
-                                            style="border-radius: 50%;border: 1px solid #030303;"></span>
-                                    <h2 style="font-size: 30px;">Bibin</h2>
+                                    <span>
+                                        <img class="card-img" width="100px" height="100px" 
+                                        src="@/assets/images/defaul.jpg"
+                                        style="border-radius: 50%;border: 1px solid #030303;">
+                                    </span>
+                                        <h2 style="font-size: 30px;">Bibin</h2>
                                 </div>
-                                <div style="text-align: center;margin-top: -10px;">
-                                    <div style="float: left;position: relative;left: 20px;margin-left:30px">
+                                <div style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
+                                    <div style="float: left;">
                                         <h4>文章</h4>
                                         0
-                                    </div>
-                                    <div style="float: left;position: relative;left: 20px;margin-left:30px">
+                                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div style="float: left;">
                                         <h4>分类</h4>
                                         0
-                                    </div>
-                                    <div style="float: left;position: relative;left: 20px;margin-left:30px">
+                                    </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div style="float: left;">
                                         <h4>访问量</h4>
                                         0
                                     </div>
@@ -58,7 +69,7 @@
                                 <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
                                 <el-input placeholder="请输入内容" v-model="searchText">
                                 </el-input>
-                                <i style="position: absolute;top: 50px;right: 35px;font-size: 20px;cursor: pointer;"
+                                <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;"
                                     @click="search()" class="el-icon-search"></i>
                             </el-card>
                             <!-- 推荐文章 -->
@@ -80,30 +91,108 @@
                                 <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
                             </el-card>
 
+                            <el-card style="height: 300px;margin-top: 40px;">
 
+                            </el-card>
+                            <el-card style="height: 300px;margin-top: 40px;">
+
+                            </el-card>
+                            <el-card style="height: 300px;margin-top: 40px;">
+
+                            </el-card>
+                            <el-card style="height: 300px;margin-top: 40px;">
+
+                            </el-card>
+                            <el-card style="height: 300px;margin-top: 40px;">
+
+                            </el-card>
 
                         </div>
-                    </el-aside>
-                    <el-main style="position: relative;left: 200px;">
-                        <div style="width: 60%;margin-top: -20px;margin-left: 70px;">
-                            <el-card style="height: 300px;">
+                    </el-container>
+                </span>
+                <span v-else>
+                    <el-container>
+                        <el-aside width="40%"
+                            style="position: relative;display: flex;  justify-content: center; /* 水平居中 */">
+                            <div style="width: 50%;position: relative;top: -30px;min-width: 280px;">
+                                <!-- 名片 -->
+                                <el-card class="box-card box-card1" shadow="always">
+                                    <div style="text-align: center;">
+                                        <span><img class="card-img" width="100px" height="100px"
+                                                src="@/assets/images/defaul.jpg" alt=""
+                                                style="border-radius: 50%;border: 1px solid #030303;"></span>
+                                        <h2 style="font-size: 30px;">Bibin</h2>
+                                    </div>
+                                    <div
+                                        style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
+                                        <div style="float: left;">
+                                            <h4>文章</h4>
+                                            0
+                                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div style="float: left;">
+                                            <h4>分类</h4>
+                                            0
+                                        </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div style="float: left;">
+                                            <h4>访问量</h4>
+                                            0
+                                        </div>
+                                    </div>
+                                </el-card>
 
-                            </el-card>
-                            <el-card style="height: 300px;margin-top: 40px;">
+                                <!-- 搜索框 -->
+                                <el-card class="box-card box-card2" shadow="always">
+                                    <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
+                                    <el-input placeholder="请输入内容" v-model="searchText">
+                                    </el-input>
+                                    <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;"
+                                        @click="search()" class="el-icon-search"></i>
+                                </el-card>
+                                <!-- 推荐文章 -->
+                                <el-card class="box-card box-card1" shadow="always">
+                                    <span style="font-weight: 900;position: relative;"><i
+                                            class="el-icon-reading"></i>&nbsp;推荐文章</span>
+                                    <el-empty style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
+                                </el-card>
+                                <!-- 赞赏 -->
+                                <el-card class="box-card box-card3" shadow="always">
+                                    <span style="font-weight: 900;"><i class="el-icon-chicken"></i>&nbsp;赞赏</span>
+                                    <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
+                                </el-card>
 
-                            </el-card>
-                            <el-card style="height: 300px;margin-top: 40px;">
 
-                            </el-card>
-                            <el-card style="height: 300px;margin-top: 40px;">
+                                <!-- 文章分类 -->
+                                <el-card class="box-card box-card3" shadow="always">
+                                    <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
+                                    <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
+                                </el-card>
 
-                            </el-card>
-                            <el-card style="height: 300px;margin-top: 40px;">
 
-                            </el-card>
-                        </div>
-                    </el-main>
-                </el-container>
+
+                            </div>
+                        </el-aside>
+                        <el-main style="position: relative;width: 60vw;">
+                            <div style="width: 70%;margin-top: -20px;min-width: 600px;">
+                                <el-card style="height: 300px;">
+
+                                </el-card>
+                                <el-card style="height: 300px;margin-top: 40px;">
+
+                                </el-card>
+                                <el-card style="height: 300px;margin-top: 40px;">
+
+                                </el-card>
+                                <el-card style="height: 300px;margin-top: 40px;">
+
+                                </el-card>
+                                <el-card style="height: 300px;margin-top: 40px;">
+
+                                </el-card>
+                            </div>
+                        </el-main>
+                    </el-container>
+                </span>
+
             </div>
             <!-- 用来撑起高度 -->
             <div class="content-after" style="height: 60px;">
@@ -118,24 +207,65 @@
 export default {
     data() {
         return {
+            //用户头像
             userImg: '',
+            //是否显示用户头像
             showImg: false,
-            changeImg: true,
-            token: null,
-            searchText:null,
+            //搜索内容
+            searchText: null,
             waveHeight: 55, // 初始波浪高度
+            //是否是手机端
+            isPhone: '',
+            //滚动距离
+            roll: '',
         }
     },
+    mounted() {
+        this.getImg();
+        this.showImg = true;
+        // 使用窗口大小监听来更新 isMobile 值
+        window.addEventListener('resize', this.updateLayout);
+        this.updateLayout(); // 初始化时执行一次
+
+        //页面刷新时回到顶部
+        this.scrollTop();
+    },
     methods: {
+        updateLayout() {
+            if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
+                //给未登录更新动态样式
+                this.isPhone = true;
+                this.roll = 240;
+            } else {
+                this.isPhone = false;
+                this.roll = -5;
+            }
+        },
 
         getImg() {
             const randomIndex = Math.floor(Math.random() * 6) + 1;
-            this.userImg = "https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/背景"+randomIndex+".webp";
+            this.userImg = "https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/背景" + randomIndex + ".webp";
         },
         // 页面下滑
         waveNext() {
             const scrollDuration = 400; // 滚动总时间（毫秒）
-            const scrollDistance = window.innerHeight + 4; // 滚动距离
+            const scrollDistance = window.innerHeight - this.roll; // 滚动距离
+            const startTime = performance.now(); // 开始时间
+            const scrollStep = timestamp => {
+                const currentTime = timestamp - startTime;
+                const progress = Math.min(currentTime / scrollDuration, 1);
+
+                window.scrollTo(0, progress * scrollDistance);
+                if (currentTime < scrollDuration) {
+                    requestAnimationFrame(scrollStep);
+                }
+            };
+            requestAnimationFrame(scrollStep);
+        },
+        // 回到顶部
+        scrollTop() {
+            const scrollDuration = 100; // 滚动总时间（毫秒）
+            const scrollDistance = -window.innerHeight + 4; // 滚动距离
             const startTime = performance.now(); // 开始时间
             const scrollStep = timestamp => {
                 const currentTime = timestamp - startTime;
@@ -153,12 +283,11 @@ export default {
             console.log(123);
         }
     },
-    mounted() {
-        this.getImg();
-        this.token = localStorage.getItem('token');
-        this.showImg = true;
-
-    }
+    beforeDestroy() {
+        if (this.intervalId !== null) {
+            clearInterval(this.intervalId);
+        }
+    },
 }
 </script>
 
@@ -184,8 +313,9 @@ export default {
 .wave-next {
     position: absolute;
     top: -70px;
-    width: 40px;
-    left: 50%;
+    display: flex;
+    justify-content: center; /* 水平居中 */
+    width: 100vw;
     text-align: center;
     color: black;
     font-size: 55px;
