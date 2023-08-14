@@ -12,10 +12,31 @@
 
         </div>
 
-        <div class="content" style="margin-top: 50vh;">
-            <div style="height: 1000px;">
-            </div>
+        <div class="content" style="margin-top: 50vh;display: flex;justify-content: center;">
+            <div style="position: relative;width: 70vw;min-width: 1024px;">
+                <el-container>
+                    <!-- 头部 -->
+                    <el-header id="header" style="width: 50vw;min-width: 720px;">
+                        <div class="float-left" style="position:relative;left: 200px;">
+                            <h3 style="color: rgb(70, 70, 70);cursor: pointer;" @click="searchMe()"><i
+                                    class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的</h3>
+                        </div>
+                        <div class="float-right" style="position: relative;top: 10px;">
+                            <el-button plain @click="dialogDiary = true">添加小记</el-button>
+                        </div>
+                        <!-- 日记表单 -->
+                        <el-dialog title="添加日记" :visible.sync="dialogDiary" width="700px" :close-on-click-modal="false">
+                            <span>这是一段信息</span>
+                        </el-dialog>
+                    </el-header>
+                    <!-- 内容 -->
+                    <el-main>
+                        
+                    </el-main>
 
+                </el-container>
+
+            </div>
             <!-- 用来撑起高度 -->
             <div class="content-after" style="height: 60px;">
 
@@ -26,9 +47,15 @@
 
 <script>
 export default {
+    components: {
+    },
     data() {
         return {
-            showImg: false
+            // 背景图片
+            showImg: false,
+            // 日记表单
+            dialogDiary: false,
+            diaryContent: ''
         }
     },
     mounted() {
@@ -38,6 +65,9 @@ export default {
 </script>
 
 <style scoped>
+@import '../../assets/css/default.css';
+
+
 .el-zoom-in-top-enter-active,
 .el-zoom-in-top-leave-active {
     transition: transform 1.2s;

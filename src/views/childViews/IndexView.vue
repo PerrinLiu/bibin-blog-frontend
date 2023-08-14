@@ -18,7 +18,7 @@
         </transition>
 
 
-        <div class="content" style="position: relative;">
+        <div class="content" style="position: relative;" >
             <!-- 波浪 -->
             <div class="wave">
                 <div style="width: 200%;height:100%;position: absolute;top: 20px;">
@@ -209,7 +209,7 @@ export default {
         return {
             //用户头像
             userImg: '',
-            //是否显示用户头像
+            //背景图片
             showImg: false,
             //搜索内容
             searchText: null,
@@ -235,7 +235,6 @@ export default {
             if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
                 //给未登录更新动态样式
                 this.isPhone = true;
-                this.roll = 240;
             } else {
                 this.isPhone = false;
                 this.roll = -5;
@@ -270,7 +269,6 @@ export default {
             const scrollStep = timestamp => {
                 const currentTime = timestamp - startTime;
                 const progress = Math.min(currentTime / scrollDuration, 1);
-
                 window.scrollTo(0, progress * scrollDistance);
                 if (currentTime < scrollDuration) {
                     requestAnimationFrame(scrollStep);

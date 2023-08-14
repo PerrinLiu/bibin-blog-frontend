@@ -1,5 +1,5 @@
 <template>
-    <div class="home-page" @scroll="handleScroll">
+    <div class="home-page" @scroll="handleScroll" style="overflow: hidden;">
 
         <!-- 手机导航栏 -->
         <el-drawer :visible.sync="drawer" size="65%" :show-close=false>
@@ -52,8 +52,11 @@
         </el-drawer>
         <el-container>
             <transition name="el-zoom-in-center">
-                <el-header v-if="show" id="layout-header">
-                    <div class="float-left layout-header-left">Bibin</div>
+                <el-header v-if="show" id="layout-header" :style="background">
+                    <router-link style="text-decoration: none;" to="/">
+                        <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue">Bibin</div>
+                    </router-link>
+
                     <!-- 手机端布局 -->
                     <span v-if="isMobile" class="float-right" style="line-height: 60px;font-size: 30px;cursor: pointer;">
                         <!-- 导航标签 -->
@@ -117,8 +120,10 @@
                     </span>
                 </el-header>
             </transition>
-
             <el-main id="el-main">
+                <span v-if="showTop" style="position: fixed;z-index: 1;right: 20px;bottom: 70px;">
+                    <i class="el-icon-top" style="font-size: 50px;font-weight: 900;cursor: pointer;color: black;" @click="backTop()"></i>
+                </span>
                 <router-view ref="childRef"></router-view>
             </el-main>
 
@@ -149,6 +154,10 @@ export default {
             // 页面宽度，决定展示哪种布局
             isMobile: false, // 根据实际情况初始化
             drawer: false,
+            // 头部手机端
+            background: '',
+            // 回到顶部
+            showTop: '',
         }
     },
     computed: {
@@ -173,6 +182,15 @@ export default {
     methods: {
         updateLayout() {
             this.isMobile = window.innerWidth <= 910; // 根据实际情况设置阈值
+            if (this.isMobile) {
+                this.background = 'background-color: rgba(0, 0, 0, 1);'
+                this.show = true;
+                //如果是手机端，不监听滚动事件
+                window.removeEventListener('scroll', this.handleScroll);
+            } else {
+                this.handleScroll();
+                this.background = ''
+            }
         },
         //监听滚动事件
         handleScroll() {
@@ -184,8 +202,29 @@ export default {
                 // 向上滚动
                 this.show = true;
             }
+            //如果滚条了当前页面的高度，展示回到顶部按钮
+            if (currentScrollTop > window.innerHeight) {
+                this.showTop = true;
+            } else {
+                this.showTop = false;
+            }
             // 更新上一次的滚动距离
             this.scrollTop = currentScrollTop;
+        },
+        // 回到顶部
+        backTop() {
+            const scrollDuration = 100; // 滚动总时间（毫秒）
+            const scrollDistance = -window.innerHeight + 4; // 滚动距离
+            const startTime = performance.now(); // 开始时间
+            const scrollStep = timestamp => {
+                const currentTime = timestamp - startTime;
+                const progress = Math.min(currentTime / scrollDuration, 1);
+                window.scrollTo(0, progress * scrollDistance);
+                if (currentTime < scrollDuration) {
+                    requestAnimationFrame(scrollStep);
+                }
+            };
+            requestAnimationFrame(scrollStep);
         },
         logout(command) {
             if (command == 'b') {
@@ -229,6 +268,6 @@ export default {
 
 
 <style scoped>
-@import '@/assets/css/layout.css';
-@import '@/assets/css/default.css';
+@import '../../src/assets/css/layout.css';
+@import '../../src/assets/css/default.css';
 </style>
