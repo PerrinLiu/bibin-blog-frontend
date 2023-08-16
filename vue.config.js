@@ -11,6 +11,13 @@ module.exports = defineConfig({
           '^/api/user':''
         }
       },
+      "/api/text":{
+        target:"http://localhost:10010/text/text",
+        changeOrigin:true,
+        pathRewrite:{
+          '^/api/text':''
+        }
+      },
       "/api/imageApi":{
         target:"https://api.lixingyong.com/api/images",
         changeOrigin:true,

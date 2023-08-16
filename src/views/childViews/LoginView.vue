@@ -70,11 +70,14 @@
                                             <el-radio label="女"></el-radio>
                                         </el-radio-group>
                                     </el-form-item>
-                                    <el-form-item>
-                                        <el-button style="position: relative; left: 20%;" class="noLogin-left-btn2"
-                                            type="primary" @click="update('updateUser')">提交</el-button>
+                                    <el-form-item style="position:relative;left: -10%;">
+                                        <el-button plain style="position: relative; left: 0%;" class="noLogin-left-btn2"
+                                            @click="update('updateUser')">提交</el-button>
+                                        <el-button style="position: relative;left: 10%;" @click="updatePsw()">修改密码</el-button>
                                     </el-form-item>
+
                                 </el-form>
+
                                 <!-- 照片和日记 -->
                                 <div style="position: relative;top: 50px;width: 96vw;">
                                     <div class="isLogin-right-top">
@@ -94,7 +97,8 @@
                                                         class="image">
                                                     <div class="el-card-hover">
                                                         <span class="el-card-hover-span">
-                                                            <span style="font-size: 16px;font-weight: 800;margin-right: 30px;">照片</span>
+                                                            <span
+                                                                style="font-size: 16px;font-weight: 800;margin-right: 30px;">照片</span>
                                                         </span>
                                                     </div>
                                                 </el-card>
@@ -189,9 +193,11 @@
                                     </el-radio-group>
                                 </el-form-item>
                                 <el-form-item>
-                                    <el-button style="position: relative; left: 30%;" class="noLogin-left-btn2"
-                                        type="primary" @click="update('updateUser')">提交</el-button>
+                                    <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
+                                        @click="update('updateUser')">提交</el-button>
+                                    <el-button style="position: relative;left: 30%;" @click="updatePsw()">修改密码</el-button>
                                 </el-form-item>
+
                             </el-form>
                         </div>
                         <div class="isLogin-right">
@@ -417,7 +423,10 @@ export default {
     },
     created() {
         this.token = localStorage.getItem('token');
-        this.userInfo = this.$store.state.user;
+        if(this.$store.state.user!=null){
+            this.userInfo = this.$store.state.user;
+        }
+        
     },
     mounted() {
         //页面加载后开始展示
@@ -465,6 +474,10 @@ export default {
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
                     localStorage.setItem('token', JSON.stringify(response.data.data.token));
+                    // setToken
+                    let token = localStorage.getItem('token');
+                    this.$store.commit('setToken', token);
+
                     this.getUser();
                     this.$message({
                         message: "登录成功",
@@ -487,18 +500,20 @@ export default {
         },
         getUser() {
             userApi.getUser().then(response => {
+                // 用户信息
                 this.userInfo = response.data.data;
-                this.userInfo.userId = response.data.data.userId;
                 // 将 this.userInfo 深拷贝到 this.userOld
                 this.userOld = JSON.parse(JSON.stringify(this.userInfo));
-                // 登录成功后得到用户信息 user
+                // 登录成功后得到用户信息并保存 user
                 this.$store.commit('setUser', response.data.data);
             }).catch(err => {
+                // 出错后，token设为null
                 this.token = null;
                 localStorage.removeItem('token');
                 console.log(err);
             })
         },
+        // 更新用户信息
         update(formName) {
             let flag1 = true;
             this.$refs[formName].validate((valid) => {
@@ -525,6 +540,7 @@ export default {
                 });
                 return;
             }
+            // 发起请求，将用户信息传过去
             userApi.updateUser(this.userInfo).then(response => {
                 this.$message({
                     message: response.data.data,
@@ -537,6 +553,18 @@ export default {
                 console.log(err);
             })
         },
+        updatePsw(){
+            this.userInfo.password = "123";
+            userApi.updateUser(this.userInfo).then(response=>{
+                const data = response.data;
+                this.$message({
+                    message:data.message,
+                    type:'info'
+                })
+                this.userInfo.password = null;
+            })
+        },
+        // 发送邮箱验证码
         sendEmail() {
             // 定义邮箱格式正则表达式
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -558,6 +586,7 @@ export default {
                 });
                 return;
             }
+            // 发起请求
             userApi.sendEmail({
                 params: {
                     email: this.userRegister.email
@@ -595,8 +624,10 @@ export default {
                 this.time = 60;
             }
         },
+        // 注册用户
         register(formName) {
             let flag = true;
+            // 表单验证
             this.$refs[formName].validate((valid) => {
                 if (!valid) {
                     flag = false;
@@ -605,7 +636,7 @@ export default {
             });
             //如果表单验证不通过 直接返回，不让提交
             if (!flag) return;
-
+            //发起请求
             userApi.register(this.userRegister).then(response => {
                 if (response.data.retCode == 200) {
                     this.$message({
@@ -624,29 +655,25 @@ export default {
                 console.log(err);
             })
         },
-        updateUserImg() {
-            userApi.updateUserImg().then(response => {
-                console.log(response.data);
-            }).catch(err => {
-                console.log(err);
-            })
-        },
+        // 头像上传完毕后，重新获取信息
         handleAvatarSuccess() {
             this.getUser();
         },
+        // 上传钱验证
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
-            const isLt2M = file.size / 1024 / 1024 < 2;
+            const isLt2M = file.size / 1024 / 1024 < 5;
 
             if (!isJPG) {
                 this.$message.error('上传头像图片只能是 JPG 格式!');
             }
             if (!isLt2M) {
-                this.$message.error('上传头像图片大小不能超过 2MB!');
+                this.$message.error('上传头像图片大小不能超过 5MB!');
             }
             return isJPG && isLt2M;
         }
     },
+    // 页面关闭结束后，移除倒计时
     beforeDestroy() {
         if (this.intervalId !== null) {
             clearInterval(this.intervalId);

@@ -8,8 +8,17 @@ import store from '@/store/store'; // 导入 Vuex Store
 Vue.config.productionTip = false
 
 
-
 Vue.use(ElementUI);
+
+// 在创建 Vue 实例之前修改全局配置
+Vue.prototype.$message = function (options) {
+  ElementUI.Message({
+    ...options,
+    offset: 300,      // 上偏移量
+    position: 'top-right', // 右上角
+    duration: 1000,
+  });
+};
 
 // 在路由切换时动态修改页面标题
 router.beforeEach((to, from, next) => {

@@ -86,7 +86,7 @@
                             <el-menu-item id="el-menu-item">
                                 <el-dropdown placement="bottom" @command="logout">
                                     <span class="el-dropdown-link">
-                                        <span v-if="user || token != null">
+                                        <span v-if="token != null">
                                             <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
                                         </span>
                                         <!-- 还没登录时，显示默认头像 -->
@@ -96,7 +96,7 @@
                                         </span>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <span v-if="user || token != null">
+                                        <span v-if="user!='user' || token != null">
                                             <router-link style="text-decoration: none;" to="/login">
                                                 <el-dropdown-item command="a"><i
                                                         class="el-icon-user"></i>个人信息</el-dropdown-item>
@@ -163,7 +163,11 @@ export default {
     computed: {
         // 拿到用户信息
         user() {
-            return this.$store.state.user; // 通过 this.$store.state 访问用户信息
+            // 通过 this.$store.state 访问用户信息
+            if(this.$store.state.user!=null){
+                return this.$store.state.user;
+            }
+            return 'user';
         },
         currentPath() {
             return this.$route.path; // 通过 $route 对象获取当前路径
@@ -175,6 +179,7 @@ export default {
         if (this.token != null && this.$route.path != '/login') {
             this.getUser();
         }
+        if(this.user)
         // 使用窗口大小监听来更新 isMobile 值
         window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
