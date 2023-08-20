@@ -469,15 +469,11 @@ export default {
             });
             //如果表单验证不通过 直接返回，不让提交
             if (!flag) return;
-
+            // 发起登录请求
             userApi.login(this.userQuery).then(response => {
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
                     localStorage.setItem('token', JSON.stringify(response.data.data.token));
-                    // setToken
-                    let token = localStorage.getItem('token');
-                    this.$store.commit('setToken', token);
-
                     this.getUser();
                     this.$message({
                         message: "登录成功",
@@ -491,15 +487,23 @@ export default {
                     });
                 }
             }).catch(err => {
-                console.log(err);
-                this.$message({
-                    message: "服务端未启动",
+                if(err.response.state ==500){
+                    this.$message({
+                    message: "服务端错误",
                     type: 'warning'
                 });
+                }
+
             })
         },
         getUser() {
             userApi.getUser().then(response => {
+                if(response.data.retCode ==401){
+                    this.$message({
+                        message:response.data.message,
+                        type:'info'
+                    })
+                }   
                 // 用户信息
                 this.userInfo = response.data.data;
                 // 将 this.userInfo 深拷贝到 this.userOld
@@ -507,10 +511,14 @@ export default {
                 // 登录成功后得到用户信息并保存 user
                 this.$store.commit('setUser', response.data.data);
             }).catch(err => {
+                const data = err.response.data
+                this.$message({
+                    message: data.message,
+                    type:'info'
+                })
                 // 出错后，token设为null
                 this.token = null;
                 localStorage.removeItem('token');
-                console.log(err);
             })
         },
         // 更新用户信息

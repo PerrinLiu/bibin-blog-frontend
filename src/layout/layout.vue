@@ -9,7 +9,7 @@
                     <!-- 头像 -->
                     <el-menu-item id="el-menu-item">
                         <span class="el-dropdown-link" @click="drawer = false">
-                            <span v-if="user || token != null">
+                            <span v-if="user!='user' || token != null">
                                 <router-link style="text-decoration: none;" to="/login">
                                     <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
                                     {{ user.nickname }}
@@ -96,7 +96,7 @@
                                         </span>
                                     </span>
                                     <el-dropdown-menu slot="dropdown">
-                                        <span v-if="user!='user' || token != null">
+                                        <span v-if="user != 'user' || token != null">
                                             <router-link style="text-decoration: none;" to="/login">
                                                 <el-dropdown-item command="a"><i
                                                         class="el-icon-user"></i>个人信息</el-dropdown-item>
@@ -122,7 +122,8 @@
             </transition>
             <el-main id="el-main">
                 <span v-if="showTop" style="position: fixed;z-index: 1;right: 20px;bottom: 70px;">
-                    <i class="el-icon-top" style="font-size: 50px;font-weight: 900;cursor: pointer;color: black;" @click="backTop()"></i>
+                    <i class="el-icon-top" style="font-size: 50px;font-weight: 900;cursor: pointer;color: black;"
+                        @click="backTop()"></i>
                 </span>
                 <router-view ref="childRef"></router-view>
             </el-main>
@@ -164,7 +165,7 @@ export default {
         // 拿到用户信息
         user() {
             // 通过 this.$store.state 访问用户信息
-            if(this.$store.state.user!=null){
+            if (this.$store.state.user != null) {
                 return this.$store.state.user;
             }
             return 'user';
@@ -179,22 +180,28 @@ export default {
         if (this.token != null && this.$route.path != '/login') {
             this.getUser();
         }
-        if(this.user)
-        // 使用窗口大小监听来更新 isMobile 值
-        window.addEventListener('resize', this.updateLayout);
+        if (this.user)
+            // 使用窗口大小监听来更新 isMobile 值
+            window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
     },
     methods: {
+        // 判断更改布局
         updateLayout() {
-            this.isMobile = window.innerWidth <= 910; // 根据实际情况设置阈值
-            if (this.isMobile) {
+            // 判断是否时手机端
+            if (window.innerWidth <= 910) {
+                this.isMobile = true;
                 this.background = 'background-color: rgba(0, 0, 0, 1);'
                 this.show = true;
                 //如果是手机端，不监听滚动事件
                 window.removeEventListener('scroll', this.handleScroll);
             } else {
+                this.isMobile = false;
                 this.handleScroll();
                 this.background = ''
+            }
+            if (this.$store.state.isPhone != this.isMobile) {
+                this.$store.commit('setIsPhone', this.isMobile)
             }
         },
         //监听滚动事件
@@ -231,6 +238,7 @@ export default {
             };
             requestAnimationFrame(scrollStep);
         },
+        // 注销
         logout(command) {
             if (command == 'b') {
                 userApi.logout().then(response => {
@@ -249,8 +257,15 @@ export default {
                 })
             }
         },
+        // 获得当前用户信息
         getUser() {
             userApi.getUser().then(response => {
+                if(response.data.retCode ==401){
+                    this.$message({
+                        message:response.data.message,
+                        type:'info'
+                    })
+                }   
                 this.userInfo = response.data.data;
                 this.userInfo.userId = response.data.data.userId;
                 // 将 this.userInfo 深拷贝到 this.userOld

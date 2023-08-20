@@ -21,5 +21,8 @@ export default{
     },
     updateUserImg(data){
         return request.post('/user/updateUserImg',data)
+    },
+    getAccess(){
+        return request.get('/user/getAccess');
     }
 }

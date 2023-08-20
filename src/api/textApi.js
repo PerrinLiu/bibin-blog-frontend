@@ -4,7 +4,20 @@ export default{
     addDiary(data){
         return request.post('/text/addDiary',data)
     },
-    getDiary(){
-        return request.get('/text/getDiary')
+    getDiaryAll(){
+        return request.get('/text/getDiaryAll')
     },
+    getDiaryByUser(){
+        return request.get('/text/getDiaryByUser')
+    },
+    getDiaryBase(){
+        return request.get('/text/getDiaryBase')
+    },
+    getDiaryBaseByUser(){
+        return request.get('/text/getDiaryBaseByUser')
+    },
+    getDiaryOne(data){
+        return request.get('/text/getDiaryOne',data)
+    }
+    
 }

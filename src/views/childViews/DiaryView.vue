@@ -1,5 +1,14 @@
 <template>
     <div class="diary-page">
+
+        <el-dialog title="日记内容" :visible.sync="showDiaryOne" width="100%">
+            <el-card class="box-card">
+                <span v-if="diaryBaseOne != null">
+                    <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
+                    </div>
+                </span>
+            </el-card>
+        </el-dialog>
         <div class="backgroundImg">
             <transition name="el-zoom-in-top">
                 <div v-show="showImg" class="backgroundImg"
@@ -12,48 +21,135 @@
 
         </div>
 
-        <div class="content" style="margin-top: 50vh;display: flex;justify-content: center;">
-            <div style="position: relative;width: 70vw;min-width: 1024px;">
-                <el-container>
-                    <!-- 头部 -->
-                    <el-header id="header" style="width: 50vw;min-width: 720px;">
-                        <div class="float-left" style="position:relative;left: 200px;">
-                            <h3 style="color: rgb(70, 70, 70);cursor: pointer;" @click="searchMe()"><i
-                                    class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的</h3>
-                        </div>
-                        <div class="float-right" style="position: relative;top: 10px;">
-                            <el-button plain @click="diaryYN()">添加小记</el-button>
-                        </div>
-                        <!-- 日记表单 -->
-                        <el-dialog title="添加日记" :visible.sync="dialogDiary" width="900px" :close-on-click-modal="false">
-                            <!-- 绑定方法 -->
-                            <mark-down-view @child-event="getDiary"></mark-down-view>
-                        </el-dialog>
-                    </el-header>
-                    <!-- 内容 -->
-                    <el-main style="position: relative;height: auto;">
-                        <div class="diary-container">
-                            <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column" ref="myCard">
-                                <el-card class="box-card color-card" v-for="o in column" :key="o.diaryId"
-                                    style="min-width: 300px;">
-                                    <!-- 卡片内容 -->
-                                    <div class="card-content">
-                                        <h2 style="position: relative;top: -20px;">{{ o.diaryTitle }}</h2>
-                                        <p style="width: 96%;position: relative;top: -30px;" v-html="o.diaryText"></p>
-                                        <span class="time">{{ formatDate(o.createTime) }}</span>
-                                    </div>
-                                </el-card>
+        <div class="content" style="margin-top: 50vh;display: flex;justify-content: center;" v-loading="loading"
+            element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
+            element-loading-background="rgba(0, 0, 0, 0.8)">
+
+
+
+            <!-- 手机端 -->
+            <span v-if="isPhone">
+                <div style="position: relative;width: 100%;">
+                    <el-container>
+                        <!-- 头部 -->
+                        <el-header id="header" style="width: 50vw;">
+                            <div class="float-left" style="position:relative;left: 0px;width: 150px;">
+                                <h3 style="color: rgb(70, 70, 70);cursor: pointer;">
+                                    <span v-if="showMe" @click="showMe = false; searchMe()">
+                                        <i class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的
+                                    </span>
+                                    <span v-else @click="showMe = true; getDiaryAll()">
+                                        <i class="el-icon-s-help"></i>&nbsp;&nbsp;查看全部
+                                    </span>
+                                </h3>
                             </div>
-                        </div>
+                            <div class="float-right" style="position: absolute;top: 10px;right:100px;width: 30px;">
+                                <el-button plain @click="diaryYN()">添加小记</el-button>
+                            </div>
+                            <!-- 日记表单 -->
+                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw" :close-on-click-modal="false">
+                                <!-- 绑定方法 -->
+                                <mark-down-view @child-event="getDiaryAll"></mark-down-view>
+                            </el-dialog>
+                        </el-header>
+                        <!-- 内容 -->
+                        <el-main style="position: relative;height: auto;">
+                            <span v-if="diaryBase != null">
+                                <div class="diary-container">
+                                    <!-- 循环遍历每一列 -->
+                                    <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column"
+                                        ref="myCard">
+                                        <!-- 循环遍历每个卡片 -->
+                                        <el-card class="box-card color-card" :body-style="{ padding: '0px' }"
+                                            v-for="o in column" :key="o.diaryId" style="min-width: 300px;">
+                                            <!-- 卡片内容 -->
+                                            <div class="card-content" style="margin-bottom: 0px;margin-left: 20px;">
+                                                <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
+                                                </h5>
+                                                <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
+                                                    o.createTime }}
+                                                    <span
+                                                        style="position: absolute;top:-20px;right:50px;font-size: 30px;cursor: pointer;"
+                                                        @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne"><i
+                                                            class="el-icon-thumb"></i></span>
+                                                </span>
+                                            </div>
+                                        </el-card>
+                                    </div>
+                                </div>
+                            </span>
+                            <span v-else>
+                                <el-empty description="无任何数据"></el-empty>
+                            </span>
 
-                    </el-main>
+                        </el-main>
 
-                </el-container>
+                    </el-container>
+                </div>
+            </span>
+            <!-- 电脑端 -->
+            <span v-else>
+                <div style="position: relative;width: 70vw;min-width: 1024px;">
+                    <el-container>
+                        <!-- 头部 -->
+                        <el-header id="header" style="width: 50vw;min-width: 720px;">
+                            <div class="float-left" style="position:relative;left: 200px;">
+                                <h3 style="color: rgb(70, 70, 70);cursor: pointer;">
+                                    <span v-if="showMe" @click="showMe = false; searchMe()">
+                                        <i class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的
+                                    </span>
+                                    <span v-else @click="showMe = true; getDiaryAll()">
+                                        <i class="el-icon-s-help"></i>&nbsp;&nbsp;查看全部
+                                    </span>
 
-            </div>
+                                </h3>
+                            </div>
+                            <div class="float-right" style="position: relative;top: 10px;">
+                                <el-button plain @click="diaryYN()">添加小记</el-button>
+                            </div>
+                            <!-- 日记表单 -->
+                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw" :close-on-click-modal="false">
+                                <!-- 绑定方法 -->
+                                <mark-down-view @child-event="getDiaryAll"></mark-down-view>
+                            </el-dialog>
+                        </el-header>
+                        <!-- 内容 -->
+                        <el-main style="position: relative;height: auto;">
+                            <span v-if="diaryInfo.length == 0">
+                                <el-empty description="无任何数据"></el-empty>
+                            </span>
+                            <span v-else>
+                                <div class="diary-container">
+                                    <!-- 循环遍历每一列 -->
+                                    <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column"
+                                        ref="myCard">
+                                        <!-- 循环遍历每个卡片 -->
+                                        <el-card class="box-card color-card" v-for="o in column" :key="o.diaryId"
+                                            style="min-width: 300px;">
+                                            <!-- 卡片内容 -->
+                                            <div class="card-content">
+                                                <h3 style="position: relative;top: -20px;">{{ o.diaryTitle }} </h3>
+                                                <p style="width: 96%;position: relative;top: -30px;" v-html="o.diaryText">
+                                                </p>
+                                                <span class="time">{{ o.createTime }}</span>
+                                            </div>
+                                        </el-card>
+                                    </div>
+                                </div>
+                            </span>
+
+                        </el-main>
+
+                    </el-container>
+                </div>
+            </span>
+
+
+
             <!-- 用来撑起高度 -->
             <div class="content-after" style="height: 60px;">
-
+                <!-- 隐藏 不要让数据清空 -->
+                <span style="display: none;">{{ user }}{{ isPhone }} {{ yes(isPhone) }}</span>
             </div>
         </div>
     </div>
@@ -72,64 +168,185 @@ export default {
             showImg: false,
             // 日记表单
             dialogDiary: false,
-            // 日记信息
+            // 日记信息数组
             diaryInfo: [],
             // token
             token: null,
-            columns: [] // 将卡片信息分配到列中
+            columns: [], // 将日记信息分配到列中，每列是一个数组
+            loading: false,  //加载
+            column: null,  //布局列
+            diaryBase: null,  //日记基础信息
+            diaryBaseOne: null,
+            flag: null,  //标记是否为电脑端布局
+            showMe: true,  //只看我的
+            showDiaryOne: false, //单个日记内容
         }
     },
     mounted() {
+        // 开始时显示背景图片，让他实现有动画
         this.showImg = true;
+        // 获得token
         this.token = localStorage.getItem('token');
-        if (this.token !== null) {
-            this.getDiary();
-        }
-        this.calculateColumnLayout();
-        window.innerWidth = 200;
+        this.getDiaryAll();
+        //监听
         window.addEventListener('resize', this.calculateColumnLayout);
     },
     beforeDestroy() {
+        // 组件销毁时移除监听事件
         window.removeEventListener('resize', this.calculateColumnLayout);
     },
+    computed: {
+        user() {
+            return this.$store.state.user;
+        },
+        isPhone() {
+            return this.$store.state.isPhone;
+        },
+    },
     methods: {
-        getDiary() {
-            textApi.getDiary().then(response => {
+        // 判断isPhone得到值之后，当前是手机端还是电脑端，选择调用哪个方法
+        yes(isPhone) {
+            // 不为空且不相等时，改变赋值，重新调用方法
+            if (isPhone != null) {
+                if (this.flag != isPhone) {
+                    this.flag = isPhone;
+                    this.getDiaryAll();
+                }
+            }
+        },
+        // 获取所有日记
+        getDiaryAll() {
+            this.loading = true;
+            //如果是手机布局，获取基本信息
+            if (this.flag) {
+                this.getDiaryBase();
+            } else {
+                // 否则获得全部信息
+                this.getDiaryInfo();
+            }
+
+        },
+        //获取日记全部信息
+        getDiaryInfo() {
+            textApi.getDiaryAll().then(response => {
                 this.diaryInfo = response.data.data;
+                // 遍历日期，更改日期格式
+                this.diaryInfo.forEach(element => {
+                    element.createTime = element.createTime.substring(0, 10);
+                });
+                // 关闭表单
                 this.dialogDiary = false;
+                this.loading = false;
             }).catch(err => {
+                this.loading = false;
                 console.log(err);
             })
         },
-        // 如果用户没登陆，点击添加时，提示先登录
-        diaryYN() {
+        // 获取日记基本信息
+        getDiaryBase() {
+            textApi.getDiaryBase().then(response => {
+                this.diaryBase = response.data.data;
+                this.diaryBase.forEach(element => {
+                    element.createTime = element.createTime.substring(0, 10);
+                });
+                this.loading = false;
+            }).catch(err => {
+                console.log(err);
+                this.loading = false;
+            })
+        },
+        getDiaryBaseByUser() {
+            textApi.getDiaryBaseByUser().then(response => {
+                this.diaryBase = response.data.data;
+                this.diaryBase.forEach(element => {
+                    element.createTime = element.createTime.substring(0, 10);
+                });
+                this.loading = false;
+            }).catch(err => {
+                console.log(err);
+                this.loading = false;
+            })
+        },
+        // 获取当前用户日记
+        searchMe() {
+            if (!this.isLogin()) {
+                return;
+            }
+            this.loading = true;
+            //如果是手机布局，获取基本信息
+            if (this.flag) {
+                this.getDiaryBaseByUser();
+            } else {
+                textApi.getDiaryByUser().then(response => {
+                    this.diaryInfo = response.data.data;
+                    this.diaryInfo.forEach(element => {
+                        element.createTime = element.createTime.substring(0, 10);
+                    });
+                    this.loading = false;
+                }).catch(err => {
+                    this.loading = false;
+                    console.log(err);
+                })
+            }
+
+        },
+        // 获取单个日记内容
+        getDiaryOne(diaryId) {
+            textApi.getDiaryOne({
+                params: {
+                    diaryId: diaryId
+                }
+            }).then(response => {
+                this.diaryBaseOne = response.data.data;
+            }).catch(err => {
+
+                console.log(err);
+            })
+        },
+        // 判断用户是否登录
+        isLogin() {
             if (this.token == null) {
                 this.$message({
                     message: "请先登录",
                     type: 'warning',
                 });
-            } else {
-                this.dialogDiary = true;
+                return false;
             }
+            return true;
         },
-        formatDate(datetimeString) {
-            const date = new Date(datetimeString);
-            const year = date.getFullYear();
-            const month = String(date.getMonth() + 1).padStart(2, '0');
-            const day = String(date.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
+        // 如果用户没登陆，点击添加时，提示先登录
+        diaryYN() {
+            if (!this.isLogin()) return;
+            this.dialogDiary = true;
         },
+        // 计算卡片列的布局
         calculateColumnLayout() {
-            this.columns = Array.from({ length: 3 }, () => []);
-            this.diaryInfo.forEach((item, index) => {
-                const columnIndex = index % 3;
-                this.columns[columnIndex].push(item);
-            });
+            this.column = this.isPhone ? 1 : 3;
+            this.columns = Array.from({ length: this.column }, () => []); // 创建三个空列
+            const diary = this.isPhone ? this.diaryBase : this.diaryInfo;
+            if (diary != null) {
+                diary.forEach((item, index) => {
+                    const columnIndex = index % this.column; // 根据索引确定列位置
+                    if (this.columns[columnIndex] != undefined) {
+                        this.columns[columnIndex].push(item); // 将卡片信息放入对应的列
+                    }
+
+                });
+            }
+
         },
+
     },
     watch: {
+        // 当卡片信息改变时重新计算布局
         diaryInfo: {
-            immediate: true,
+            immediate: true, // 立即触发
+            handler() {
+                this.calculateColumnLayout();
+            }
+        },
+        diaryBase: {
+            immediate: true, // 立即触发
             handler() {
                 this.calculateColumnLayout();
             }
@@ -150,14 +367,25 @@ export default {
 
 }
 
+
+
 .column {
     flex: 1;
+    /* 列均匀分配剩余空间 */
 }
 
 .box-card {
     min-width: 300px;
     display: flex;
     flex-direction: column;
+}
+
+img {
+    width: 100%;
+}
+
+.box-card {
+    width: 100% !important;
 }
 
 .color-card {
@@ -172,8 +400,8 @@ export default {
 }
 
 .time {
+    bottom: -25px;
     position: relative;
-    bottom: -30px;
     /* 将时间部分置底 */
     font-weight: 600;
 }
@@ -181,4 +409,5 @@ export default {
 .el-zoom-in-top-enter-active,
 .el-zoom-in-top-leave-active {
     transition: transform 1.2s;
-}</style>
+}
+</style>

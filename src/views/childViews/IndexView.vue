@@ -59,7 +59,7 @@
                                     </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div style="float: left;">
                                         <h4>访问量</h4>
-                                        0
+                                        {{ access }}
                                     </div>
                                 </div>
                             </el-card>
@@ -135,7 +135,7 @@
                                         </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                         <div style="float: left;">
                                             <h4>访问量</h4>
-                                            0
+                                            {{ access }}
                                         </div>
                                     </div>
                                 </el-card>
@@ -204,6 +204,7 @@
 </template>
 
 <script>
+import userApi from '@/api/userApi';
 export default {
     data() {
         return {
@@ -218,19 +219,30 @@ export default {
             isPhone: '',
             //滚动距离
             roll: '',
+            access: 0, //访问量
         }
     },
+    // 页面加载完成执行
     mounted() {
+        //获取页面背景
         this.getImg();
+        //背景图片展示
         this.showImg = true;
         // 使用窗口大小监听来更新 isMobile 值
         window.addEventListener('resize', this.updateLayout);
-        this.updateLayout(); // 初始化时执行一次
-
+        this.updateLayout(); // 初始化时执行一次s
         //页面刷新时回到顶部
         this.scrollTop();
+        // 获得访问量
+        this.getAccess();
+    },
+    computed:{
+        user(){
+            return this.$store.state.user;
+        }
     },
     methods: {
+        // 是否更改布局的判断方法
         updateLayout() {
             if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
                 //给未登录更新动态样式
@@ -240,7 +252,7 @@ export default {
                 this.roll = -5;
             }
         },
-
+        // 获得背景图片
         getImg() {
             const randomIndex = Math.floor(Math.random() * 6) + 1;
             this.userImg = "https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/背景" + randomIndex + ".webp";
@@ -279,6 +291,15 @@ export default {
         // 搜索
         search() {
             console.log(123);
+        },
+        // 获得访问量
+        getAccess(){
+            userApi.getAccess().then(response=>{
+               const data =  response.data.data;
+               this.access = data;
+            }).catch(err=>{
+                console.log(err);
+            })
         }
     },
     beforeDestroy() {
@@ -403,7 +424,7 @@ export default {
 .box-card1 {
     height: 300px;
     background-size: 300% 300%;
-    background-image: linear-gradient(90deg, #3db7f0, #8bceee, #0aa6f5);
+    background-image: linear-gradient(90deg, #728086, #8bceee, #88949b);
     animation: colorChange 5s linear infinite;
 }
 
