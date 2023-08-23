@@ -112,7 +112,7 @@ export default {
             this.html = render;
             if (this.html.includes('<img')) {
                 // 如果包含图片，限制图片大小再发请求
-                this.html = this.html.replace('img', 'img style="width:100%"');
+                this.html = this.html.replace('img', 'img style="width:100%;margin-top:20px"');
 
             }
             if (this.html.length > 5 * 1024 * 1024) {

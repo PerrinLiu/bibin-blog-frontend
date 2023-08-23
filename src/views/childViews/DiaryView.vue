@@ -35,7 +35,7 @@
                         <el-header id="header" style="width: 50vw;">
                             <div class="float-left" style="position:relative;left: 0px;width: 150px;">
                                 <h3 style="color: rgb(70, 70, 70);cursor: pointer;">
-                                    <span v-if="showMe" @click="showMe = false; searchMe()">
+                                    <span v-if="showMe" @click="searchMe()">
                                         <i class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的
                                     </span>
                                     <span v-else @click="showMe = true; getDiaryAll()">
@@ -67,7 +67,7 @@
                                                 <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
                                                 </h5>
                                                 <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
-                                                    o.createTime }}
+                                                    o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
                                                     <span
                                                         style="position: absolute;top:-20px;right:50px;font-size: 30px;cursor: pointer;"
                                                         @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne"><i
@@ -95,7 +95,7 @@
                         <el-header id="header" style="width: 50vw;min-width: 720px;">
                             <div class="float-left" style="position:relative;left: 200px;">
                                 <h3 style="color: rgb(70, 70, 70);cursor: pointer;">
-                                    <span v-if="showMe" @click="showMe = false; searchMe()">
+                                    <span v-if="showMe" @click="searchMe()">
                                         <i class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的
                                     </span>
                                     <span v-else @click="showMe = true; getDiaryAll()">
@@ -131,7 +131,7 @@
                                                 <h3 style="position: relative;top: -20px;">{{ o.diaryTitle }} </h3>
                                                 <p style="width: 96%;position: relative;top: -30px;" v-html="o.diaryText">
                                                 </p>
-                                                <span class="time">{{ o.createTime }}</span>
+                                                <span class="time">{{ o.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;{{ o.nickname }}</span>
                                             </div>
                                         </el-card>
                                     </div>
@@ -187,8 +187,7 @@ export default {
         this.showImg = true;
         // 获得token
         this.token = localStorage.getItem('token');
-        this.getDiaryAll();
-        //监听
+        //监听浏览器窗口大小发生
         window.addEventListener('resize', this.calculateColumnLayout);
     },
     beforeDestroy() {
@@ -255,6 +254,7 @@ export default {
                 this.loading = false;
             })
         },
+        // 获取单个用户日记基本信息
         getDiaryBaseByUser() {
             textApi.getDiaryBaseByUser().then(response => {
                 this.diaryBase = response.data.data;
@@ -272,6 +272,7 @@ export default {
             if (!this.isLogin()) {
                 return;
             }
+            this.showMe = false; 
             this.loading = true;
             //如果是手机布局，获取基本信息
             if (this.flag) {
@@ -400,6 +401,7 @@ img {
 }
 
 .time {
+    font-size: 14px;
     bottom: -25px;
     position: relative;
     /* 将时间部分置底 */

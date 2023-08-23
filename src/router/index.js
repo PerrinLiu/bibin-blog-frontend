@@ -7,6 +7,7 @@ import DiaryView from '../views/childViews/DiaryView.vue'
 import LoginView from '../views/childViews/LoginView.vue'
 import PhotoView from '../views/childViews/PhotoView.vue'
 import MessageView from '../views/childViews/MessageView.vue'
+import LoveView from '../views/childViews/LoveView.vue'
 
 // 使用Vue Router插件
 Vue.use(VueRouter);
@@ -34,6 +35,14 @@ const routes = [
                 component: LoginView,
                 meta: {
                 title: 'Bibin | 登录'
+                }
+            },
+            {
+                path:'/love',
+                name: 'love',
+                component: LoveView,
+                meta: {
+                title: 'Bibin | 记恋'
                 }
             },
             {

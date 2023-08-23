@@ -73,7 +73,8 @@
                                     <el-form-item style="position:relative;left: -10%;">
                                         <el-button plain style="position: relative; left: 0%;" class="noLogin-left-btn2"
                                             @click="update('updateUser')">提交</el-button>
-                                        <el-button style="position: relative;left: 10%;" @click="updatePsw()">修改密码</el-button>
+                                        <el-button style="position: relative;left: 10%;"
+                                            @click="updatePsw()">修改密码</el-button>
                                     </el-form-item>
 
                                 </el-form>
@@ -423,10 +424,10 @@ export default {
     },
     created() {
         this.token = localStorage.getItem('token');
-        if(this.$store.state.user!=null){
+        if (this.$store.state.user != null) {
             this.userInfo = this.$store.state.user;
         }
-        
+
     },
     mounted() {
         //页面加载后开始展示
@@ -459,7 +460,9 @@ export default {
                 this.isPhone = false;
             }
         },
+        // 接收的是表单信息
         login(formName1) {
+            // 判断表单信息是否通过
             let flag = true;
             this.$refs[formName1].validate((valid) => {
                 if (!valid) {
@@ -487,23 +490,23 @@ export default {
                     });
                 }
             }).catch(err => {
-                if(err.response.state ==500){
+                if (err.response.status == 500) {
                     this.$message({
-                    message: "服务端错误",
-                    type: 'warning'
-                });
+                        message: "服务端错误",
+                        type: 'info'
+                    });
                 }
 
             })
         },
         getUser() {
             userApi.getUser().then(response => {
-                if(response.data.retCode ==401){
+                if (response.data.retCode == 401) {
                     this.$message({
-                        message:response.data.message,
-                        type:'info'
+                        message: response.data.message,
+                        type: 'info'
                     })
-                }   
+                }
                 // 用户信息
                 this.userInfo = response.data.data;
                 // 将 this.userInfo 深拷贝到 this.userOld
@@ -514,7 +517,7 @@ export default {
                 const data = err.response.data
                 this.$message({
                     message: data.message,
-                    type:'info'
+                    type: 'info'
                 })
                 // 出错后，token设为null
                 this.token = null;
@@ -561,13 +564,13 @@ export default {
                 console.log(err);
             })
         },
-        updatePsw(){
+        updatePsw() {
             this.userInfo.password = "123";
-            userApi.updateUser(this.userInfo).then(response=>{
+            userApi.updateUser(this.userInfo).then(response => {
                 const data = response.data;
                 this.$message({
-                    message:data.message,
-                    type:'info'
+                    message: data.message,
+                    type: 'info'
                 })
                 this.userInfo.password = null;
             })

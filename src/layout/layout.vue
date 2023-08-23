@@ -71,6 +71,9 @@
                             <el-menu-item id="el-menu-item" index="/"><i class="el-icon-school"></i>首页
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
+                            <el-menu-item id="el-menu-item" index="/love"><i class="el-icon-moon-night"></i>记恋
+                                <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
+                            </el-menu-item>
                             <el-menu-item id="el-menu-item" index="/article"><i class="el-icon-notebook-1"></i>文章
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
