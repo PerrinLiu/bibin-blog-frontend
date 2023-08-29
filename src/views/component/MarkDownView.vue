@@ -110,10 +110,10 @@ export default {
         change(value, render) {
             // render 为 markdown 解析后的结果[html]
             this.html = render;
+
             if (this.html.includes('<img')) {
                 // 如果包含图片，限制图片大小再发请求
-                this.html = this.html.replace('img', 'img style="width:100%;margin-top:20px"');
-
+                this.html = this.html.replace(/<img/g, '<img style="width:47%;margin-top:20px;margin-left:2%"');
             }
             if (this.html.length > 5 * 1024 * 1024) {
                 this.$message({
@@ -121,8 +121,6 @@ export default {
                     type: 'warning'
                 })
             }
-            console.log(this.html.length);
-            console.log(5 * 1024 * 1024);
         },
         // 提交
         submit() {

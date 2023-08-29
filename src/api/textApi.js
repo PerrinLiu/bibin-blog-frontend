@@ -18,6 +18,9 @@ export default{
     },
     getDiaryOne(data){
         return request.get('/text/getDiaryOne',data)
+    },
+    deleteDiaryOne(data){
+        return request.delete('/text/deleteDiaryOne',data)
     }
     
 }

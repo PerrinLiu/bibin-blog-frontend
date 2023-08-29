@@ -116,9 +116,24 @@
                                                 <el-empty description="你还没写过日记~"></el-empty>
                                             </span>
                                             <span v-else>
-                                                <el-card style="width: 90%;margin: 10px 5%;" v-for="o in 10" :key="o">
-                                                    <div>
-                                                        {{ o }}
+                                                <el-card style="width: 90%;margin: 10px 2%;" v-for="o in userDiary"
+                                                    :key="o.id" :body-style="{ padding: '0px' }">
+                                                    <!-- 卡片内容 -->
+                                                    <div class="card-content"
+                                                        style="width:100%;margin-bottom: 0px;margin-left: 20px;">
+                                                        <h5 style="position: relative;height:20px;top: -3px;">{{
+                                                            o.diaryTitle }}</h5>
+                                                        <span style="position: relative;top: -20px;font-size: 12px;"
+                                                            class="time">{{
+                                                                o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                            <span
+                                                                style="position: absolute;top:-20px;right:-110%;font-size: 30px;cursor: pointer;"
+                                                                @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
+                                                                <i class="el-icon-thumb"></i>
+                                                            </span>
+
+                                                        </span>
+
                                                     </div>
                                                 </el-card>
                                             </span>
@@ -128,9 +143,40 @@
 
                             </div>
                         </div>
+                        <el-card v-if="showDiaryOne" class="box-card"
+                            style="position: fixed;top: 20vh;left: 10vw;z-index: 999;">
+                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？"  >
+                                <span  slot="reference" style="cursor: pointer;font-size: 20px;"><i
+                                    class="el-icon-delete"></i></span>
+                            </el-popconfirm>
+                            
+                            <span @click="showDiaryOne = !showDiaryOne"
+                                style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
+                                    class="el-icon-close"></i></span>
+                            <span v-if="diaryBaseOne != null">
+                                <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
+                                </div>
+                            </span>
+                        </el-card>
                     </span>
+
                     <!-- 电脑端 -->
                     <span v-else>
+                        <el-card v-if="showDiaryOne" class="box-card"
+                            style="position: fixed;top: 20vh;left: 40vw;z-index: 999;">
+                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？"  >
+                                <span  slot="reference" style="cursor: pointer;font-size: 20px;"><i
+                                    class="el-icon-delete"></i></span>
+                            </el-popconfirm>
+                            
+                            <span @click="showDiaryOne = !showDiaryOne"
+                                style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
+                                    class="el-icon-close"></i></span>
+                            <span v-if="diaryBaseOne != null">
+                                <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
+                                </div>
+                            </span>
+                        </el-card>
                         <div class="isLogin-left">
                             <span class="isLogin-userImg">
                                 <el-upload class="avatar-uploader" action="/api/user/updateUserImg" :show-file-list="false"
@@ -196,7 +242,7 @@
                                 <el-form-item>
                                     <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
                                         @click="update('updateUser')">提交</el-button>
-                                    <el-button style="position: relative;left: 30%;" @click="updatePsw()">修改密码</el-button>
+                                    <el-button style="position: relative;left: 30%;" @click="updatePsw();">修改密码</el-button>
                                 </el-form-item>
 
                             </el-form>
@@ -241,9 +287,22 @@
                                         <el-empty description="你还没写过日记~"></el-empty>
                                     </span>
                                     <span v-else>
-                                        <el-card style="width: 90%;margin: 10px 2%;" v-for="o in 10" :key="o">
-                                            <div>
-                                                {{ o }}
+                                        <el-card style="width: 90%;margin: 10px 2%;" v-for="o in userDiary" :key="o.id"
+                                            :body-style="{ padding: '0px' }">
+                                            <!-- 卡片内容 -->
+                                            <div class="card-content"
+                                                style="width:100%;margin-bottom: 0px;margin-left: 20px;">
+                                                <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
+                                                </h5>
+                                                <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
+                                                    o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                    <span
+                                                        style="position: absolute;top:-20px;right:-200%;font-size: 30px;cursor: pointer;"
+                                                        @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
+                                                        <i class="el-icon-thumb"></i>
+                                                    </span>
+                                                </span>
+
                                             </div>
                                         </el-card>
                                     </span>
@@ -337,12 +396,14 @@
                 </div>
 
             </span>
+
         </div>
     </transition>
 </template>
 
 <script>
 import userApi from '@/api/userApi';
+import textApi from '@/api/textApi';
 export default {
     data() {
         return {
@@ -389,6 +450,7 @@ export default {
             userPhoto: null,
             //用户日记
             userDiary: null,
+            //表单规则
             loginRules: {
                 username: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' },
@@ -420,6 +482,9 @@ export default {
             //客户端样式
             isPhone: false,
             isLoginLeft: '',
+            //单个用户日记内容是否展示
+            showDiaryOne: false,
+            diaryBaseOne: null,
         }
     },
     created() {
@@ -435,12 +500,14 @@ export default {
         //如果token不为空，获取用户
         if (this.token != null) {
             this.getUser();
+            this.getDiaryBaseByUser();
         }
         // 使用窗口大小监听来更新 isMobile 值
         window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
     },
     methods: {
+        //判断是否更改布局
         updateLayout() {
             if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
                 //给未登录更新动态样式
@@ -499,6 +566,7 @@ export default {
 
             })
         },
+        // 获取用户信息
         getUser() {
             userApi.getUser().then(response => {
                 if (response.data.retCode == 401) {
@@ -564,8 +632,8 @@ export default {
                 console.log(err);
             })
         },
+        // 修改密码
         updatePsw() {
-            this.userInfo.password = "123";
             userApi.updateUser(this.userInfo).then(response => {
                 const data = response.data;
                 this.$message({
@@ -670,7 +738,7 @@ export default {
         handleAvatarSuccess() {
             this.getUser();
         },
-        // 上传钱验证
+        // 上传前验证
         beforeAvatarUpload(file) {
             const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 5;
@@ -682,6 +750,46 @@ export default {
                 this.$message.error('上传头像图片大小不能超过 5MB!');
             }
             return isJPG && isLt2M;
+        },
+        // 获取单个用户日记基本信息
+        getDiaryBaseByUser() {
+            textApi.getDiaryBaseByUser().then(response => {
+                this.userDiary = response.data.data;
+                this.userDiary.forEach(element => {
+                    element.createTime = element.createTime.substring(0, 10);
+                });
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        // 获取单个日记内容
+        getDiaryOne(diaryId) {
+            textApi.getDiaryOne({
+                params: {
+                    diaryId: diaryId
+                }
+            }).then(response => {
+                this.diaryBaseOne = response.data.data;
+            }).catch(err => {
+                console.log(err);
+            })
+        },
+        delDiary(id){
+            textApi.deleteDiaryOne({
+                params:{
+                    diaryId:id,
+                }
+            }).then(response=>{
+                console.log(response.data.data);
+                this.getDiaryBaseByUser();
+                this.showDiaryOne = !this.showDiaryOne;
+                this.$message({
+                    message:response.data.message,
+                    type:'success'
+                })
+            }).catch(err=>{
+                console.log(err);
+            })
         }
     },
     // 页面关闭结束后，移除倒计时
@@ -710,5 +818,4 @@ export default {
 .el-zoom-in-bottom-leave-active {
     transition: 0.8s;
     /* 使用CSS过渡属性来定义动画效果 */
-}
-</style>
+}</style>
