@@ -7,9 +7,15 @@ axios.interceptors.request.use(config => {
         const token = JSON.parse(localStorage.getItem('token'));
         config.headers['x-token'] = token;
     }
+    
     if(localStorage.getItem('emailToken')){
         const emailToken = JSON.parse(localStorage.getItem('emailToken'));
         config.headers['email-token'] = emailToken;
+    }
+
+    if(localStorage.getItem('captchaToken')){
+        const captchaToken = JSON.parse(localStorage.getItem('captchaToken'));
+        config.headers['captchaToken'] = captchaToken;
     }
     return config;
 }, function (error) {

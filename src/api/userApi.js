@@ -1,6 +1,9 @@
 import request from "@/request";
 
 export default{
+    getGenerateBase64(){
+        return request.get("/user/generate-base64");
+    },
     login(data){
         return request.post('/user/login',data)
     },

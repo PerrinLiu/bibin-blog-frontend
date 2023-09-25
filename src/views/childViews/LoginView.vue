@@ -24,7 +24,8 @@
                                         <el-input v-model="userInfo.nickname"></el-input>
                                     </el-form-item>
                                     <el-form-item label="用户名：">
-                                        {{ userInfo.username }}
+                                        {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
+                                            userInfo.root }}》</span>
                                     </el-form-item>
                                     <el-form-item prop="email" label="邮箱：">
                                         <span v-if="changeEmail">
@@ -145,11 +146,11 @@
                         </div>
                         <el-card v-if="showDiaryOne" class="box-card"
                             style="position: fixed;top: 20vh;left: 10vw;z-index: 999;">
-                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？"  >
-                                <span  slot="reference" style="cursor: pointer;font-size: 20px;"><i
-                                    class="el-icon-delete"></i></span>
+                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？">
+                                <span slot="reference" style="cursor: pointer;font-size: 20px;"><i
+                                        class="el-icon-delete"></i></span>
                             </el-popconfirm>
-                            
+
                             <span @click="showDiaryOne = !showDiaryOne"
                                 style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
                                     class="el-icon-close"></i></span>
@@ -164,11 +165,11 @@
                     <span v-else>
                         <el-card v-if="showDiaryOne" class="box-card"
                             style="position: fixed;top: 20vh;left: 40vw;z-index: 999;">
-                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？"  >
-                                <span  slot="reference" style="cursor: pointer;font-size: 20px;"><i
-                                    class="el-icon-delete"></i></span>
+                            <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？">
+                                <span slot="reference" style="cursor: pointer;font-size: 20px;"><i
+                                        class="el-icon-delete"></i></span>
                             </el-popconfirm>
-                            
+
                             <span @click="showDiaryOne = !showDiaryOne"
                                 style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
                                     class="el-icon-close"></i></span>
@@ -193,7 +194,8 @@
                                     <el-input v-model="userInfo.nickname"></el-input>
                                 </el-form-item>
                                 <el-form-item label="用户名：">
-                                    {{ userInfo.username }}
+                                    {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
+                                        userInfo.root }}》</span>
                                 </el-form-item>
                                 <el-form-item prop="email" label="邮箱：">
                                     <span v-if="changeEmail">
@@ -325,11 +327,25 @@
                                     <el-input v-model="userQuery.password" type="password" placeholder="密码"
                                         show-password></el-input>
                                 </el-form-item>
-                                <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
-                                <el-form-item>
-                                    <el-button class="noLogin-left-btn2" type="primary"
-                                        @click="login('userQuery')">登录</el-button>
+                                <el-form-item prop="captcha">
+                                    <el-input v-model="userQuery.captcha" type="text" placeholder="请输入验证码"></el-input>
+                                    <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()"
+                                        :src="captcha" />
+                                        <span style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">傻狗,看不清？点一下</span>
                                 </el-form-item>
+                                <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
+
+                                <el-form-item>
+                                    <span v-if="showLogin">
+                                        <el-button class="noLogin-left-btn2" type="primary"
+                                            @click="login('userQuery')">登录</el-button>
+                                    </span>
+                                    <span v-else>
+                                        <el-button disabled class="noLogin-left-btn2" type="primary">登录中···</el-button>
+                                    </span>
+
+                                </el-form-item>
+
                             </el-form>
                         </div>
                     </transition>
@@ -355,7 +371,7 @@
                                 <br><br><br>
                                 <el-button class="noLogin-right-btn1" @click="show2 = !show2, show1 = !show1" type="primary"
                                     style="margin-left: 16px;">
-                                    去登陆
+                                    去登录
                                 </el-button>
                             </div>
                         </div>
@@ -412,10 +428,13 @@ export default {
                 // 在这里添加您的请求头信息
                 'x-token': JSON.parse(localStorage.getItem('token'))
             },
+            //验证码
+            captcha: "data:image/gif;base64,",
             //登录对象
             userQuery: {
                 username: '',
                 password: '',
+                captcha: ''
             },
             //注册对象
             userRegister: {
@@ -458,6 +477,9 @@ export default {
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
                 ],
+                captcha: [
+                    { required: true, message: '验证码不能为空', trigger: 'blur' },
+                ]
             },
             registerRules: {
                 username: [
@@ -484,7 +506,10 @@ export default {
             isLoginLeft: '',
             //单个用户日记内容是否展示
             showDiaryOne: false,
+            //单个日记内容
             diaryBaseOne: null,
+            //登录中
+            showLogin: true,
         }
     },
     created() {
@@ -505,6 +530,9 @@ export default {
         // 使用窗口大小监听来更新 isMobile 值
         window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
+        if (this.token == null) {
+            this.getCaptcha();
+        }
     },
     methods: {
         //判断是否更改布局
@@ -527,13 +555,26 @@ export default {
                 this.isPhone = false;
             }
         },
+        //获取验证码
+        getCaptcha() {
+            userApi.getGenerateBase64().then(response => {
+
+                this.captcha = "data:image/gif;base64," + response.data[1];
+                const str = response.data[0];
+                localStorage.setItem('captchaToken',JSON.stringify(str));
+            }).catch(err => {
+                console.log(err);
+            })
+        },
         // 接收的是表单信息
         login(formName1) {
+            this.showLogin = false;
             // 判断表单信息是否通过
             let flag = true;
             this.$refs[formName1].validate((valid) => {
                 if (!valid) {
                     flag = false;
+                    this.showLogin = true;
                     return;
                 }
             });
@@ -541,6 +582,7 @@ export default {
             if (!flag) return;
             // 发起登录请求
             userApi.login(this.userQuery).then(response => {
+
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
                     localStorage.setItem('token', JSON.stringify(response.data.data.token));
@@ -550,20 +592,23 @@ export default {
                         type: 'success'
                     });
                     this.$router.push('/');
-                } else {
+                } else if(retCode == 500) {
                     this.$message({
                         message: response.data.message,
                         type: 'warning'
                     });
                 }
             }).catch(err => {
-                if (err.response.status == 500) {
+                console.log(err);
+                if (err) {
                     this.$message({
                         message: "服务端错误",
                         type: 'info'
                     });
                 }
 
+            }).finally(() => {
+                this.showLogin = true;
             })
         },
         // 获取用户信息
@@ -674,7 +719,6 @@ export default {
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
                     localStorage.setItem('emailToken', JSON.stringify(response.data.data));
-                    console.log(localStorage.getItem('emailToken'));
                     this.$message({
                         message: response.data.message,
                         type: 'success'
@@ -774,20 +818,20 @@ export default {
                 console.log(err);
             })
         },
-        delDiary(id){
+        delDiary(id) {
             textApi.deleteDiaryOne({
-                params:{
-                    diaryId:id,
+                params: {
+                    diaryId: id,
                 }
-            }).then(response=>{
+            }).then(response => {
                 console.log(response.data.data);
                 this.getDiaryBaseByUser();
                 this.showDiaryOne = !this.showDiaryOne;
                 this.$message({
-                    message:response.data.message,
-                    type:'success'
+                    message: response.data.message,
+                    type: 'success'
                 })
-            }).catch(err=>{
+            }).catch(err => {
                 console.log(err);
             })
         }
