@@ -25,7 +25,7 @@
                                     </el-form-item>
                                     <el-form-item label="用户名：">
                                         {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                            userInfo.root }}》</span>
+                                            userInfo.roleName }}》</span>
                                     </el-form-item>
                                     <el-form-item prop="email" label="邮箱：">
                                         <span v-if="changeEmail">
@@ -195,7 +195,7 @@
                                 </el-form-item>
                                 <el-form-item label="用户名：">
                                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                        userInfo.root }}》</span>
+                                        userInfo.roleName }}》</span>
                                 </el-form-item>
                                 <el-form-item prop="email" label="邮箱：">
                                     <span v-if="changeEmail">
@@ -331,7 +331,8 @@
                                     <el-input v-model="userQuery.captcha" type="text" placeholder="请输入验证码"></el-input>
                                     <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()"
                                         :src="captcha" />
-                                        <span style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">傻狗,看不清？点一下</span>
+                                    <span
+                                        style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">傻狗,看不清？点一下</span>
                                 </el-form-item>
                                 <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
 
@@ -561,7 +562,7 @@ export default {
 
                 this.captcha = "data:image/gif;base64," + response.data[1];
                 const str = response.data[0];
-                localStorage.setItem('captchaToken',JSON.stringify(str));
+                localStorage.setItem('captchaToken', JSON.stringify(str));
             }).catch(err => {
                 console.log(err);
             })
@@ -592,7 +593,7 @@ export default {
                         type: 'success'
                     });
                     this.$router.push('/');
-                } else if(retCode == 500) {
+                } else {
                     this.$message({
                         message: response.data.message,
                         type: 'warning'
@@ -781,6 +782,10 @@ export default {
         // 头像上传完毕后，重新获取信息
         handleAvatarSuccess() {
             this.getUser();
+            this.$message({
+                message: "修改成功",
+                type: 'success'
+            })
         },
         // 上传前验证
         beforeAvatarUpload(file) {
@@ -862,4 +867,5 @@ export default {
 .el-zoom-in-bottom-leave-active {
     transition: 0.8s;
     /* 使用CSS过渡属性来定义动画效果 */
-}</style>
+}
+</style>
