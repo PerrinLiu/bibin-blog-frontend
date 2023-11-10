@@ -25,7 +25,7 @@
                                     </el-form-item>
                                     <el-form-item label="用户名：">
                                         {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                            userInfo.root }}》</span>
+                                            userInfo.roleName }}》</span>
                                     </el-form-item>
                                     <el-form-item prop="email" label="邮箱：">
                                         <span v-if="changeEmail">
@@ -152,8 +152,9 @@
                             </el-popconfirm>
 
                             <span @click="showDiaryOne = !showDiaryOne"
-                                style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
-                                    class="el-icon-close"></i></span>
+                                style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;">
+                                <i class="el-icon-close"></i>
+                            </span>
                             <span v-if="diaryBaseOne != null">
                                 <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
                                 </div>
@@ -164,7 +165,7 @@
                     <!-- 电脑端 -->
                     <span v-else>
                         <el-card v-if="showDiaryOne" class="box-card"
-                            style="position: fixed;top: 20vh;left: 40vw;z-index: 999;">
+                            style="position: fixed;top: 20vh;left: 30vw;z-index: 999;">
                             <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？">
                                 <span slot="reference" style="cursor: pointer;font-size: 20px;"><i
                                         class="el-icon-delete"></i></span>
@@ -174,7 +175,7 @@
                                 style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
                                     class="el-icon-close"></i></span>
                             <span v-if="diaryBaseOne != null">
-                                <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
+                                <div style="width: 600px;" v-html="diaryBaseOne.diaryText">
                                 </div>
                             </span>
                         </el-card>
@@ -195,7 +196,7 @@
                                 </el-form-item>
                                 <el-form-item label="用户名：">
                                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                        userInfo.root }}》</span>
+                                        userInfo.roleName }}》</span>
                                 </el-form-item>
                                 <el-form-item prop="email" label="邮箱：">
                                     <span v-if="changeEmail">
@@ -244,7 +245,8 @@
                                 <el-form-item>
                                     <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
                                         @click="update('updateUser')">提交</el-button>
-                                    <el-button style="position: relative;left: 30%;" @click="updatePsw();">修改密码</el-button>
+                                    <el-button style="position: relative;left: 30%;"
+                                        @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
                                 </el-form-item>
 
                             </el-form>
@@ -324,16 +326,18 @@
                                     <el-input v-model="userQuery.username" type="text" placeholder="用户名"></el-input>
                                 </el-form-item>
                                 <el-form-item prop="password">
-                                    <el-input v-model="userQuery.password" type="password" placeholder="密码"
-                                        show-password></el-input>
+                                    <el-input v-model="userQuery.password" @keyup.enter.native="login('userQuery')"
+                                        type="password" placeholder="密码" show-password></el-input>
                                 </el-form-item>
                                 <el-form-item prop="captcha">
-                                    <el-input v-model="userQuery.captcha" type="text" placeholder="请输入验证码"></el-input>
+                                    <el-input v-model="userQuery.captcha" @keyup.enter.native="login('userQuery')"
+                                        type="text" placeholder="请输入验证码"></el-input>
                                     <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()"
                                         :src="captcha" />
-                                        <span style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">傻狗,看不清？点一下</span>
+                                    <span
+                                        style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">看不清？点一下</span>
                                 </el-form-item>
-                                <span class="noLogin-left-btn1" @click="submitForm()">忘记密码?</span>
+                                <span class="noLogin-left-btn1" @click="retrievePsw = true">忘记密码?</span>
 
                                 <el-form-item>
                                     <span v-if="showLogin">
@@ -392,7 +396,7 @@
                                 </el-form-item>
                                 <el-form-item prop="email">
                                     <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-                                    <el-button style="position: absolute;right: 0px;" @click="sendEmail()">
+                                    <el-button style="position: absolute;right: 0px;" @click="sendEmail(true)">
                                         <span v-if="showCaptcha">获取验证码</span>
                                         <span v-else>{{ time }}&nbsp;s</span>
                                     </el-button>
@@ -413,6 +417,59 @@
 
             </span>
 
+            <el-dialog title="修改密码" :visible.sync="updatePswDialog" :modal="false" min-width="300px" width="30%"
+                :close-on-click-modal="false">
+                <el-form :model="updatePswData">
+                    <el-form-item prop="password">
+                        <el-input v-model="updatePswData.oldPassword" type="password" show-password
+                            autocomplete="new-password" placeholder="旧密码"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="updatePswData.newPassword" type="password" show-password
+                            autocomplete="new-password" placeholder="新密码"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="updatePswData.confirm" type="password" show-password autocomplete="new-password"
+                            placeholder="再输入一次密码"></el-input>
+                    </el-form-item>
+                    <el-button @click="hanldClose()">关闭</el-button>
+                    <el-button @click="updatePsw()">修改</el-button>
+                </el-form>
+            </el-dialog>
+
+            <el-dialog title="找回密码" :visible.sync="retrievePsw" :modal="false" min-width="300px" width="30%"
+                :close-on-click-modal="false">
+                <el-form :model="updatePswData">
+                    <el-form-item>
+                        <span>请输入你的邮箱</span>
+                        <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
+                        <el-button style="position: absolute;right: 0px;" @click="sendEmail(false)">
+                            <span v-if="showCaptcha">获取验证码</span>
+                            <span v-else>{{ time }}&nbsp;s</span>
+                        </el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-input v-model="userRegister.captcha" type="text" placeholder="验证码"></el-input>
+                    </el-form-item>
+                    <el-button @click="retrievePsw = false">关闭</el-button>
+                    <el-button @click="isTrue()">提交</el-button>
+                </el-form>
+
+                <el-dialog title="修改密码" :visible.sync="retrievePswInner" :modal="false" min-width="300px" width="30%"
+                    :close-on-click-modal="false">
+                    <el-form :model="updatePswData">
+                        <span>{{ userInfo.username }}</span>
+                        <el-form-item>
+                            <span>请输入你的新密码</span>
+                            <el-input v-model="userInfo.password" type="password" show-password placeholder="新密码">
+                            </el-input>
+                        </el-form-item>
+                        <el-button @click="retrievePswInner = false">关闭</el-button>
+                        <el-button @click="updatePassword()">提交</el-button>
+                    </el-form>
+                </el-dialog>
+
+            </el-dialog>
         </div>
     </transition>
 </template>
@@ -443,6 +500,12 @@ export default {
                 email: "",
                 nickname: "",
                 captcha: "",
+            },
+            //修改密码对象
+            updatePswData: {
+                oldPassword: '',
+                newPassword: '',
+                confirm: ''
             },
             //验证码倒计时
             time: 60,
@@ -510,6 +573,11 @@ export default {
             diaryBaseOne: null,
             //登录中
             showLogin: true,
+            //修改密码窗口
+            updatePswDialog: false,
+            //忘记密码窗口
+            retrievePsw: false,
+            retrievePswInner: false
         }
     },
     created() {
@@ -561,7 +629,7 @@ export default {
 
                 this.captcha = "data:image/gif;base64," + response.data[1];
                 const str = response.data[0];
-                localStorage.setItem('captchaToken',JSON.stringify(str));
+                localStorage.setItem('captchaToken', JSON.stringify(str));
             }).catch(err => {
                 console.log(err);
             })
@@ -592,7 +660,13 @@ export default {
                         type: 'success'
                     });
                     this.$router.push('/');
-                } else if(retCode == 500) {
+                } else if (retCode == 500105) {
+                    this.getCaptcha();
+                    this.$message({
+                        message: response.data.message,
+                        type: 'warning'
+                    });
+                } else {
                     this.$message({
                         message: response.data.message,
                         type: 'warning'
@@ -651,6 +725,9 @@ export default {
             //判断是否修改过
             let flag = false;
             for (let key in this.userInfo) {
+                if (key == 'menuVos') {
+                    continue;
+                }
                 if (this.userInfo[key] != this.userOld[key]) {
                     flag = true;
                 }
@@ -664,6 +741,7 @@ export default {
                 });
                 return;
             }
+            this.userINfo.password = null;
             // 发起请求，将用户信息传过去
             userApi.updateUser(this.userInfo).then(response => {
                 this.$message({
@@ -679,17 +757,57 @@ export default {
         },
         // 修改密码
         updatePsw() {
+            const flag1 = this.updatePswData.newPassword == this.updatePswData.oldPassword;
+            const flag2 = this.updatePswData.confirm == this.updatePswData.newPassword;
+            if (flag1) {
+                this.$message({
+                    message: "新密码不能与旧密码一致",
+                    type: 'warning'
+                })
+                return;
+            }
+            if (!flag2) {
+                this.$message({
+                    message: "两次密码不一致",
+                    type: 'warning'
+                })
+                return;
+            }
+            const nickname = this.userInfo.nickname;
+
+            this.userInfo.password = this.updatePswData.oldPassword;
+            this.userInfo.nickname = this.updatePswData.newPassword;
+
             userApi.updateUser(this.userInfo).then(response => {
                 const data = response.data;
+                if (data.data == "修改成功") {
+                    this.$message({
+                        message: "修改成功,下次请使用新密码登录~",
+                        type: 'info'
+                    })
+                    this.getUser();
+                    this.updatePswDialog = !this.updatePswDialog;
+                    this.userInfo.password = null;
+                    return;
+                }
                 this.$message({
-                    message: data.message,
+                    message: data.data,
                     type: 'info'
                 })
-                this.userInfo.password = null;
+                this.userInfo.nickname = nickname;
+
             })
         },
+        hanldClose() {
+            this.updatePswDialog = !this.updatePswDialog;
+            this.updatePswData = {
+                oldPassword: '',
+                newPassword: '',
+                confirm: ''
+            }
+        },
         // 发送邮箱验证码
-        sendEmail() {
+        sendEmail(bool) {
             // 定义邮箱格式正则表达式
             const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
             // 使用正则表达式验证邮箱格式
@@ -711,11 +829,7 @@ export default {
                 return;
             }
             // 发起请求
-            userApi.sendEmail({
-                params: {
-                    email: this.userRegister.email
-                }
-            }).then(response => {
+            userApi.sendEmail(this.userRegister.email, bool).then(response => {
                 const retCode = response.data.retCode;
                 if (retCode == 200) {
                     localStorage.setItem('emailToken', JSON.stringify(response.data.data));
@@ -776,6 +890,69 @@ export default {
                 }
             }).catch(err => {
                 console.log(err);
+            })
+        },
+        isTrue() {
+            // 定义邮箱格式正则表达式
+            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            // 使用正则表达式验证邮箱格式
+            const isEmail = emailRegex.test(this.userRegister.email);
+            if (!isEmail) {
+                this.$message({
+                    message: "邮箱格式错误",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            if (localStorage.getItem('emailToken') == undefined) {
+                this.$message({
+                    message: "请先获取验证码",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            if (this.userRegister.captcha == "") {
+                this.$message({
+                    message: "验证码为空",
+                    type: 'warning',
+                    duration: 1000
+                });
+                return;
+            }
+            userApi.emailIsTrue(this.userRegister).then(response => {
+                const data = response.data;
+                if (data.retCode == 200) {
+                    this.userInfo = data.data;
+                    this.retrievePswInner = true;
+                } else {
+                    this.$message({
+                        message: data.message,
+                        type: 'warning'
+                    })
+                }
+            })
+        },
+        updatePassword() {
+            if (this.userInfo.password == "") {
+                this.$message({
+                    message: "密码不能为空",
+                    type: 'warning'
+                })
+                return;
+            }
+            userApi.updatePassword(this.userInfo).then(response => {
+                const data = response.data;
+                if (data.retCode == 200) {
+                    this.$message({
+                        message: "修改成功,可以使用新密码登录了",
+                        type: 'success',
+                        duration: 2000
+                    })
+                    this.retrievePsw = false;
+                    this.retrievePswInner = false;
+                }
             })
         },
         // 头像上传完毕后，重新获取信息
@@ -845,7 +1022,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import '../../assets/css/login.css';
 
 
@@ -862,4 +1039,9 @@ export default {
 .el-zoom-in-bottom-leave-active {
     transition: 0.8s;
     /* 使用CSS过渡属性来定义动画效果 */
-}</style>
+}
+
+.el-dialog__wrapper {
+    background-color: rgba($color: #000000, $alpha: 0.5);
+}
+</style>

@@ -16,7 +16,7 @@ Vue.prototype.$message = function (options) {
     ...options,
     offset: 300,      // 上偏移量
     position: 'top-right', // 右上角
-    duration: 1000,
+    duration: 1500,
   });
 };
 
@@ -35,7 +35,7 @@ Vue.config.errorHandler = function (err, vm, info) {
 };
 
 new Vue({
-  el:'#app',
+  el: '#app',
   router,
   store,
   render: h => h(App),

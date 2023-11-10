@@ -1,19 +1,21 @@
 import axios from "axios";
 axios.defaults.baseURL = "api"
 
+import { Message } from 'element-ui'
+
 axios.interceptors.request.use(config => {
     if (localStorage.getItem('token')) {
         // 在发送请求之前做些什么
         const token = JSON.parse(localStorage.getItem('token'));
         config.headers['x-token'] = token;
     }
-    
-    if(localStorage.getItem('emailToken')){
+
+    if (localStorage.getItem('emailToken')) {
         const emailToken = JSON.parse(localStorage.getItem('emailToken'));
         config.headers['email-token'] = emailToken;
     }
 
-    if(localStorage.getItem('captchaToken')){
+    if (localStorage.getItem('captchaToken')) {
         const captchaToken = JSON.parse(localStorage.getItem('captchaToken'));
         config.headers['captchaToken'] = captchaToken;
     }
@@ -22,6 +24,21 @@ axios.interceptors.request.use(config => {
     // 对请求错误做些什么
     return Promise.reject(error);
 });
+
+
+axios.interceptors.response.use(
+    response => response,
+    response => {
+
+        if (response.response.status === 400) {
+            Message.error(response.response.data.message)
+        } else if (response.response.data.retCode === 401) {
+            Message.error('无权限')
+        } else if (response) {
+            Message.error('serve error')
+        }
+
+    })
 
 
 export default {

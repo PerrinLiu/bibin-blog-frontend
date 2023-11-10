@@ -9,7 +9,7 @@
                     <!-- 头像 -->
                     <el-menu-item id="el-menu-item">
                         <span class="el-dropdown-link" @click="drawer = false">
-                            <span v-if="user!='user' || token != null">
+                            <span v-if="user != 'user' || token != null">
                                 <router-link style="text-decoration: none;" to="/login">
                                     <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
                                     {{ user.nickname }}
@@ -84,12 +84,13 @@
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
                             <el-menu-item id="el-menu-item" index="/message"><i class="el-icon-s-comment"></i>留言
+
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
                             <el-menu-item id="el-menu-item">
                                 <el-dropdown placement="bottom" @command="logout">
                                     <span class="el-dropdown-link">
-                                        <span v-if="token != null">
+                                        <span v-if="user != 'user'">
                                             <img width="40px" height="40px" id="user-img" :src="user.userImg" alt="">
                                         </span>
                                         <!-- 还没登录时，显示默认头像 -->
@@ -187,6 +188,7 @@ export default {
             // 使用窗口大小监听来更新 isMobile 值
             window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
+        console.log(this.user);
     },
     methods: {
         // 判断更改布局
@@ -263,12 +265,12 @@ export default {
         // 获得当前用户信息
         getUser() {
             userApi.getUser().then(response => {
-                if(response.data.retCode ==401){
+                if (response.data.retCode == 401) {
                     this.$message({
-                        message:response.data.message,
-                        type:'info'
+                        message: response.data.message,
+                        type: 'info'
                     })
-                }   
+                }
                 this.userInfo = response.data.data;
                 this.userInfo.userId = response.data.data.userId;
                 // 将 this.userInfo 深拷贝到 this.userOld

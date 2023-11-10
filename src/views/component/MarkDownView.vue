@@ -113,9 +113,10 @@ export default {
 
             if (this.html.includes('<img')) {
                 // 如果包含图片，限制图片大小再发请求
-                this.html = this.html.replace(/<img/g, '<img style="width:47%;margin-top:20px;margin-left:2%"');
+                this.html = this.html.replace(/<img/g, '<img style="width:80%;margin-top:20px;margin-left:2%"');
             }
-            if (this.html.length > 5 * 1024 * 1024) {
+            if (this.html.length > 7 * 1024 * 1024) {
+                console.log(this.html.len);
                 this.$message({
                     message: '日记大小超出限制',
                     type: 'warning'
@@ -132,7 +133,7 @@ export default {
                 return;
             }
             // 限制大小为5m
-            if (this.html.length > 5 * 1024 * 1024) {
+            if (this.html.length > 7 * 1024 * 1024) {
                 this.$message({
                     message: '日记大小超出限制',
                     type: 'warning'
@@ -153,9 +154,9 @@ export default {
                 return;
             }
             // 判断是公开还是隐私
-            if(this.diaryVo.isOpen =='1'){
+            if (this.diaryVo.isOpen == '1') {
                 this.diaryVo.isOpen = 1
-            }else{
+            } else {
                 this.diaryVo.isOpen = 0
             }
             // 将this.html赋值给diaryText 

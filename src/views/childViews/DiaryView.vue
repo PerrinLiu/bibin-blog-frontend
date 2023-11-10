@@ -1,10 +1,10 @@
 <template>
     <div class="diary-page">
 
-        <el-dialog title="日记内容" :visible.sync="showDiaryOne" width="100%">
+        <el-dialog title="日记内容" :visible.sync="showDiaryOne" :width="isPhone ? '90%' : '50%'">
             <el-card class="box-card">
                 <span v-if="diaryBaseOne != null">
-                    <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
+                    <div style="width: 100%;" v-html="diaryBaseOne.diaryText">
                     </div>
                 </span>
             </el-card>
@@ -12,11 +12,11 @@
         <div class="backgroundImg">
             <transition name="el-zoom-in-top">
                 <div v-show="showImg" class="backgroundImg"
-                    style="position: inherit;height:900px;top:-350px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF7.webp')">
+                    style="position: inherit;height:900px;top:-100px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF7.webp')">
                 </div>
             </transition>
             <div class="backgroundImg-text-div" style="height: 60vh;">
-                <h1 class="backgroundImg-text" style="color: rgb(182, 182, 182);">小记</h1>
+                <h1 class="backgroundImg-text" style="color: bisque;">小记</h1>
             </div>
 
         </div>
@@ -68,10 +68,15 @@
                                                 </h5>
                                                 <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
                                                     o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                    <span style="position: absolute;right: 20px;top: -25px;">
+                                                        <img style="width:40px;height:40px;border-radius: 50%;"
+                                                            :src="o.userImg">
+                                                    </span>
                                                     <span
-                                                        style="position: absolute;top:-20px;right:50px;font-size: 30px;cursor: pointer;"
-                                                        @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne"><i
-                                                            class="el-icon-thumb"></i></span>
+                                                        style="position: absolute;top:-20px;right:80px;font-size: 30px;cursor: pointer;"
+                                                        @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
+                                                        <i class="el-icon-thumb"></i>
+                                                    </span>
                                                 </span>
                                             </div>
                                         </el-card>
@@ -115,7 +120,7 @@
                         </el-header>
                         <!-- 内容 -->
                         <el-main style="position: relative;height: auto;">
-                            <span v-if="diaryInfo.length == 0">
+                            <span v-if="diaryBase == null">
                                 <el-empty description="无任何数据"></el-empty>
                             </span>
                             <span v-else>
@@ -129,9 +134,18 @@
                                             <!-- 卡片内容 -->
                                             <div class="card-content">
                                                 <h3 style="position: relative;top: -20px;">{{ o.diaryTitle }} </h3>
-                                                <p style="width: 96%;position: relative;top: -30px;" v-html="o.diaryText">
-                                                </p>
-                                                <span class="time">{{ o.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;{{ o.nickname }}</span>
+                                                <span style="position: absolute;right: 0px;">
+                                                    <img style="width:80px;height: 80px;border-radius: 50%;"
+                                                        :src="o.userImg">
+                                                </span>
+                                                <span
+                                                    style="position: absolute;top:20px;right:130px;font-size: 36px;cursor: pointer;"
+                                                    @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
+                                                    <i class="el-icon-thumb"></i>
+                                                </span>
+                                                <span class="time">
+                                                    {{ o.createTime }}&nbsp;&nbsp;&nbsp;&nbsp;{{ o.nickname }}
+                                                </span>
                                             </div>
                                         </el-card>
                                     </div>
@@ -168,8 +182,6 @@ export default {
             showImg: false,
             // 日记表单
             dialogDiary: false,
-            // 日记信息数组
-            diaryInfo: [],
             // token
             token: null,
             columns: [], // 将日记信息分配到列中，每列是一个数组
@@ -187,6 +199,7 @@ export default {
         this.showImg = true;
         // 获得token
         this.token = localStorage.getItem('token');
+        this.getDiaryAll();
         //监听浏览器窗口大小发生
         window.addEventListener('resize', this.calculateColumnLayout);
     },
@@ -209,20 +222,14 @@ export default {
             if (isPhone != null) {
                 if (this.flag != isPhone) {
                     this.flag = isPhone;
-                    this.getDiaryAll();
+
                 }
             }
         },
         // 获取所有日记
         getDiaryAll() {
-            this.loading = true;
-            //如果是手机布局，获取基本信息
-            if (this.flag) {
-                this.getDiaryBase();
-            } else {
-                // 否则获得全部信息
-                this.getDiaryInfo();
-            }
+            this.dialogDiary = false;
+            this.getDiaryBase();
 
         },
         //获取日记全部信息
@@ -272,23 +279,25 @@ export default {
             if (!this.isLogin()) {
                 return;
             }
-            this.showMe = false; 
+            this.showMe = false;
             this.loading = true;
+
+            this.getDiaryBaseByUser();
             //如果是手机布局，获取基本信息
-            if (this.flag) {
-                this.getDiaryBaseByUser();
-            } else {
-                textApi.getDiaryByUser().then(response => {
-                    this.diaryInfo = response.data.data;
-                    this.diaryInfo.forEach(element => {
-                        element.createTime = element.createTime.substring(0, 10);
-                    });
-                    this.loading = false;
-                }).catch(err => {
-                    this.loading = false;
-                    console.log(err);
-                })
-            }
+            // if (this.flag) {
+            //     this.getDiaryBaseByUser();
+            // } else {
+            //     textApi.getDiaryByUser().then(response => {
+            //         this.diaryInfo = response.data.data;
+            //         this.diaryInfo.forEach(element => {
+            //             element.createTime = element.createTime.substring(0, 10);
+            //         });
+            //         this.loading = false;
+            //     }).catch(err => {
+            //         this.loading = false;
+            //         console.log(err);
+            //     })
+            // }
 
         },
         // 获取单个日记内容
@@ -324,7 +333,7 @@ export default {
         calculateColumnLayout() {
             this.column = this.isPhone ? 1 : 3;
             this.columns = Array.from({ length: this.column }, () => []); // 创建三个空列
-            const diary = this.isPhone ? this.diaryBase : this.diaryInfo;
+            const diary = this.diaryBase;
             if (diary != null) {
                 diary.forEach((item, index) => {
                     const columnIndex = index % this.column; // 根据索引确定列位置
@@ -395,6 +404,7 @@ img {
 
 .card-content {
     display: flex;
+    position: relative;
     flex-direction: column;
     margin-bottom: 20px;
     /* 卡片之间的纵向间距 */
