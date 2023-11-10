@@ -958,6 +958,10 @@ export default {
         // 头像上传完毕后，重新获取信息
         handleAvatarSuccess() {
             this.getUser();
+            this.$message({
+                message: "修改成功",
+                type: 'success'
+            })
         },
         // 上传前验证
         beforeAvatarUpload(file) {
