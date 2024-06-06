@@ -7,14 +7,15 @@
             </div>
             <span v-if="token != null">
                 <div class="isLogin" :style="'left:' + isLoginLeft + 'vw'" style="overflow: hidden;">
+                    <!-- todo 将手机端和pc端合并 -->
                     <!-- 手机端 -->
                     <span v-if="isPhone">
                         <div style="width:100vw;height:100%;overflow-y: scroll;">
                             <div class="isLogin-phone">
                                 <span>
                                     <el-upload class="avatar-uploader" action="/api/user/updateUserImg"
-                                        :show-file-list="false" :headers="uploadHeaders" :on-success="handleAvatarSuccess"
-                                        :before-upload="beforeAvatarUpload">
+                                        :show-file-list="false" :headers="uploadHeaders"
+                                        :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                                         <img :src="userInfo.userImg">
                                     </el-upload>
                                 </span>
@@ -24,8 +25,8 @@
                                         <el-input v-model="userInfo.nickname"></el-input>
                                     </el-form-item>
                                     <el-form-item label="用户名：">
-                                        {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                            userInfo.roleName }}》</span>
+                                        {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">
+                                            《{{ userInfo.roleName }}》</span>
                                         <span
                                             v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
                                             <router-link to="/manager" style="text-decoration: none;">
@@ -128,11 +129,11 @@
                                                     <!-- 卡片内容 -->
                                                     <div class="card-content"
                                                         style="width:100%;margin-bottom: 0px;margin-left: 20px;">
-                                                        <h5 style="position: relative;height:20px;top: -3px;">{{
-                                                            o.diaryTitle }}</h5>
+                                                        <h5 style="position: relative;height:20px;top: -3px;">
+                                                            {{ o.diaryTitle }}</h5>
                                                         <span style="position: relative;top: -20px;font-size: 12px;"
-                                                            class="time">{{
-                                                                o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                            class="time">
+                                                            {{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
                                                             <span
                                                                 style="position: absolute;top:-20px;right:-110%;font-size: 30px;cursor: pointer;"
                                                                 @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
@@ -144,6 +145,10 @@
                                                     </div>
                                                 </el-card>
                                             </span>
+                                            <el-pagination background layout="prev, pager, next" :total="total"
+                                                :page-size="pageSize" :current-page="pageNum"
+                                                @current-change="handleCurrentChange">
+                                            </el-pagination>
                                         </div>
                                     </div>
                                 </div>
@@ -187,8 +192,8 @@
                         </el-card>
                         <div class="isLogin-left">
                             <span class="isLogin-userImg">
-                                <el-upload class="avatar-uploader" action="/api/user/updateUserImg" :show-file-list="false"
-                                    :headers="uploadHeaders" :on-success="handleAvatarSuccess"
+                                <el-upload class="avatar-uploader" action="/api/user/updateUserImg"
+                                    :show-file-list="false" :headers="uploadHeaders" :on-success="handleAvatarSuccess"
                                     :before-upload="beforeAvatarUpload">
                                     <img :src="userInfo.userImg">
                                     <div class="imgHover">更换图片</div>
@@ -202,7 +207,7 @@
                                 </el-form-item>
                                 <el-form-item label="用户名：">
                                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-                                        userInfo.roleName }}》</span>
+            userInfo.roleName }}》</span>
                                     <span
                                         v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
                                         <router-link to="/manager" style="text-decoration: none;">
@@ -219,8 +224,8 @@
                                     </span>
                                     &nbsp;&nbsp;
                                     <span v-if="changeEmail">
-                                        <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit"
-                                            circle>
+                                        <el-button plain size="mini" @click="changeEmail = !changeEmail"
+                                            icon="el-icon-edit" circle>
                                         </el-button>
                                     </span>
                                     <span v-else>
@@ -238,13 +243,13 @@
                                     </span>
                                     &nbsp;&nbsp;
                                     <span v-if="changeCity">
-                                        <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit"
-                                            circle>
+                                        <el-button plain size="mini" @click="changeCity = !changeCity"
+                                            icon="el-icon-edit" circle>
                                         </el-button>
                                     </span>
                                     <span v-else>
-                                        <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check"
-                                            circle>
+                                        <el-button plain size="mini" @click="changeCity = !changeCity"
+                                            icon="el-icon-check" circle>
                                         </el-button>
                                     </span>
                                 </el-form-item>
@@ -275,8 +280,8 @@
                                     </span>
                                     <span v-else>
                                         <el-row>
-                                            <el-col style="height: 140px;width: 100px;" v-for="(o, index) in 10" :key="o"
-                                                :offset="index > 0 ? 3 : 3">
+                                            <el-col style="height: 140px;width: 100px;" v-for="(o, index) in 10"
+                                                :key="o" :offset="index > 0 ? 3 : 3">
                                                 <el-card :body-style="{ padding: '0px' }"
                                                     style="margin:10px -30px;height:120px;">
                                                     <img width="100%"
@@ -310,8 +315,9 @@
                                                 style="width:100%;margin-bottom: 0px;margin-left: 20px;">
                                                 <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
                                                 </h5>
-                                                <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
-                                                    o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                <span style="position: relative;top: -20px;font-size: 12px;"
+                                                    class="time">
+                                                    {{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
                                                     <span
                                                         style="position: absolute;top:-20px;right:-200%;font-size: 30px;cursor: pointer;"
                                                         @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
@@ -322,6 +328,10 @@
                                             </div>
                                         </el-card>
                                     </span>
+                                    <el-pagination background layout="prev, pager, next" :total="total"
+                                        :page-size="pageSize" :current-page="pageNum"
+                                        @current-change="handleCurrentChange">
+                                    </el-pagination>
                                 </div>
                             </div>
 
@@ -370,8 +380,8 @@
                             <div class="noLogin-right-reg">
                                 <h1>没有账号？</h1>
                                 <br><br><br>
-                                <el-button class="noLogin-right-btn1" @click="show2 = !show2, show1 = !show1" type="primary"
-                                    style="margin-left: 16px;">
+                                <el-button class="noLogin-right-btn1" @click="show2 = !show2, show1 = !show1"
+                                    type="primary" style="margin-left: 16px;">
                                     立即注册
                                 </el-button>
                             </div>
@@ -385,8 +395,8 @@
                             <div class="noLogin-right-reg">
                                 <h1>已有账号？</h1>
                                 <br><br><br>
-                                <el-button class="noLogin-right-btn1" @click="show2 = !show2, show1 = !show1" type="primary"
-                                    style="margin-left: 16px;">
+                                <el-button class="noLogin-right-btn1" @click="show2 = !show2, show1 = !show1"
+                                    type="primary" style="margin-left: 16px;">
                                     去登录
                                 </el-button>
                             </div>
@@ -441,8 +451,8 @@
                             autocomplete="new-password" placeholder="新密码"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
-                        <el-input v-model="updatePswData.confirm" type="password" show-password autocomplete="new-password"
-                            placeholder="再输入一次密码"></el-input>
+                        <el-input v-model="updatePswData.confirm" type="password" show-password
+                            autocomplete="new-password" placeholder="再输入一次密码"></el-input>
                     </el-form-item>
                     <el-button @click="hanldClose()">关闭</el-button>
                     <el-button @click="updatePsw()">修改</el-button>
@@ -492,6 +502,9 @@ import textApi from '@/api/textApi';
 export default {
     data() {
         return {
+            total: 0,
+            pageNum: 1,
+            pageSize: 30,
             //上传图片时，携带请求头
             uploadHeaders: {
                 // 在这里添加您的请求头信息
@@ -634,6 +647,10 @@ export default {
                 this.isLoginLeft = 15;
                 this.isPhone = false;
             }
+        },
+        handleCurrentChange(val) {
+            this.pageNum = val;
+            this.getDiaryBaseByUser();
         },
         //获取验证码
         getCaptcha() {
@@ -990,8 +1007,9 @@ export default {
         },
         // 获取单个用户日记基本信息
         getDiaryBaseByUser() {
-            textApi.getDiaryBaseByUser().then(response => {
-                this.userDiary = response.data.data;
+            textApi.getDiaryBaseByUser(this.pageSize, this.pageNum).then(response => {
+                this.userDiary = response.data.data.records;
+                this.total = response.data.data.total;
                 this.userDiary.forEach(element => {
                     element.createTime = element.createTime.substring(0, 10);
                 });
