@@ -16,7 +16,7 @@ Vue.prototype.$message = function (options) {
     ...options,
     offset: 300,      // 上偏移量
     position: 'top-right', // 右上角
-    duration: 1500,
+    duration: 1200,
   });
 };
 

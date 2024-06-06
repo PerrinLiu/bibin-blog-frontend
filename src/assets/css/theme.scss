@@ -1,0 +1,40 @@
+$themes: (
+    light: (bgColor:#fff,
+        textColor:#000,
+        boxShadow: 2px 2px 6px 0.5px rgba(0, 0, 0, 0.5),
+    ),
+    dark: (bgColor:#111111,
+        textColor:#fff,
+        boxShadow: 2px 2px 6px 0.5px rgba(255, 255, 255, 0.5),
+    )
+);
+
+$curTheme: 'light';
+
+@mixin userTheme() {
+    @each $key, $value in $themes {
+        $curTheme: $key !global;
+
+        div[data-theme='#{$key}'] & {
+            @content;
+        }
+    }
+}
+
+
+@function getVar($paramName) {
+    $themeMap: map-get($themes, $curTheme);
+    @return map-get($themeMap, $paramName);
+}
+
+.item {
+    transition: 0.5s;
+
+    @include userTheme {
+        background: getVar('bgColor');
+        color: getVar('textColor');
+        box-shadow: getVar('boxShadow') !important;
+    }
+
+    ;
+}

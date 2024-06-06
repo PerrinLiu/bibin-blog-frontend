@@ -26,6 +26,12 @@
                                     <el-form-item label="用户名：">
                                         {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
                                             userInfo.roleName }}》</span>
+                                        <span
+                                            v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
+                                            <router-link to="/manager" style="text-decoration: none;">
+                                                <strong>管理</strong>
+                                            </router-link>
+                                        </span>
                                     </el-form-item>
                                     <el-form-item prop="email" label="邮箱：">
                                         <span v-if="changeEmail">
@@ -197,6 +203,12 @@
                                 <el-form-item label="用户名：">
                                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
                                         userInfo.roleName }}》</span>
+                                    <span
+                                        v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
+                                        <router-link to="/manager" style="text-decoration: none;">
+                                            <strong>管理</strong>
+                                        </router-link>
+                                    </span>
                                 </el-form-item>
                                 <el-form-item prop="email" label="邮箱：">
                                     <span v-if="changeEmail">
@@ -605,7 +617,7 @@ export default {
     methods: {
         //判断是否更改布局
         updateLayout() {
-            if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
+            if (window.innerWidth <= 940) {  // 根据实际情况设置阈值
                 //给未登录更新动态样式
                 this.noLoginLeft = 0;
                 this.isPhone = true;
@@ -741,7 +753,7 @@ export default {
                 });
                 return;
             }
-            this.userINfo.password = null;
+            this.userInfo.password = null;
             // 发起请求，将用户信息传过去
             userApi.updateUser(this.userInfo).then(response => {
                 this.$message({

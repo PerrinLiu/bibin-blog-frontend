@@ -35,7 +35,7 @@
                             class="el-icon-notebook-1"></i>文章
                         <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                     </el-menu-item>
-                    <el-menu-item id="el-menu-item" index="/diary" @click="drawer = false"><i class="el-icon-edit"></i>小记
+                    <el-menu-item id="el-menu-item" index="/diary" @click="drawer = false"><i class="el-icon-edit"></i>碎片
                         <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                     </el-menu-item>
                     <el-menu-item id="el-menu-item" index="/photo" @click="drawer = false"><i
@@ -51,6 +51,7 @@
 
         </el-drawer>
         <el-container>
+
             <transition name="el-zoom-in-center">
                 <el-header v-if="show" id="layout-header" :style="background">
                     <router-link style="text-decoration: none;" to="/">
@@ -77,7 +78,7 @@
                             <el-menu-item id="el-menu-item" index="/article"><i class="el-icon-notebook-1"></i>文章
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
-                            <el-menu-item id="el-menu-item" index="/diary"><i class="el-icon-edit"></i>小记
+                            <el-menu-item id="el-menu-item" index="/diary"><i class="el-icon-edit"></i>碎片
                                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
                             </el-menu-item>
                             <el-menu-item id="el-menu-item" index="/photo"><i class="el-icon-picture-outline"></i>照片墙
@@ -135,8 +136,7 @@
             <el-footer>
                 <span v-if="currentPath !== '/login'">
                     <div id="footer">
-                        刘林培言的个人博客
-                        @刘林培言
+                        个人博客
                     </div>
                 </span>
             </el-footer>
@@ -188,13 +188,12 @@ export default {
             // 使用窗口大小监听来更新 isMobile 值
             window.addEventListener('resize', this.updateLayout);
         this.updateLayout(); // 初始化时执行一次
-        console.log(this.user);
     },
     methods: {
         // 判断更改布局
         updateLayout() {
             // 判断是否时手机端
-            if (window.innerWidth <= 910) {
+            if (window.innerWidth <= 940) {
                 this.isMobile = true;
                 this.background = 'background-color: rgba(0, 0, 0, 1);'
                 this.show = true;

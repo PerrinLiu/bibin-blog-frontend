@@ -1,7 +1,7 @@
 <template>
     <div class="diary-page">
 
-        <el-dialog title="日记内容" :visible.sync="showDiaryOne" :width="isPhone ? '90%' : '50%'">
+        <el-dialog title="碎片内容" :visible.sync="showDiaryOne" :width="isPhone ? '90%' : '50%'">
             <el-card class="box-card">
                 <span v-if="diaryBaseOne != null">
                     <div style="width: 100%;" v-html="diaryBaseOne.diaryText">
@@ -16,7 +16,7 @@
                 </div>
             </transition>
             <div class="backgroundImg-text-div" style="height: 60vh;">
-                <h1 class="backgroundImg-text" style="color: bisque;">小记</h1>
+                <h1 class="backgroundImg-text" style="color: bisque;">碎片</h1>
             </div>
 
         </div>
@@ -94,7 +94,7 @@
             </span>
             <!-- 电脑端 -->
             <span v-else>
-                <div style="position: relative;width: 70vw;min-width: 1024px;">
+                <div style="position: relative;width: 70vw;min-width: 1024px;min-height: 600px;">
                     <el-container>
                         <!-- 头部 -->
                         <el-header id="header" style="width: 50vw;min-width: 720px;">
@@ -242,22 +242,23 @@ export default {
                 });
                 // 关闭表单
                 this.dialogDiary = false;
-                this.loading = false;
             }).catch(err => {
-                this.loading = false;
                 console.log(err);
+            }).finally(() => {
+                this.loading = false;
             })
         },
         // 获取日记基本信息
         getDiaryBase() {
+            this.loading = true;
             textApi.getDiaryBase().then(response => {
                 this.diaryBase = response.data.data;
                 this.diaryBase.forEach(element => {
                     element.createTime = element.createTime.substring(0, 10);
                 });
-                this.loading = false;
             }).catch(err => {
                 console.log(err);
+            }).finally(() => {
                 this.loading = false;
             })
         },
@@ -268,9 +269,10 @@ export default {
                 this.diaryBase.forEach(element => {
                     element.createTime = element.createTime.substring(0, 10);
                 });
-                this.loading = false;
             }).catch(err => {
                 console.log(err);
+
+            }).finally(() => {
                 this.loading = false;
             })
         },
@@ -292,11 +294,11 @@ export default {
             //         this.diaryInfo.forEach(element => {
             //             element.createTime = element.createTime.substring(0, 10);
             //         });
-            //         this.loading = false;
             //     }).catch(err => {
-            //         this.loading = false;
             //         console.log(err);
-            //     })
+            //     }).finally(() => {
+            //     this.loading = false;
+            // })
             // }
 
         },
@@ -308,8 +310,7 @@ export default {
                 }
             }).then(response => {
                 this.diaryBaseOne = response.data.data;
-            }).catch(err => {
-
+            }).catch(err => { 
                 console.log(err);
             })
         },

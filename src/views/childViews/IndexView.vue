@@ -1,5 +1,5 @@
 <template>
-    <div class="index-page">
+    <div class="index-page  ">
         <div class="div-with-lines">
             <div class="backgroundImg-text-div">
                 <span v-if="isPhone">
@@ -18,11 +18,11 @@
         </transition>
 
 
-        <div class="content" style="position: relative;" >
+        <div class="content item" style="position: relative;">
             <!-- 波浪 -->
             <div class="wave">
-                <div style="width: 200%;height:100%;position: absolute;top: 20px;">
-                    <div v-for="i in 20" :key="i" class="wave1">
+                <div style="width: 200%;height:100%;position: absolute;top: 20px;z-index: 1;">
+                    <div v-for="i in 20" :key="i" class="wave1 item">
                     </div>
                 </div>
 
@@ -31,8 +31,8 @@
                     </div>
                 </div>
             </div>
-            <div class="wave-next">
-                <i @click="waveNext()" class="el-icon-arrow-down"></i>
+            <div class="wave-next" style="z-index: 99;">
+                <i @click="waveNext()" class="el-icon-arrow-down "></i>
             </div>
             <div style="position: relative;top: 50px;">
                 <span v-if="isPhone">
@@ -42,13 +42,13 @@
                             <el-card class="box-card box-card1" shadow="always">
                                 <div style="text-align: center;">
                                     <span>
-                                        <img class="card-img" width="100px" height="100px" 
-                                        src="@/assets/images/defaul.jpg"
-                                        style="border-radius: 50%;border: 1px solid #030303;">
+                                        <img class="card-img" width="100px" height="100px" src="@/assets/images/defaul.jpg"
+                                            style="border-radius: 50%;border: 1px solid #030303;">
                                     </span>
-                                        <h2 style="font-size: 30px;">Bibin</h2>
+                                    <h2 style="font-size: 30px;">Bibin</h2>
                                 </div>
-                                <div style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
+                                <div
+                                    style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
                                     <div style="float: left;">
                                         <h4>文章</h4>
                                         0
@@ -65,7 +65,7 @@
                             </el-card>
 
                             <!-- 搜索框 -->
-                            <el-card class="box-card box-card2" shadow="always">
+                            <el-card class="box-card box-card2 item" shadow="always">
                                 <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
                                 <el-input placeholder="请输入内容" v-model="searchText">
                                 </el-input>
@@ -79,17 +79,18 @@
                                 <el-empty style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
                             </el-card>
                             <!-- 赞赏 -->
-                            <el-card class="box-card box-card3" shadow="always">
+                            <el-card class="box-card box-card3 item" shadow="always">
                                 <span style="font-weight: 900;"><i class="el-icon-chicken"></i>&nbsp;赞赏</span>
                                 <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
                             </el-card>
 
 
                             <!-- 文章分类 -->
-                            <el-card class="box-card box-card3" shadow="always">
+                            <el-card class="box-card box-card3 item" shadow="always">
                                 <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
                                 <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
                             </el-card>
+
 
                             <el-card style="height: 300px;margin-top: 40px;">
 
@@ -141,7 +142,7 @@
                                 </el-card>
 
                                 <!-- 搜索框 -->
-                                <el-card class="box-card box-card2" shadow="always">
+                                <el-card class="box-card box-card2 item" shadow="always">
                                     <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
                                     <el-input placeholder="请输入内容" v-model="searchText">
                                     </el-input>
@@ -155,14 +156,14 @@
                                     <el-empty style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
                                 </el-card>
                                 <!-- 赞赏 -->
-                                <el-card class="box-card box-card3" shadow="always">
+                                <el-card class="box-card box-card3 item" shadow="always">
                                     <span style="font-weight: 900;"><i class="el-icon-chicken"></i>&nbsp;赞赏</span>
                                     <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
                                 </el-card>
 
 
                                 <!-- 文章分类 -->
-                                <el-card class="box-card box-card3" shadow="always">
+                                <el-card class="box-card box-card3 item" shadow="always">
                                     <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
                                     <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
                                 </el-card>
@@ -173,20 +174,8 @@
                         </el-aside>
                         <el-main style="position: relative;width: 60vw;">
                             <div style="width: 70%;margin-top: -20px;min-width: 600px;">
-                                <el-card style="height: 300px;">
-
-                                </el-card>
-                                <el-card style="height: 300px;margin-top: 40px;">
-
-                                </el-card>
-                                <el-card style="height: 300px;margin-top: 40px;">
-
-                                </el-card>
-                                <el-card style="height: 300px;margin-top: 40px;">
-
-                                </el-card>
-                                <el-card style="height: 300px;margin-top: 40px;">
-
+                                <el-card class="box-card item" v-for="item in 4" :key="item" style=" height: 300px;">
+                                    {{ item }}
                                 </el-card>
                             </div>
                         </el-main>
@@ -220,6 +209,7 @@ export default {
             //滚动距离
             roll: '',
             access: 0, //访问量
+            currentTheme: 'light'
         }
     },
     // 页面加载完成执行
@@ -236,15 +226,15 @@ export default {
         // 获得访问量
         this.getAccess();
     },
-    computed:{
-        user(){
+    computed: {
+        user() {
             return this.$store.state.user;
         }
     },
     methods: {
         // 是否更改布局的判断方法
         updateLayout() {
-            if (window.innerWidth <= 910) {  // 根据实际情况设置阈值
+            if (window.innerWidth <= 940) {  // 根据实际情况设置阈值
                 //给未登录更新动态样式
                 this.isPhone = true;
             } else {
@@ -293,11 +283,11 @@ export default {
             console.log(123);
         },
         // 获得访问量
-        getAccess(){
-            userApi.getAccess().then(response=>{
-               const data =  response.data.data;
-               this.access = data;
-            }).catch(err=>{
+        getAccess() {
+            userApi.getAccess().then(response => {
+                const data = response.data.data;
+                this.access = data;
+            }).catch(err => {
                 console.log(err);
             })
         }
@@ -310,7 +300,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-zoom-in-top-enter-active,
 .el-zoom-in-top-leave-active {
     transition: transform 1.2s;
@@ -333,7 +323,8 @@ export default {
     position: absolute;
     top: -70px;
     display: flex;
-    justify-content: center; /* 水平居中 */
+    justify-content: center;
+    /* 水平居中 */
     width: 100vw;
     text-align: center;
     color: black;
@@ -408,7 +399,8 @@ export default {
 .box-card {
     position: relative;
     margin-top: 40px;
-    box-shadow: 2px -2px 5px rgba(0, 0, 0, 0.5) !important;
+    border-radius: 30px;
+    box-shadow: 2px 2px 6px 0.5px rgba(0, 0, 0, 0.5) !important;
 }
 
 .box-card:hover {
