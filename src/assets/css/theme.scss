@@ -28,7 +28,7 @@ $curTheme: 'light';
 }
 
 .item {
-    transition: 0.5s;
+    transition: 1s;
 
     @include userTheme {
         background: getVar('bgColor');

@@ -1,6 +1,10 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
+  configureWebpack: {
+    //开发模式下错误显示对应行数
+    devtool: 'source-map'
+  },
   devServer: {
     port: 8080,
     proxy: {

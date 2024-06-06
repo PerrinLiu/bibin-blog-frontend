@@ -1,7 +1,7 @@
 <template>
   <div id="app" :data-theme="curTheme">
 
-    <router-view />
+    <router-view :data-theme="curTheme" />
 
     <el-button type="primary" round class="appBtn" @click="change()"
       :style="curTheme == 'light' ? 'background:#333' : 'background:#ddd'">

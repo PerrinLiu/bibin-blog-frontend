@@ -1,9 +1,9 @@
 <template>
-    <div class="love-page">
+    <div class="love-page ">
         <div class="backgroundImg">
             <transition name="el-zoom-in-top">
-                <div v-show="showImg" class="backgroundImg" style="position: inherit;height:900px;top:-200px;"
-                    :style="{ 'background-image': `url(${BgImg})` }">
+                <div v-show="showImg" class="backgroundImg"
+                    style="position: inherit;height:900px;top:-200px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF7.webp')">
                 </div>
             </transition>
 
@@ -15,7 +15,7 @@
 
         </div>
 
-        <div class="content" style="margin-top: 45vh;display: flex;justify-content: center;">
+        <div class="content item" style="margin-top: 45vh;display: flex;justify-content: center;">
             <div style="width: 70%;">
                 <div v-if="!loveShow" style="height: 200px;margin-top: 30px;">
                     里面的内容是秘密喔~

@@ -39,10 +39,11 @@
                     <el-container>
                         <div style="width: 80%;position: relative;top: -30px;min-width: 280px;left: 10%;">
                             <!-- 名片 -->
-                            <el-card class="box-card box-card1" shadow="always">
+                            <el-card class="box-card box-card1 " shadow="always">
                                 <div style="text-align: center;">
                                     <span>
-                                        <img class="card-img" width="100px" height="100px" src="@/assets/images/defaul.jpg"
+                                        <img class="card-img" width="100px" height="100px"
+                                            src="@/assets/images/defaul.jpg"
                                             style="border-radius: 50%;border: 1px solid #030303;">
                                     </span>
                                     <h2 style="font-size: 30px;">Bibin</h2>
@@ -164,7 +165,8 @@
 
                                 <!-- 文章分类 -->
                                 <el-card class="box-card box-card3 item" shadow="always">
-                                    <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
+                                    <span style="font-weight: 900;"><i
+                                            class="el-icon-location-outline"></i>&nbsp;标签</span>
                                     <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
                                 </el-card>
 

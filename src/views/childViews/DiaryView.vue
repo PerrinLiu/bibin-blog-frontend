@@ -21,7 +21,7 @@
 
         </div>
 
-        <div class="content" style="margin-top: 50vh;display: flex;justify-content: center;" v-loading="loading"
+        <div class="content item" style="margin-top: 50vh;display: flex;justify-content: center;" v-loading="loading"
             element-loading-text="拼命加载中" element-loading-spinner="el-icon-loading"
             element-loading-background="rgba(0, 0, 0, 0.8)">
 
@@ -44,10 +44,11 @@
                                 </h3>
                             </div>
                             <div class="float-right" style="position: absolute;top: 10px;right:100px;width: 30px;">
-                                <el-button plain @click="diaryYN()">添加小记</el-button>
+                                <el-button class="item" plain @click="diaryYN()">添加小记</el-button>
                             </div>
                             <!-- 日记表单 -->
-                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw" :close-on-click-modal="false">
+                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw"
+                                :close-on-click-modal="false">
                                 <!-- 绑定方法 -->
                                 <mark-down-view @child-event="getDiaryAll"></mark-down-view>
                             </el-dialog>
@@ -60,14 +61,14 @@
                                     <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column"
                                         ref="myCard">
                                         <!-- 循环遍历每个卡片 -->
-                                        <el-card class="box-card color-card" :body-style="{ padding: '0px' }"
+                                        <el-card class="box-card color-card item" :body-style="{ padding: '0px' }"
                                             v-for="o in column" :key="o.diaryId" style="min-width: 300px;">
                                             <!-- 卡片内容 -->
                                             <div class="card-content" style="margin-bottom: 0px;margin-left: 20px;">
                                                 <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
                                                 </h5>
-                                                <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{
-                                                    o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                                                <span style="position: relative;top: -20px;font-size: 12px;"
+                                                    class="time">{{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
                                                     <span style="position: absolute;right: 20px;top: -25px;">
                                                         <img style="width:40px;height:40px;border-radius: 50%;"
                                                             :src="o.userImg">
@@ -86,7 +87,9 @@
                             <span v-else>
                                 <el-empty description="无任何数据"></el-empty>
                             </span>
-
+                            <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize"
+                                :current-page="pageNum" @current-change="handleCurrentChange">
+                            </el-pagination>
                         </el-main>
 
                     </el-container>
@@ -110,10 +113,11 @@
                                 </h3>
                             </div>
                             <div class="float-right" style="position: relative;top: 10px;">
-                                <el-button plain @click="diaryYN()">添加小记</el-button>
+                                <el-button class="item" plain @click="diaryYN()">添加小记</el-button>
                             </div>
                             <!-- 日记表单 -->
-                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw" :close-on-click-modal="false">
+                            <el-dialog title="添加日记" :visible.sync="dialogDiary" width="90vw"
+                                :close-on-click-modal="false">
                                 <!-- 绑定方法 -->
                                 <mark-down-view @child-event="getDiaryAll"></mark-down-view>
                             </el-dialog>
@@ -129,7 +133,7 @@
                                     <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column"
                                         ref="myCard">
                                         <!-- 循环遍历每个卡片 -->
-                                        <el-card class="box-card color-card" v-for="o in column" :key="o.diaryId"
+                                        <el-card class="box-card color-card item" v-for="o in column" :key="o.diaryId"
                                             style="min-width: 300px;">
                                             <!-- 卡片内容 -->
                                             <div class="card-content">
@@ -152,13 +156,15 @@
                                 </div>
                             </span>
 
+
+                            <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize"
+                                :current-page="pageNum" @current-change="handleCurrentChange">
+                            </el-pagination>
                         </el-main>
 
                     </el-container>
                 </div>
             </span>
-
-
 
             <!-- 用来撑起高度 -->
             <div class="content-after" style="height: 60px;">
@@ -178,6 +184,9 @@ export default {
     },
     data() {
         return {
+            total: 0,
+            pageNum: 1,
+            pageSize: 30,
             // 背景图片
             showImg: false,
             // 日记表单
@@ -232,27 +241,21 @@ export default {
             this.getDiaryBase();
 
         },
-        //获取日记全部信息
-        getDiaryInfo() {
-            textApi.getDiaryAll().then(response => {
-                this.diaryInfo = response.data.data;
-                // 遍历日期，更改日期格式
-                this.diaryInfo.forEach(element => {
-                    element.createTime = element.createTime.substring(0, 10);
-                });
-                // 关闭表单
-                this.dialogDiary = false;
-            }).catch(err => {
-                console.log(err);
-            }).finally(() => {
-                this.loading = false;
-            })
+        handleCurrentChange(val) {
+            this.pageNum = val;
+            if (!this.showMe) {
+                this.getDiaryBaseByUser();
+            } else {
+                this.getDiaryAll();
+            }
         },
+
         // 获取日记基本信息
         getDiaryBase() {
             this.loading = true;
-            textApi.getDiaryBase().then(response => {
-                this.diaryBase = response.data.data;
+            textApi.getDiaryBase(this.pageSize, this.pageNum).then(response => {
+                this.diaryBase = response.data.data.records;
+                this.total = response.data.data.total;
                 this.diaryBase.forEach(element => {
                     element.createTime = element.createTime.substring(0, 10);
                 });
@@ -264,8 +267,9 @@ export default {
         },
         // 获取单个用户日记基本信息
         getDiaryBaseByUser() {
-            textApi.getDiaryBaseByUser().then(response => {
-                this.diaryBase = response.data.data;
+            textApi.getDiaryBaseByUser(this.pageSize, this.pageNum).then(response => {
+                this.diaryBase = response.data.data.records;
+                this.total = response.data.data.total;
                 this.diaryBase.forEach(element => {
                     element.createTime = element.createTime.substring(0, 10);
                 });
@@ -285,21 +289,7 @@ export default {
             this.loading = true;
 
             this.getDiaryBaseByUser();
-            //如果是手机布局，获取基本信息
-            // if (this.flag) {
-            //     this.getDiaryBaseByUser();
-            // } else {
-            //     textApi.getDiaryByUser().then(response => {
-            //         this.diaryInfo = response.data.data;
-            //         this.diaryInfo.forEach(element => {
-            //             element.createTime = element.createTime.substring(0, 10);
-            //         });
-            //     }).catch(err => {
-            //         console.log(err);
-            //     }).finally(() => {
-            //     this.loading = false;
-            // })
-            // }
+
 
         },
         // 获取单个日记内容
@@ -310,7 +300,7 @@ export default {
                 }
             }).then(response => {
                 this.diaryBaseOne = response.data.data;
-            }).catch(err => { 
+            }).catch(err => {
                 console.log(err);
             })
         },
