@@ -176,7 +176,7 @@
 </template>
 
 <script>
-import MarkDownView from '../component/MarkDownView';
+import MarkDownView from '../components/MarkDownView';
 import textApi from '@/api/textApi';
 export default {
     components: {
