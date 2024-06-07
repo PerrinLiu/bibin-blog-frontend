@@ -186,7 +186,7 @@ export default {
         return {
             total: 0,
             pageNum: 1,
-            pageSize: 30,
+            pageSize: 15,
             // 背景图片
             showImg: false,
             // 日记表单
@@ -390,7 +390,7 @@ img {
 }
 
 .color-card {
-    margin-bottom: 10px;
+    margin-bottom: 20px;
 }
 
 .card-content {
