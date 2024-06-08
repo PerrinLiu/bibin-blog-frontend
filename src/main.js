@@ -11,14 +11,25 @@ Vue.config.productionTip = false
 Vue.use(ElementUI);
 
 // 在创建 Vue 实例之前修改全局配置
-Vue.prototype.$message = function (options) {
-  ElementUI.Message({
-    ...options,
-    offset: 300,      // 上偏移量
-    position: 'top-right', // 右上角
-    duration: 1200,
-  });
-};
+const messages = ['success', 'warning', 'info', 'error']
+messages.forEach(type => {
+  ElementUI.Message[type] = options => {
+    if (typeof options === 'string') {
+      options = {
+        message: options
+      }
+      // 默认设置
+      options.duration = 1000 // 显示多久,单位毫秒
+      options.showClose = true // 是否显示关闭按钮
+      options.offset = 200 // 距离顶部距离
+    }
+    if (type == null || type == undefined) {
+      type = "error"
+    }
+    options.type = type
+    return ElementUI.Message(options)
+  }
+})
 
 // 在路由切换时动态修改页面标题
 router.beforeEach((to, from, next) => {
