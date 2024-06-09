@@ -23,7 +23,7 @@ module.exports = defineConfig({
         }
       },
       "/api/text": {
-        target: "http://localhost:10010/text/text",
+        target: "http://localhost:10010/text",
         changeOrigin: true,
         pathRewrite: {
           '^/api/text': ''

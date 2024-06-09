@@ -12,17 +12,22 @@
         </div>
 
         <div class="content" style="margin-top: 50vh;">
-            <div style="height: 1000px;"></div>
+            <div style="height: 1000px;">
+                <WangEditorView></WangEditorView>
+            </div>
             <!-- 用来撑起高度 -->
             <div class="content-after" style="height: 60px;">
-
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import WangEditorView from '../components/WangEditorView';
 export default {
+    components: {
+        WangEditorView
+    },
     data() {
         return {
             showImg: false
@@ -30,6 +35,9 @@ export default {
     },
     mounted() {
         this.showImg = true;
+    },
+    methods: {
+
     }
 }
 </script>

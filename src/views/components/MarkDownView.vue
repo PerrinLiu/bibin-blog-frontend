@@ -53,7 +53,8 @@
 
 
 
-                        <el-input v-model="diaryVo.diaryTitle" style="position: relative;top:20px;width:80%;"></el-input>
+                        <el-input v-model="diaryVo.diaryTitle"
+                            style="position: relative;top:20px;width:80%;"></el-input>
                         <el-radio-group v-model="diaryVo.isOpen" style="position: relative;top:30px;">
 
                             <el-radio label='0'>公开</el-radio>
@@ -65,7 +66,8 @@
                         <br />
                         <i style="font-size: 30px;cursor: pointer;" @click="showInput = false"
                             class="el-icon-error"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <i style="font-size: 30px;cursor: pointer;" @click="addDiary(diaryVo)" class="el-icon-success"></i>
+                        <i style="font-size: 30px;cursor: pointer;" @click="addDiary(diaryVo)"
+                            class="el-icon-success"></i>
                     </div>
 
                 </div>
@@ -75,9 +77,9 @@
 
     </div>
 </template>
-  
-  
-  
+
+
+
 <script>
 // 导入组件 及 组件样式
 import { mavonEditor } from 'mavon-editor'
