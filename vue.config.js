@@ -7,35 +7,24 @@ module.exports = defineConfig({
   },
   devServer: {
     port: 8080,
+    client: {  // 解决页面弹出红色报错遮罩层
+      overlay: false,//将overlay设置为false即可
+    },
     proxy: {
-      "/manager/api/user": {
-        target: "http://localhost:10010/user/user",
+      "/manager/api": {
+        target: "http://localhost:10010/",
         changeOrigin: true,
         pathRewrite: {
-          '^/manager/api/user': ''
+          '^/manager/api': ''
         }
       },
-      "/api/user": {
-        target: "http://localhost:10010/user/user",
+      "/api": {
+        target: "http://localhost:10010/",
         changeOrigin: true,
         pathRewrite: {
-          '^/api/user': ''
+          '^/api': ''
         }
       },
-      "/api/text": {
-        target: "http://localhost:10010/text",
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api/text': ''
-        }
-      },
-      "/api/imageApi": {
-        target: "https://api.lixingyong.com/api/images",
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api/imageApi': ''
-        }
-      }
     },
   }
 })

@@ -6,6 +6,10 @@ import 'element-ui/lib/theme-chalk/index.css';
 import store from '@/store/store'; // 导入 Vuex Store
 
 Vue.config.productionTip = false
+import { ifSuccess } from '@/utils/commonFunction'
+
+
+Vue.prototype.ifSuccess = ifSuccess
 
 
 Vue.use(ElementUI);

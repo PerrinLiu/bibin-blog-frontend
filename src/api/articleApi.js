@@ -1,11 +1,17 @@
 import request from "@/request";
 
 
-const prefix = '/text/article'
+const article = '/text/article'
 
 export default {
-    addDiary(data) {
-        return request.post('/text/text/addDiary', data)
+    addArticle(data) {
+        return request.post(article + '/addArticle', data)
     },
+    getGroupList() {
+        return request.get(article + '/getGroupList')
+    },
+    listArticle(pageSize, pageNum, searchText) {
+        return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&searchText=' + searchText)
+    }
 
 }
