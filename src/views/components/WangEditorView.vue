@@ -1,18 +1,21 @@
 <template>
-  <div style="border: 1px solid #ccc">
-    <div>
-      <el-input style="width: 300px" placeholder="请输入标题" v-model="title"></el-input>
-      &nbsp;&nbsp;
-      <el-select style="width: 100px" v-model="value" placeholder="标签">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-        </el-option>
-      </el-select>
-      &nbsp;&nbsp;
-      <el-button type="primary" @click="insertText">发布</el-button>
+  <div>
+    <div style="margin-bottom: 30px;">
+      <div>
+        <el-input style="width: 300px" placeholder="请输入标题" v-model="articleDto.title"></el-input>
+        &nbsp;&nbsp;
+        <el-select :multiple="true" style="width: 300px" v-model="articleDto.groupIds" placeholder="选择标签">
+          <el-option v-for="item in options" :key="item.id" :label="item.articleType" :value="item.id">
+          </el-option>
+        </el-select>
+        &nbsp;&nbsp;
+
+      </div>
     </div>
-    <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
-    <Editor style="height: 500px; overflow-y: hidden" v-model="html" :defaultConfig="editorConfig" :mode="mode"
-      @onCreated="onCreated" />
+    <div style="border: 1px solid #ccc;height: 600px;">
+      <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
+      <Editor style="height: 500px; overflow-y: hidden" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+    </div>
   </div>
 </template>
 
@@ -20,34 +23,35 @@
 <script>
 import Vue from "vue";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
+import articleApi from "@/api/articleApi";
 
 export default Vue.extend({
   components: { Editor, Toolbar },
   data() {
     return {
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value: '',
-      title: "",
+      // 标签
+      options: [
+        {
+          value: '1',
+          articleType: 'java'
+        }, {
+          value: '2',
+          articleType: 'vue'
+        }
+      ],
+      // 文章
+      articleDto: {
+        title: "",
+        articleText: "",
+        cover: "1",
+        groupIds: []
+      },
       editor: null,
       html: "<p>hello</p>",
       toolbarConfig: {},
       editorConfig: { MENU_CONF: {}, laceholder: "请输入内容..." },
       mode: "default", // or 'simple'
+
     };
   },
   created() {
@@ -109,23 +113,45 @@ export default Vue.extend({
       },
     };
   },
+  mounted() {
+    this.getGroupList();
+  },
   methods: {
     onCreated(editor) {
       this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
-    //发布
+
+    //发布文章
     insertText() {
       const editor = this.editor; // 获取 editor 实例
       if (editor == null) {
-        return;
+        return false;
       }
       // 调用 editor 属性和 API
-      console.log(editor.getHtml());
+      this.articleDto.articleText = editor.getHtml();
+      console.log(this.articleDto);
+      return articleApi.addArticle(this.articleDto).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.$message({
+            message: data.message,
+            type: 'success'
+          })
+          return true
+        } else {
+          return false
+        }
+      })
     },
-  },
-
-  mounted() {
-    // 模拟 ajax 请求，异步渲染编辑器
+    //获取分组
+    getGroupList() {
+      articleApi.getGroupList().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.options = data.data;
+        }
+      })
+    }
   },
   beforeDestroy() {
     const editor = this.editor;
@@ -136,3 +162,9 @@ export default Vue.extend({
 </script>
 
 <style src="@wangeditor/editor/dist/css/style.css"></style>
+
+<style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+</style>
