@@ -113,11 +113,6 @@ export default {
             element.articleGroupId = list
 
           })
-
-          this.$message({
-            message: data.message,
-            type: 'success'
-          })
         }
       })
     },

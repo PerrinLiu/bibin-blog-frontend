@@ -1,5 +1,5 @@
 import axios from "axios";
-axios.defaults.baseURL = "api"
+axios.defaults.baseURL = "/api"
 
 import { Message } from 'element-ui'
 import { Notification } from 'element-ui'

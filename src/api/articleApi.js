@@ -2,6 +2,7 @@ import request from "@/request";
 
 
 const article = '/text/article'
+const articleCommon = '/text/article/common'
 
 export default {
     addArticle(data) {
@@ -12,6 +13,12 @@ export default {
     },
     listArticle(pageSize, pageNum, searchText) {
         return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&searchText=' + searchText)
+    },
+    getArticleOne(id) {
+        return request.get(articleCommon + '/getArticle?articleId=' + id)
+    },
+    getArticleAll() {
+        return request.get('/text/article/getArticleAll')
     }
 
 }

@@ -2,8 +2,8 @@
   <div>
     <div class="backgroundImg">
       <transition name="el-zoom-in-top">
-        <div v-show="showImg" class="backgroundImg"
-          style="position: inherit;height:900px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF10.webp')">
+        <div v-show="showImg" class="backgroundImg" style="position: inherit;height:900px;"
+          :style="{backgroundImage: 'url(' + articleDetails.cover + ')' }">
         </div>
       </transition>
       <div class="backgroundImg-text-div" style="height: 60vh;">
@@ -13,7 +13,7 @@
 
     <div class="content item center" style="margin-top: 50vh;">
       <div class="content-inner" style="height: 200px;">
-        123
+        {{ articleDetails.title }}
         <!-- 用来撑起高度 -->
         <div class=" content-after" style="height: 60px;">
         </div>
@@ -23,16 +23,33 @@
 </template>
 
 <script>
-
+import articleApi from '@/api/articleApi';
 export default {
   name: 'ArticleDetailsView',
   data() {
     return {
-      showImg: false
+      showImg: false,
+      // 文章详情
+      articleDetails: {
+        cover: '',
+      }
     }
   },
   mounted() {
     this.showImg = true;
+    if (this.$route.params.id != undefined) {
+      this.getArticle(this.$route.params.id);
+    }
+  },
+  methods: {
+    getArticle(id) {
+      articleApi.getArticleOne(id).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.articleDetails = data.data
+        }
+      })
+    }
   }
 }
 </script>
