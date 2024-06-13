@@ -111,7 +111,6 @@ export default {
               })
             })
             element.articleGroupId = list
-
           })
         }
       })

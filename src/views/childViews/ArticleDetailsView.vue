@@ -12,8 +12,22 @@
     </div>
 
     <div class="content item center" style="margin-top: 50vh;">
-      <div class="content-inner" style="height: 200px;">
-        {{ articleDetails.title }}
+      <div class="content-inner">
+        <div class="content-top">
+          <h1>{{ articleDetails.articleTitle }}</h1>
+          <i class="el-icon-time top-icon">&nbsp;{{ articleDetails.createTime }}</i>
+          <i class="el-icon-star-on top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
+          <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i>
+          <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
+        </div>
+        <div style="position: relative;margin-top:40px;height: 800px;">
+          <div v-html="articleDetails.articleText">
+          </div>
+          <div class="content-bottom">
+            123
+          </div>
+        </div>
+
         <!-- 用来撑起高度 -->
         <div class=" content-after" style="height: 60px;">
         </div>
@@ -62,7 +76,7 @@ export default {
 }
 
 .content-inner {
-  width: 70%;
+  max-width: 1024px;
   min-width: 1024px;
   margin-top: 50px;
 }
@@ -70,5 +84,17 @@ export default {
 .center {
   display: flex;
   justify-content: center;
+}
+.content-top {
+}
+.el-icon-time {
+  margin-bottom: 10px;
+}
+.top-icon {
+  font-size: 13px;
+  margin-right: 20px;
+  color: #999;
+}
+.content-bottom {
 }
 </style>
