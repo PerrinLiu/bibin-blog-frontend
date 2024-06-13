@@ -264,7 +264,6 @@ export default {
         // 将 this.userInfo 深拷贝到 this.userOld
         this.userOld = JSON.parse(JSON.stringify(this.userInfo));
         // 登录成功后得到用户信息 user
-        console.log(response.data.data, this.$store.state);
         this.$store.dispatch("setUser", response.data.data);
       }).catch(err => {
         this.token = null;

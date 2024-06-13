@@ -13,7 +13,7 @@
             <div style="width:100vw;height:100%;overflow-y: scroll;">
               <div class="isLogin-phone">
                 <span>
-                  <el-upload class="avatar-uploader" action="/api/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+                  <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
                     :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                     <img :src="userInfo.userImg">
                   </el-upload>
@@ -171,7 +171,7 @@
             </el-card>
             <div class="isLogin-left">
               <span class="isLogin-userImg">
-                <el-upload class="avatar-uploader" action="/api/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+                <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
                   :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                   <img :src="userInfo.userImg">
                   <div class="imgHover">更换图片</div>

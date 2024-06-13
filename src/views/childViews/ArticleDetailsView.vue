@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="content item center" style="margin-top: 50vh;">
+    <div class="content item center">
       <div class="content-inner">
         <div class="content-top">
           <h1>{{ articleDetails.articleTitle }}</h1>
@@ -19,8 +19,18 @@
           <i class="el-icon-star-on top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
           <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i>
           <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
+          <div class="top-icon">
+            文章标签：
+            <el-tag style="margin-right:16px" v-for="(item,index) in articleDetails.articleGroupId" :key="index">
+              {{item}}
+            </el-tag>
+            <el-tag v-if="articleDetails.articleGroupId == null" style="margin-right:16px">
+              无标签
+            </el-tag>
+          </div>
+
         </div>
-        <div style="position: relative;margin-top:40px;height: 800px;">
+        <div class="content-middle">
           <div v-html="articleDetails.articleText">
           </div>
           <div class="content-bottom">
@@ -49,6 +59,11 @@ export default {
       }
     }
   },
+  computed: {
+    groupList() {
+      return this.$store.getters.groupList == null ? [] : this.$store.getters.groupList
+    }
+  },
   mounted() {
     this.showImg = true;
     if (this.$route.params.id != undefined) {
@@ -61,6 +76,16 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.articleDetails = data.data
+          let group = this.articleDetails.articleGroupId.split(",");
+          const list = [];
+          group.forEach((gId) => {
+            this.groupList.forEach(item => {
+              if (gId == item.id) {
+                list.push(item.articleType)
+              }
+            })
+          })
+          this.articleDetails.articleGroupId = list.length == 0 ? null : list
         }
       })
     }
@@ -84,16 +109,21 @@ export default {
 .center {
   display: flex;
   justify-content: center;
+  margin-top: 50vh;
 }
 .content-top {
 }
-.el-icon-time {
-  margin-bottom: 10px;
-}
+
 .top-icon {
   font-size: 13px;
   margin-right: 20px;
+  margin-bottom: 20px;
   color: #999;
+}
+
+.content-middle {
+  position: relative;
+  margin-top: 40px;
 }
 .content-bottom {
 }

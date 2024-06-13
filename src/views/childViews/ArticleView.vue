@@ -39,7 +39,7 @@
                       {{item}}
                     </el-tag>
                     <el-tag v-if="o.articleGroupId.length == 0" style="margin-right:16px">
-                      无分组
+                      无标签
                     </el-tag>
                   </div>
                 </div>
@@ -120,6 +120,7 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.options = data.data;
+          this.$store.dispatch("setGroupList", data.data);
           this.getArticle();
         }
       })

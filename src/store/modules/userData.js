@@ -7,11 +7,9 @@ const user = {
     },
     mutations: {
         SET_USER(state, user) {
-            console.log(user, state.user);
             state.user = user; // 这里修改用户信息的方法
         },
         SET_ISPHONE(state, isPhone) {
-            console.log(isPhone, state.isPhone);
             state.isPhone = isPhone;
         },
         CLAET_USER(state) {
@@ -24,7 +22,6 @@ const user = {
             commit('SET_USER', user)
         },
         setIsPhone({ commit }, isPhone) {
-            console.log(isPhone);
             commit('SET_ISPHONE', isPhone)
         },
         claetUser({ commit }) {

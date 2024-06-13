@@ -1,5 +1,6 @@
+// getters.js,获取vuex数据
 const getters = {
-    articleGroup: state => state.article.group,
+    groupList: state => state.article.groupList,
     isPhone: state => state.userData.isPhone,
     user: state => state.userData.user
 
