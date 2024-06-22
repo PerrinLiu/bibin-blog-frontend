@@ -1,71 +1,33 @@
 <template>
   <div>
-    <span v-if="isPhone">
-      <div>
-        <mavon-editor v-model="diaryVo.diaryText" ref="md" @change="change" style="min-height: 500px" />
+    <mavon-editor v-model="diaryVo.diaryText" ref="md" @change="change" style="min-height: 500px" />
 
-        <el-button plain style="position: relative;width: 100%;top: 15px;" @click="submit">提交</el-button>
+    <el-button plain style="position: relative;width: 100%;top: 15px;" @click="submit">提交</el-button>
+    <!-- 标题 -->
+    <div style="display: flex;justify-content: center;">
+      <div v-if="showInput" v-loading="loading" element-loading-text="正在提交~" element-loading-spinner="el-icon-loading"
+        element-loading-background="rgba(0, 0, 0, 0.8)"
+        style="position:fixed;top:0;z-index: 9999;min-width: 1200px;width:100vw; height:100vh;background-color: rgba(0, 0, 0, 0.3);text-align: center;">
+        <div style="position: relative;top: 30vh;left:38%;width:300px;height:200px;background-color: rgb(252, 252, 252);">
+          <h1 style="position: relative;top:20px;color: #191919;">为小记起个标题叭</h1>
 
-        <!-- 标题 -->
-        <div style="display: flex;justify-content: center;">
-          <div v-if="showInput" v-loading="loading" element-loading-text="正在提交~" element-loading-spinner="el-icon-loading"
-            element-loading-background="rgba(0, 0, 0, 0.8)"
-            style="position:fixed;top:0;left: ;z-index: 9999;min-width: 1200px;width:100vw; height:100vh;background-color: rgba(0, 0, 0, 0.3);text-align: center;">
-            <div style="position: relative;top: 30vh;left:38%;width:300px;height:200px;background-color: rgb(252, 252, 252);">
-              <h1 style="position: relative;top:20px;color: #191919;">为小记起个标题叭</h1>
+          <el-input v-model="diaryVo.diaryTitle" style="position: relative;top:20px;width:80%;"></el-input>
+          <el-radio-group v-model="diaryVo.isOpen" style="position: relative;top:30px;">
 
-              <el-input v-model="diaryVo.diaryTitle" style="position: relative;top:20px;width:80%;"></el-input>
-              <el-radio-group v-model="diaryVo.isOpen" style="position: relative;top:30px;">
-
-                <el-radio label='0'>公开</el-radio>
-                <el-radio label='1'>隐私</el-radio>
-              </el-radio-group>
-              <br />
-              <br />
-              <br />
-              <br />
-              <i style="font-size: 30px;cursor: pointer;" @click="showInput = false"
-                class="el-icon-error"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <i style="font-size: 30px;cursor: pointer;" @click="addDiary(diaryVo)" class="el-icon-success"></i>
-            </div>
-
-          </div>
+            <el-radio label='0'>公开</el-radio>
+            <el-radio label='1'>隐私</el-radio>
+          </el-radio-group>
+          <br />
+          <br />
+          <br />
+          <br />
+          <i style="font-size: 30px;cursor: pointer;" @click="showInput = false"
+            class="el-icon-error"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <i style="font-size: 30px;cursor: pointer;" @click="addDiary(diaryVo)" class="el-icon-success"></i>
         </div>
 
       </div>
-    </span>
-    <span v-else>
-      <mavon-editor v-model="diaryVo.diaryText" ref="md" @change="change" style="min-height: 500px" />
-
-      <el-button plain style="position: relative;width: 100%;top: 15px;" @click="submit">提交</el-button>
-
-      <!-- 标题 -->
-      <div style="display: flex;justify-content: center;">
-        <div v-if="showInput" v-loading="loading" element-loading-text="正在提交~" element-loading-spinner="el-icon-loading"
-          element-loading-background="rgba(0, 0, 0, 0.8)"
-          style="position:fixed;top:0;left: ;z-index: 9999;min-width: 1200px;width:100vw; height:100vh;background-color: rgba(0, 0, 0, 0.3);text-align: center;">
-          <div style="position: relative;top: 30vh;left:42%;width:300px;height:200px;background-color: rgb(252, 252, 252);">
-            <h1 style="position: relative;top:20px;color: #191919;">为小记起个标题叭</h1>
-
-            <el-input v-model="diaryVo.diaryTitle" style="position: relative;top:20px;width:80%;"></el-input>
-            <el-radio-group v-model="diaryVo.isOpen" style="position: relative;top:30px;">
-
-              <el-radio label='0'>公开</el-radio>
-              <el-radio label='1'>隐私</el-radio>
-            </el-radio-group>
-            <br />
-            <br />
-            <br />
-            <br />
-            <i style="font-size: 30px;cursor: pointer;" @click="showInput = false"
-              class="el-icon-error"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <i style="font-size: 30px;cursor: pointer;" @click="addDiary(diaryVo)" class="el-icon-success"></i>
-          </div>
-
-        </div>
-      </div>
-
-    </span>
+    </div>
 
   </div>
 </template>
