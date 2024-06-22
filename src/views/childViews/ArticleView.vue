@@ -29,7 +29,7 @@
                   <div style="margin-top: 10px;position: relative;">
                     <span style="font-size: 16px;color: #ccc;">{{o.createTime}}</span>
                     <span style="font-size: 16px;position: absolute;right: 0px;">
-                      <i class="el-icon-star-on">&nbsp;{{o.likeSum}}</i>&nbsp;&nbsp;
+                      <i class="iconfont icon-like">&nbsp;{{o.likeSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-view">&nbsp;{{o.readSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-s-comment">&nbsp;{{ o.commentSum }}</i>
                     </span>

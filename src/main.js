@@ -7,7 +7,7 @@ import store from '@/store'; // 导入 Vuex Store
 
 Vue.config.productionTip = false
 import { ifSuccess } from '@/utils/commonFunction'
-
+import '@/assets/iconfont/iconfont.css'
 
 Vue.prototype.ifSuccess = ifSuccess
 

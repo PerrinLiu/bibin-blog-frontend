@@ -17,7 +17,8 @@
           <div style="padding: 20px 20px 0 20px;">
             <h1>{{ articleDetails.articleTitle }}</h1>
             <i class="el-icon-time top-icon">&nbsp;{{ articleDetails.createTime }}</i>
-            <i class="el-icon-star-on top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
+            <i class="iconfont icon-like top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
+            <i class="el-icon-star-on top-icon">&nbsp;收藏：{{articleDetails.likeSum}}</i>
             <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i>
             <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
             <div class="top-icon">
@@ -35,10 +36,14 @@
             <div style="padding: 20px 20px 0 20px;" v-html="articleDetails.articleText">
             </div>
             <div ref="statusBar" class="content-bottom">
-              <!-- todo 状态栏待做 -->
-              <i class="el-icon-star-on top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
-              <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i>
-              <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
+              <div style="position: relative;">
+                <div class="bottom-status">
+                  <i class="iconfont icon-like status-icon" style="color: red">&nbsp;{{articleDetails.likeSum}}</i>
+                  <i class="el-icon-star-on status-icon" style="color: #333;">&nbsp;{{articleDetails.likeSum}}</i>
+                  <i class="el-icon-s-comment  status-icon">&nbsp;{{ articleDetails.commentSum }}</i>
+                </div>
+
+              </div>
             </div>
           </div>
         </div>
@@ -49,9 +54,9 @@
     </div>
   </div>
 </template>
-
 <script>
 import articleApi from '@/api/articleApi';
+
 export default {
   name: 'ArticleDetailsView',
   data() {
@@ -101,7 +106,6 @@ export default {
     checkHeight() {
       const contentHeight = this.$refs.content.scrollHeight;
       const statusBar = this.$refs.statusBar;
-      console.log(window.scrollY);
       if (contentHeight > window.scrollY + 300) {
         statusBar.style.position = 'fixed';
         statusBar.style.bottom = '0';
@@ -150,5 +154,15 @@ export default {
   height: 60px;
   background: #fff;
   box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.5);
+}
+.bottom-status {
+  position: absolute;
+  right: 20px;
+  line-height: 60px;
+}
+.status-icon {
+  font-size: 20px;
+  margin-right: 20px;
+  cursor: pointer;
 }
 </style>

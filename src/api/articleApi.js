@@ -15,7 +15,7 @@ export default {
         return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&searchText=' + searchText)
     },
     getArticleOne(id) {
-        return request.get(articleCommon + '/getArticle?articleId=' + id)
+        return request.post(articleCommon + '/getArticle?articleId=' + id)
     },
     getArticleAll() {
         return request.get('/text/article/getArticleAll')
