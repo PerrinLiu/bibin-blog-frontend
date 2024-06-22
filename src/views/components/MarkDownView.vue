@@ -1,7 +1,9 @@
 <template>
   <div>
-    <mavon-editor v-model="diaryVo.diaryText" ref="md" @change="change" style="min-height: 500px" />
-
+    <div style="border: 1px solid #ccc;height: 600px;">
+      <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
+      <Editor style="height: 500px; overflow-y: hidden" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
+    </div>
     <el-button plain style="position: relative;width: 100%;top: 15px;" @click="submit">提交</el-button>
     <!-- 标题 -->
     <div style="display: flex;justify-content: center;">
@@ -32,17 +34,14 @@
   </div>
 </template>
 
-
-
 <script>
+import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 // 导入组件 及 组件样式
-import { mavonEditor } from 'mavon-editor'
-import 'mavon-editor/dist/css/index.css'
 import textApi from '@/api/textApi'
 export default {
   // 注册
   components: {
-    mavonEditor,
+    Editor, Toolbar
   },
   data() {
     return {
@@ -54,49 +53,96 @@ export default {
         isOpen: '0', //0代表开放
       },
       loading: false,
+      editor: null,
+      toolbarConfig: {
+        excludeKeys: ['uploadVideo']
+      },
+      editorConfig: { MENU_CONF: {}, laceholder: "请输入内容..." },
+      mode: "default", // or ''
     }
   },
-  computed: {
-    isPhone() {
-      return this.$store.getters.isPhone;
-    }
-  },
-  methods: {
-    // 所有操作都会被解析重新渲染
-    change(value, render) {
-      // render 为 markdown 解析后的结果[html]
-      this.html = render;
+  created() {
+    this.editorConfig.placeholder = "请输入使用说明内容...";
+    this.editorConfig.MENU_CONF["uploadImage"] = {
+      timeout: 5 * 1000, // 5s
+      fieldName: "image",
+      headers: {
+        "Content-Type": "multipart/form-data",
+        "X-Token": JSON.parse(localStorage.getItem("token")),
+      },
+      maxFileSize: 10 * 1024 * 1024, // 10M
 
-      if (this.html.includes('<img')) {
-        // 如果包含图片，限制图片大小再发请求
-        this.html = this.html.replace(/<img/g, '<img style="width:80%;margin-top:20px;margin-left:2%"');
-      }
-      if (this.html.length > 7 * 1024 * 1024) {
-        console.log(this.html.len);
-        this.$message({
-          message: '日记大小超出限制',
-          type: 'warning'
-        })
-      }
+      base64LimitSize: 5 * 1024, // 5kb 以下插入 base64
+
+      onBeforeUpload(files) {
+        return files; // 返回哪些文件可以上传
+        // return false 会阻止上传
+      },
+      onProgress(progress) {
+        console.log("onProgress", progress);
+      },
+      onSuccess(file, res) {
+        console.log("onSuccess", file, res);
+      },
+      onFailed(file, res) {
+        alert(res.message);
+        console.log("onFailed", file, res);
+      },
+      onError(file, err, res) {
+        alert(err.message);
+        console.error("onError", file, err, res);
+      },
+
+      // 用户自定义上传图片
+      customUpload(file, insertFn) {
+        var axios = require("axios");
+        var FormData = require("form-data");
+        var data = new FormData();
+        data.append("image", file); // file 即选中的文件
+        var config = {
+          method: "post",
+          url: "/api/text/article/uploadImg", //上传图片地址
+          headers: {
+            "Content-Type": "multipart/form-data",
+            "X-Token": JSON.parse(localStorage.getItem("token")),
+          },
+          data: data,
+        };
+
+        axios(config)
+          .then(function (res) {
+            let url = res.data.data; //拼接成可浏览的图片地址
+            insertFn(url, "使用说明", url); //插入图片
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      },
+    };
+  },
+
+  methods: {
+    onCreated(editor) {
+      this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
     },
+
     // 提交
     submit() {
-      if (this.diaryVo.diaryText == null || this.diaryVo.diaryText.trim() == '') {
+      if (this.html == "<p><br></p>" || this.html.trim() == '') {
         this.$message({
           message: '日记内容不能为空',
           type: 'info'
         })
         return;
       }
-      // 限制大小为5m
-      if (this.html.length > 7 * 1024 * 1024) {
+      // 限制大小为1m
+      if (this.html.length > 1 * 1024 * 1024) {
         this.$message({
           message: '日记大小超出限制',
           type: 'warning'
         })
         return;
       }
-      console.log(this.diaryVo.diaryText);
       this.showInput = true;
     },
     // 添加日记
@@ -115,9 +161,13 @@ export default {
       } else {
         this.diaryVo.isOpen = 0
       }
-      // 将this.html赋值给diaryText 
-      this.diaryVo.diaryText = this.html;
-
+      // 将this.html赋值给diaryText
+      // 调用 editor 属性和 API
+      const editor = this.editor; // 获取 editor 实例
+      if (editor == null) {
+        return false;
+      }
+      this.diaryVo.diaryText = editor.getHtml();
       textApi.addDiary(this.diaryVo).then(response => {
         this.loading = true;
         const data = response.data;
@@ -136,10 +186,19 @@ export default {
         this.loading = false;
         console.log(err);
       })
+
     }
   },
   mounted() {
-
+    console.log(this.toolbarConfig);
   }
 }
 </script>
+
+<style src="@wangeditor/editor/dist/css/style.css"></style>
+
+<style scoped>
+.el-tag + .el-tag {
+  margin-left: 10px;
+}
+</style>

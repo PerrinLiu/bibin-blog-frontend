@@ -56,7 +56,7 @@ const routes = [
             {
                 path: '/articleDetails/:id',
                 name: 'articleDetails',
-                component: () => import('../views/childViews/ArticleDetailsView.vue'),
+                component: () => import('../views/childViews/components/ArticleDetailsView.vue'),
                 meta: {
                     title: '详情'
                 },
