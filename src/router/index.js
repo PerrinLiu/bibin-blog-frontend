@@ -56,7 +56,7 @@ const routes = [
             {
                 path: '/articleDetails/:id',
                 name: 'articleDetails',
-                component: () => import('../views/childViews/ArticleDetailsView.vue'),
+                component: () => import('../views/childViews/components/ArticleDetailsView.vue'),
                 meta: {
                     title: '详情'
                 },
@@ -138,8 +138,18 @@ const routes = [
 ]
 
 const router = new VueRouter({
+
     mode: 'history',
-    routes
+    routes,
+    // 路由滚动行为（滚动条回到顶部）
+    scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+            return savedPosition
+        } else {
+            return { x: 0, y: 0 }
+        }
+    }
+
 })
 
 // 在路由切换前执行逻辑（导航守卫 beforeEach）
@@ -148,5 +158,6 @@ router.beforeEach((to, from, next) => {
     // 继续路由导航
     next();
 });
+
 
 export default router

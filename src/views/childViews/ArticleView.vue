@@ -23,13 +23,12 @@
                 <router-link :to="{ name: 'articleDetails', params: {id:o.id } }">
                   <img width="100%" height="250px" style="cursor: pointer;" :src="o.cover" class="image">
                 </router-link>
-
                 <div style="padding: 20px;">
                   <span>{{o.articleTitle}}</span>
                   <div style="margin-top: 10px;position: relative;">
                     <span style="font-size: 16px;color: #ccc;">{{o.createTime}}</span>
                     <span style="font-size: 16px;position: absolute;right: 0px;">
-                      <i class="el-icon-star-on">&nbsp;{{o.likeSum}}</i>&nbsp;&nbsp;
+                      <i class="iconfont icon-like">&nbsp;{{o.likeSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-view">&nbsp;{{o.readSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-s-comment">&nbsp;{{ o.commentSum }}</i>
                     </span>
@@ -39,7 +38,7 @@
                       {{item}}
                     </el-tag>
                     <el-tag v-if="o.articleGroupId.length == 0" style="margin-right:16px">
-                      无分组
+                      无标签
                     </el-tag>
                   </div>
                 </div>
@@ -111,7 +110,6 @@ export default {
               })
             })
             element.articleGroupId = list
-
           })
         }
       })
@@ -121,6 +119,7 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.options = data.data;
+          this.$store.dispatch("setGroupList", data.data);
           this.getArticle();
         }
       })

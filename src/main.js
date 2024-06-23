@@ -3,11 +3,11 @@ import App from './App.vue'
 import router from './router'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import store from '@/store/store'; // 导入 Vuex Store
+import store from '@/store'; // 导入 Vuex Store
 
 Vue.config.productionTip = false
 import { ifSuccess } from '@/utils/commonFunction'
-
+import '@/assets/iconfont/iconfont.css'
 
 Vue.prototype.ifSuccess = ifSuccess
 
