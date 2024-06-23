@@ -57,45 +57,45 @@
         <div class="article-list">
           <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;"
             :body-style="{ padding: '0px' }">
-            <router-link :to="{ name: 'articleDetails', params: {id:item.id } }">
-              <el-row>
+            <el-row>
+              <router-link :to="{ name: 'articleDetails', params: {id:item.id } }">
                 <el-col :span="12">
                   <div style="height: 300px;">
                     <img width="100%" height="100%" :src="item.cover" alt="">
                   </div>
                 </el-col>
-                <el-col :span="12">
-                  <div class="article-content">
-                    <div style="height: 3cap;">
-                      <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
-                    </div>
-                    <div style="height: 90px;">
-                      <p class="article-text">
-                        啊是多久啊立刻撒旦吉萨利空打击撒赖扩大，马上就打算离开东京撒赖扩大吉萨离开阿克苏的距离喀什角动量看撒娇的撒利空打击撒赖可见度拉卡上来看大家阿斯利康大家埃里克就拉开圣诞节拉开教案设计的卢卡sadmsajdlksajd
-                        lkajdlka洒家打开拉萨建档立卡记录卡撒旦就拉山口就打卢克斯ja </p>
-                    </div>
-                    <div style="height: 40px;line-height: 40px;">
-                      <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
-                        {{o}}
-                      </el-tag>
-                      <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">
-                        无标签
-                      </el-tag>
-                    </div>
-                    <div style="height: 60px;line-height: 60px;">
-                      <span>
-                        <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
-                        <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
-                        <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
-                      </span>
-                    </div>
-                    <div style="height: 30px;">
-                      <i class="el-icon-date" style="font-size: 20px;color: #5CB6FF;">&nbsp;</i>{{ item.createTime }}
-                    </div>
+              </router-link>
+              <el-col :span="12">
+                <div class="article-content">
+                  <div style="height: 3cap;">
+                    <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
                   </div>
-                </el-col>
-              </el-row>
-            </router-link>
+                  <div style="height: 90px;">
+                    <p class="article-text">
+                      啊是多久啊立刻撒旦吉萨利空打击撒赖扩大，马上就打算离开东京撒赖扩大吉萨离开阿克苏的距离喀什角动量看撒娇的撒利空打击撒赖可见度拉卡上来看大家阿斯利康大家埃里克就拉开圣诞节拉开教案设计的卢卡sadmsajdlksajd
+                      lkajdlka洒家打开拉萨建档立卡记录卡撒旦就拉山口就打卢克斯ja </p>
+                  </div>
+                  <div style="height: 40px;line-height: 40px;">
+                    <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
+                      {{o}}
+                    </el-tag>
+                    <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">
+                      无标签
+                    </el-tag>
+                  </div>
+                  <div style="height: 60px;line-height: 60px;">
+                    <span>
+                      <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                      <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                    </span>
+                  </div>
+                  <div style="height: 30px;">
+                    <i class="el-icon-date" style="font-size: 20px;color: #5CB6FF;">&nbsp;</i>{{ item.createTime }}
+                  </div>
+                </div>
+              </el-col>
+            </el-row>
           </el-card>
           <div style="width: 100%;height: 60px;">
             <router-link to="/article" style="text-decoration: none;">

@@ -13,13 +13,15 @@
 
     <div class="content item center">
       <div>
-        <div class="content-inner">
+        <div class="content-inner" ref="myElement"
+          :style="isPhone ? 'width:95%;max-width: 550px;margin-left: 2.5%;' : 'max-width: 1024px;min-width: 1024px;'">
           <div style="padding: 20px 20px 0 20px;">
             <h1>{{ articleDetails.articleTitle }}</h1>
             <i class="el-icon-time top-icon">&nbsp;{{ articleDetails.createTime }}</i>
+
+            <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i><br v-if="isPhone" />
             <i class="iconfont icon-like top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
             <i class="el-icon-star-on top-icon">&nbsp;收藏：{{articleDetails.likeSum}}</i>
-            <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i>
             <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
             <div class="top-icon">
               文章标签：
@@ -79,6 +81,9 @@ export default {
   computed: {
     groupList() {
       return this.$store.getters.groupList == null ? [] : this.$store.getters.groupList
+    },
+    isPhone() {
+      return this.$store.getters.isPhone
     }
   },
   mounted() {
@@ -117,9 +122,11 @@ export default {
       const contentHeight = this.$refs.content.scrollHeight;
       const statusBar = this.$refs.statusBar;
       if (contentHeight > window.scrollY + 300) {
+        const element = this.$refs.myElement;
+        const width = element.offsetWidth;
         statusBar.style.position = 'fixed';
         statusBar.style.bottom = '0';
-        statusBar.style.width = '1024px';
+        statusBar.style.width = width + 'px';
       } else {
         statusBar.style.position = 'relative';
       }
@@ -155,8 +162,6 @@ export default {
 
 .content-inner {
   position: relative;
-  max-width: 1024px;
-  min-width: 1024px;
   margin-top: 50px;
   box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.5);
 }

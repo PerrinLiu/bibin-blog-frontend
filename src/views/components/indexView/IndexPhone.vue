@@ -11,8 +11,7 @@
             </span>
             <h2 style="font-size: 30px;">Bibin</h2>
           </div>
-          <div
-            style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
+          <div style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
             <div style="float: left;">
               <h4>文章</h4>
               0
@@ -33,8 +32,8 @@
           <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
           <el-input placeholder="请输入内容" v-model="searchText">
           </el-input>
-          <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;"
-            @click="$emit('childEvent', searchText);" class="el-icon-search"></i>
+          <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;" @click="$emit('childEvent', searchText);"
+            class="el-icon-search"></i>
         </el-card>
         <!-- 推荐文章 -->
         <el-card class="box-card box-card1" shadow="always">
@@ -53,21 +52,47 @@
           <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
         </el-card>
 
-        <el-card style="height: 300px;margin-top: 40px;">
+        <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;" :body-style="{ padding: '0px' }">
 
+          <div style="height: 300px;width:100%;position: absolute;top: 0px;">
+            <img width="100%" height="100%" :src="item.cover" alt="">
+          </div>
+          <router-link style="text-decoration: none" :to="{ name: 'articleDetails', params: {id:item.id } }">
+            <div class="article-content" style="text-shadow:0 0 10px red;">
+              <div style="height: 3cap;">
+                <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
+              </div>
+              <div style="height: 90px;">
+                <p class="article-text">
+                  啊是多久啊立刻撒旦吉萨利空打击撒赖扩大，马上就打算离开东京撒赖扩大吉萨离开阿克苏的距离喀什角动量看撒娇的撒利空打击撒赖可见度拉卡上来看大家阿斯利康大家埃里克就拉开圣诞节拉开教案设计的卢卡sadmsajdlksajd
+                  lkajdlka洒家打开拉萨建档立卡记录卡撒旦就拉山口就打卢克斯ja </p>
+              </div>
+              <div style="height: 40px;line-height: 40px;">
+                <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
+                  {{o}}
+                </el-tag>
+                <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">
+                  无标签
+                </el-tag>
+              </div>
+              <div style="height: 60px;line-height: 60px;">
+                <span>
+                  <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                  <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                  <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                </span>
+              </div>
+              <div style="height: 30px;">
+                <i class="el-icon-date" style="font-size: 20px;color: #5CB6FF;">&nbsp;</i>{{ item.createTime }}
+              </div>
+            </div>
+          </router-link>
         </el-card>
-        <el-card style="height: 300px;margin-top: 40px;">
-
-        </el-card>
-        <el-card style="height: 300px;margin-top: 40px;">
-
-        </el-card>
-        <el-card style="height: 300px;margin-top: 40px;">
-
-        </el-card>
-        <el-card style="height: 300px;margin-top: 40px;">
-
-        </el-card>
+        <div style="width: 100%;height: 60px;">
+          <router-link to="/article" style="text-decoration: none;">
+            <el-button type="primary" style="position: absolute;bottom: 0;right: 0px;">查看更多</el-button>
+          </router-link>
+        </div>
 
       </div>
     </el-container>
@@ -75,20 +100,56 @@
 </template>
 
 <script>
+import articleApi from '@/api/articleApi'
 export default {
   props: ["access"],
   data() {
     return {
       //搜索内容
       searchText: "",
+      //文章列表
+      articleList: [],
+      //文章分组
+      options: [],
     }
   },
   mounted() {
-    console.log(this.access);
-
+    this.getGroup()
   },
   methods: {
-
+    getData() {
+      this.getGroup();
+    },
+    getArticle() {
+      articleApi.listIndexArticle().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.articleList = data.data;
+          this.articleList.forEach(element => {
+            let group = element.articleGroupId.split(",");
+            const list = [];
+            group.forEach((gId) => {
+              this.options.forEach(item => {
+                if (gId == item.id) {
+                  list.push(item.articleType)
+                }
+              })
+            })
+            element.articleGroupId = list
+          })
+        }
+      })
+    },
+    getGroup() {
+      articleApi.getGroupList().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.options = data.data;
+          this.$store.dispatch("setGroupList", data.data);
+          this.getArticle();
+        }
+      })
+    }
   }
 }
 </script>
@@ -147,5 +208,28 @@ export default {
 
 .box-card3 {
   height: 250px;
+}
+.article-list {
+  position: relative;
+  margin-top: -50px;
+  width: 70%;
+  min-width: 600px;
+}
+.article-content {
+  position: relative;
+  margin-left: 15px;
+  height: 280px;
+  min-width: 300px;
+  color: #666;
+}
+.article-text {
+  width: 95%;
+  overflow: hidden;
+  position: relative;
+  top: -15px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
 }
 </style>
