@@ -38,9 +38,17 @@
             <div ref="statusBar" class="content-bottom">
               <div style="position: relative;">
                 <div class="bottom-status">
-                  <i class="iconfont icon-like status-icon" style="color: red">&nbsp;{{articleDetails.likeSum}}</i>
-                  <i class="el-icon-star-on status-icon" style="color: #333;">&nbsp;{{articleDetails.likeSum}}</i>
-                  <i class="el-icon-s-comment  status-icon">&nbsp;{{ articleDetails.commentSum }}</i>
+                  <i class="iconfont icon-like status-icon" @click="likeOne(articleDetails.id)"
+                    :style="articleDetails.liked ? 'color: red;' : 'color: #333'">
+                    &nbsp;{{articleDetails.likeSum}}
+                  </i>
+                  <i class="el-icon-star-on status-icon" @click="starOne(articleDetails.id)"
+                    :style="articleDetails.star ? 'color: red;' : 'color: #333'">
+                    &nbsp;{{articleDetails.collectionsSum}}
+                  </i>
+                  <i class="el-icon-s-comment  status-icon" @click="getComment(articleDetails.id)">
+                    &nbsp;{{ articleDetails.commentSum }}
+                  </i>
                 </div>
 
               </div>
@@ -85,6 +93,7 @@ export default {
     window.removeEventListener('scroll', this.checkHeight);
   },
   methods: {
+    // 获取文章详情
     getArticle(id) {
       articleApi.getArticleOne(id).then((res) => {
         const data = this.ifSuccess(res)
@@ -103,6 +112,7 @@ export default {
         }
       })
     },
+    // 检测高度，改变状态栏的位置
     checkHeight() {
       const contentHeight = this.$refs.content.scrollHeight;
       const statusBar = this.$refs.statusBar;
@@ -113,6 +123,24 @@ export default {
       } else {
         statusBar.style.position = 'relative';
       }
+    },
+    likeOne(id) {
+      articleApi.likeOrStarArticle({ id: id, type: 1 }).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.articleDetails.likeSum += this.articleDetails.liked ? -1 : 1;
+          this.articleDetails.liked = !this.articleDetails.liked;
+        }
+      })
+    },
+    starOne(id) {
+      articleApi.likeOrStarArticle({ id: id, type: 2 }).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.articleDetails.collectionsSum += this.articleDetails.star ? -1 : 1
+          this.articleDetails.star = !this.articleDetails.star
+        }
+      })
     }
   }
 }
