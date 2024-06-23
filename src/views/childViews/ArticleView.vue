@@ -23,7 +23,6 @@
                 <router-link :to="{ name: 'articleDetails', params: {id:o.id } }">
                   <img width="100%" height="250px" style="cursor: pointer;" :src="o.cover" class="image">
                 </router-link>
-
                 <div style="padding: 20px;">
                   <span>{{o.articleTitle}}</span>
                   <div style="margin-top: 10px;position: relative;">
