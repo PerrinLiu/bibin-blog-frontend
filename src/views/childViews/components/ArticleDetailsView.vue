@@ -34,7 +34,7 @@
             </div>
 
           </div>
-          <div class="content-middle" ref="content">
+          <div class="content-middle" ref="contentContainer">
             <div style="padding: 20px 20px 0 20px;" v-html="articleDetails.articleText">
             </div>
             <div ref="statusBar" class="content-bottom">
@@ -98,12 +98,34 @@ export default {
     window.removeEventListener('scroll', this.checkHeight);
   },
   methods: {
+    changeImages() {
+      setTimeout(() => {
+        const container = this.$refs.contentContainer;
+        if (container) {
+          const images = container.getElementsByTagName('img');
+          const containerWidth = container.clientWidth;
+          console.log(containerWidth, images);
+          for (let i = 0; i < images.length; i++) {
+            console.log(images[i]);
+          }
+          Array.from(images).forEach((image) => {
+            const imageWidth = image.clientWidth;
+            console.log(imageWidth);
+            if (imageWidth > containerWidth) {
+              image.style.width = '100%';
+            }
+          })
+        }
+      }, 200);
+
+    },
     // 获取文章详情
     getArticle(id) {
       articleApi.getArticleOne(id).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.articleDetails = data.data
+          this.changeImages();
           let group = this.articleDetails.articleGroupId.split(",");
           const list = [];
           group.forEach((gId) => {
@@ -119,7 +141,7 @@ export default {
     },
     // 检测高度，改变状态栏的位置
     checkHeight() {
-      const contentHeight = this.$refs.content.scrollHeight;
+      const contentHeight = this.$refs.contentContainer.scrollHeight;
       const statusBar = this.$refs.statusBar;
       if (contentHeight > window.scrollY + 300) {
         const element = this.$refs.myElement;

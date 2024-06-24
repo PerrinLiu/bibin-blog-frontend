@@ -14,12 +14,15 @@
     <div class="content item center" style="margin-top: 50vh;">
       <div class="content-inner">
         <div class="center">
-          <el-input v-model="searchVo.title" placeholder="请输入内容" suffix-icon="el-icon-search" style="width: 50%;"></el-input>
+          <el-input v-model="searchVo.title" placeholder="请输入内容" suffix-icon="el-icon-search"
+            :style="isPhone ? 'width: 300px;' : 'width: 50%;'"></el-input>
         </div>
         <div>
           <el-row>
-            <el-col :span="8" v-for="(o) in  articleList " :key="o.id">
-              <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px;height: 390px;">
+            <!-- todo 待完善手机界面 -->
+            <el-col :span="isPhone ? 24 : 8" v-for="(o) in  articleList " :key="o.id">
+              <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px;height: 390px;"
+                :style="isPhone ? 'width: 80%;margin-left: 10%;' : ''">
                 <router-link :to="{ name: 'articleDetails', params: {id:o.id } }">
                   <img width="100%" height="250px" style="cursor: pointer;" :src="o.cover" class="image">
                 </router-link>
@@ -80,6 +83,11 @@ export default {
   mounted() {
     this.showImg = true;
     this.getData();
+  },
+  computed: {
+    isPhone() {
+      return this.$store.getters.isPhone
+    }
   },
   methods: {
     goDetail() {
