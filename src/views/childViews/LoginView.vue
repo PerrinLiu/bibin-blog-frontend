@@ -176,7 +176,6 @@
                   <img :src="userInfo.userImg">
                   <div class="imgHover">更换图片</div>
                 </el-upload>
-
               </span>
               <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
                 <el-form-item prop="nickname" label="昵称：">
