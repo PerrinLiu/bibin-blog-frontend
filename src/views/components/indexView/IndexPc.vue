@@ -68,10 +68,10 @@
               <el-col :span="12">
                 <div class="article-content">
                   <div style="height: 3cap;">
-                    <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
+                    <h1 style="color: #030303;font-size: 25px;line-height: 17px;">{{ item.articleTitle }}</h1>
                   </div>
                   <div style="height: 90px;">
-                    <p class="article-text">{{item.des}}</p>
+                    <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
                     <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">

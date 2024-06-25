@@ -12,29 +12,28 @@
     </div>
 
     <div class="content item center" style="margin-top: 50vh;">
-      <div class="content-inner">
+      <div class="content-inner" :style="isPhone ? 'width: 100%;' : 'min-width: 1024px;'">
         <div class="center">
           <el-input v-model="searchVo.title" placeholder="请输入内容" suffix-icon="el-icon-search"
             :style="isPhone ? 'width: 300px;' : 'width: 50%;'"></el-input>
         </div>
         <div>
           <el-row>
-            <!-- todo 待完善手机界面 -->
             <el-col :span="isPhone ? 24 : 8" v-for="(o) in  articleList " :key="o.id">
               <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px;height: 390px;"
                 :style="isPhone ? 'width: 80%;margin-left: 10%;' : ''">
                 <router-link :to="{ name: 'articleDetails', params: {id:o.id } }">
-                  <img width="100%" height="250px" style="cursor: pointer;" :src="o.cover" class="image">
+                  <img width="100%" :height="isPhone ? '210px' : '250px'" style="cursor: pointer;" :src="o.cover" class="image">
                 </router-link>
                 <div style="padding: 20px;">
                   <span>{{o.articleTitle}}</span>
                   <div style="margin-top: 10px;position: relative;">
-                    <span style="font-size: 16px;color: #ccc;">{{o.createTime}}</span>
-                    <span style="font-size: 16px;position: absolute;right: 0px;">
+                    <span style="font-size: 16px;color: #ccc;">{{o.createTime}}</span><br v-if="isPhone" />
+                    <p style="font-size: 16px;" :style="isPhone ? '' : 'position: absolute;right: 0px;'">
                       <i class="iconfont icon-like">&nbsp;{{o.likeSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-view">&nbsp;{{o.readSum}}</i>&nbsp;&nbsp;
                       <i class="el-icon-s-comment">&nbsp;{{ o.commentSum }}</i>
-                    </span>
+                    </p>
                   </div>
                   <div style="margin-top: 10px">
                     <el-tag style="margin-right:16px" v-for="(item,index) in o.articleGroupId" :key="index">
@@ -144,7 +143,6 @@ export default {
 
 .content-inner {
   width: 70%;
-  min-width: 1024px;
   margin-top: 50px;
 }
 
