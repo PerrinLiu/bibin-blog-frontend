@@ -24,7 +24,13 @@ export default {
         return request.get('/text/article/getArticleAll')
     },
     likeOrStarArticle(data) {
-        return request.post('/text/article/likeOrStarArticle?articleId=' + data.id + '&type=' + data.type)
-    }
+        return request.post('/text/article/likeOrStarArticle?articleId=' + data.id + '&type=' + data.type, null, { headers: { 'showLoading': false } })
+    },
+    listComment(data) {
+        return request.get('/text/article/listComment?articleId=' + data.articleId + '&pageSize=' + data.pageSize + '&pageNum=' + data.pageNum)
+    },
+    addComment(data) {
+        return request.post('/text/article/addComment', data)
+    },
 
 }

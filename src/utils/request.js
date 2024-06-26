@@ -4,23 +4,42 @@ import { Message } from 'element-ui'
 import { Notification } from 'element-ui'
 import { Loading } from 'element-ui';
 
+
 //loading对象
 let loading;
 
-function startLoading() {
-    loading = Loading.service({
-        lock: true,
-        text: '拼命加载中...',
-        background: 'rgba(255,255,255,0.5)',
-    })
-}
-function endLoading() {
-    loading.close()
+//当前正在请求的数量
+let needLoadingRequestCount = 0;
+
+//显示loading
+function showLoading(target) {
+    // 后面这个判断很重要，因为关闭时加了抖动，此时loading对象可能还存在，
+    // 但needLoadingRequestCount已经变成0.避免这种情况下会重新创建个loading
+    if (needLoadingRequestCount === 0) {
+        loading = Loading.service({
+            lock: true,
+            text: "Loading...",
+            background: 'rgba(255, 255, 255, 0.5)',
+            target: target || "body"
+        });
+    }
+    needLoadingRequestCount++;
 }
 
+//隐藏loading
+function hideLoading() {
+    needLoadingRequestCount--;
+    if (needLoadingRequestCount <= 0) {
+        //关闭loading
+        loading.close();
+    }
+}
 
 axios.interceptors.request.use(config => {
-    startLoading();
+    //判断当前请求是否设置了不显示Loading
+    if (config.headers.showLoading == undefined) {
+        showLoading(config.headers.loadingTarget);
+    }
     if (localStorage.getItem('token')) {
         // 在发送请求之前做些什么
         const token = JSON.parse(localStorage.getItem('token'));
@@ -45,11 +64,11 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(
     response => {
-        endLoading();
+        hideLoading();
         return response;
     },
     err => {
-        endLoading();
+        hideLoading();
         const res = err.response
         if (err.response.status === 400) {
             Message.error(err.response.data.message)

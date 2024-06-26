@@ -34,10 +34,10 @@
             </div>
 
           </div>
-          <div class="content-middle">
+          <div class="content-middle ">
             <div style="padding: 20px 20px 0 20px;" v-html="articleDetails.articleText">
             </div>
-            <div ref="statusBar" class="content-bottom">
+            <div ref="statusBar" class="content-bottom item">
               <div style="position: relative;">
                 <div class="bottom-status">
                   <i class="iconfont icon-like status-icon" @click="likeOne(articleDetails.id)"
@@ -62,6 +62,42 @@
         </div>
       </div>
     </div>
+
+    <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item">
+      <div style="width: 90%;margin-left: 5%;height: 500px;">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <div style="width: 50px;height: 50px;">
+              <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
+            </div>
+          </el-col>
+          <el-col :span="20">
+            <div style="background-color: aliceblue;width: 100%;height: 30px;">
+              <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
+              </el-input>
+              <div style="text-align: right;margin-top: 15px;">
+                <el-button type="primary" @click="addComment">发布</el-button>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+      <div style="width: 90%;margin-left: 5%;height: 500px;">
+        <el-row :gutter="20">
+          <el-col :span="4">
+            <div style="width: 50px;height: 50px;">
+              <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
+            </div>
+          </el-col>
+          <el-col :span="20">
+            <div style="background-color: aliceblue;width: 100%;height: 30px;">
+              <!-- todo 评论样式待做 -->
+              {{ listComment }}
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </el-drawer>
   </div>
 </template>
 <script>
@@ -77,6 +113,19 @@ export default {
         cover: '',
       },
       checkHeightOffset: 9,
+      drawer: false,
+      commentVo: {
+        articleId: 0,
+        content: '',
+        userId: null,
+        parentId: null
+      },
+      listComment: [],
+      commentSearch: {
+        articleId: 0,
+        pageNum: 1,
+        pageSize: 5
+      }
     }
   },
   computed: {
@@ -99,6 +148,7 @@ export default {
   },
 
   methods: {
+    // 图片大小自适应
     changeImages() {
       setTimeout(() => {
         const container = this.$refs.contentContainer;
@@ -151,11 +201,11 @@ export default {
         statusBar.style.bottom = '0';
         statusBar.style.width = width + 'px';
       } else {
-        console.log('不满足条件');
         statusBar.style.position = 'relative';
       }
       this.checkHeightOffset = 0;
     },
+    // 点赞
     likeOne(id) {
       articleApi.likeOrStarArticle({ id: id, type: 1 }).then((res) => {
         const data = this.ifSuccess(res)
@@ -165,12 +215,49 @@ export default {
         }
       })
     },
+    // 收藏
     starOne(id) {
       articleApi.likeOrStarArticle({ id: id, type: 2 }).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.articleDetails.collectionsSum += this.articleDetails.star ? -1 : 1
           this.articleDetails.star = !this.articleDetails.star
+        }
+      })
+    },
+    // 获取评论
+    getComment(id) {
+      console.log(this.articleDetails);
+      this.drawer = true
+      //获取评论
+      this.commentSearch.articleId = id
+      articleApi.listComment(this.commentSearch).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.listComment = data.data
+        }
+      })
+    },
+    // 发布评论
+    addComment() {
+      this.commentVo.articleId = this.articleDetails.id
+      this.commentVo.userId = this.$store.getters.user.userId
+      articleApi.addComment(this.commentVo).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.listComment = data.data
+          this.getComment(this.articleDetails.id)
+        }
+      })
+    },
+    replyComment(id) {
+      this.commentVo.parentId = id
+      this.commentVo.articleId = this.articleDetails.id
+      this.commentVo.userId = this.$store.getters.user.userId
+      articleApi.addComment(this.commentVo).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.listComment = data.data
         }
       })
     }
