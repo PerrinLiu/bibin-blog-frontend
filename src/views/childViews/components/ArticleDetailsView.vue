@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <div class="content item center">
+    <div class="content item center" ref="contentContainer">
       <div>
         <div class="content-inner" ref="myElement"
           :style="isPhone ? 'width:95%;max-width: 550px;margin-left: 2.5%;' : 'max-width: 1024px;min-width: 1024px;'">
@@ -34,7 +34,7 @@
             </div>
 
           </div>
-          <div class="content-middle" ref="content">
+          <div class="content-middle">
             <div style="padding: 20px 20px 0 20px;" v-html="articleDetails.articleText">
             </div>
             <div ref="statusBar" class="content-bottom">
@@ -75,7 +75,8 @@ export default {
       // 文章详情
       articleDetails: {
         cover: '',
-      }
+      },
+      checkHeightOffset: 9,
     }
   },
   computed: {
@@ -87,7 +88,6 @@ export default {
     }
   },
   mounted() {
-    this.checkHeight();
     window.addEventListener('scroll', this.checkHeight);
     this.showImg = true;
     if (this.$route.params.id != undefined) {
@@ -97,13 +97,33 @@ export default {
   beforeDestroy() {
     window.removeEventListener('scroll', this.checkHeight);
   },
+
   methods: {
+    changeImages() {
+      setTimeout(() => {
+        const container = this.$refs.contentContainer;
+        if (container) {
+          const images = container.getElementsByTagName('img');
+          const containerWidth = container.clientWidth;
+          Array.from(images).forEach((image) => {
+            const imageWidth = image.clientWidth;
+            if (imageWidth > containerWidth) {
+              image.style.width = '100%';
+              image.style.height = '';
+            }
+          })
+          this.checkHeight();
+        }
+      }, 300);
+
+    },
     // 获取文章详情
     getArticle(id) {
       articleApi.getArticleOne(id).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.articleDetails = data.data
+          this.changeImages();
           let group = this.articleDetails.articleGroupId.split(",");
           const list = [];
           group.forEach((gId) => {
@@ -119,17 +139,22 @@ export default {
     },
     // 检测高度，改变状态栏的位置
     checkHeight() {
-      const contentHeight = this.$refs.content.scrollHeight;
+      this.checkHeightOffset++;
+      if (this.checkHeightOffset < 10) {
+        return;
+      }
       const statusBar = this.$refs.statusBar;
-      if (contentHeight > window.scrollY + 300) {
+      if (this.$refs.myElement.scrollHeight > (window.innerHeight / 2) + window.scrollY) {
         const element = this.$refs.myElement;
         const width = element.offsetWidth;
         statusBar.style.position = 'fixed';
         statusBar.style.bottom = '0';
         statusBar.style.width = width + 'px';
       } else {
+        console.log('不满足条件');
         statusBar.style.position = 'relative';
       }
+      this.checkHeightOffset = 0;
     },
     likeOne(id) {
       articleApi.likeOrStarArticle({ id: id, type: 1 }).then((res) => {

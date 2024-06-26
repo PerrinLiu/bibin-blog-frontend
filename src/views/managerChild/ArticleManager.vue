@@ -75,7 +75,6 @@ export default {
   },
   mounted() {
     this.getArticle();
-    console.log("123");
   },
   methods: {
     // 点击按钮，调用子组件方法添加文章

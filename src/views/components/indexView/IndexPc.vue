@@ -11,17 +11,17 @@
               <h2 style="font-size: 30px;">Bibin</h2>
             </div>
             <div style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
-              <div style="float: left;">
-                <h4>文章</h4>
-                0
+              <div style="float: left;line-height: 10px;">
+                <p style="font-size: 18px;font-weight: 900;">文章</p>
+                <div>0</div>
               </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div style="float: left;">
-                <h4>分类</h4>
-                0
+              <div style="float: left;line-height: 10px;">
+                <p style="font-size: 18px;font-weight: 900;">分类</p>
+                <div>0</div>
               </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div style="float: left;">
-                <h4>访问量</h4>
-                {{ access }}
+              <div style="float: left;line-height: 10px;">
+                <p style="font-size: 18px;font-weight: 900;">访问量</p>
+                <div> {{ access }}</div>
               </div>
             </div>
           </el-card>
@@ -68,12 +68,10 @@
               <el-col :span="12">
                 <div class="article-content">
                   <div style="height: 3cap;">
-                    <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
+                    <h1 style="color: #030303;font-size: 25px;line-height: 17px;">{{ item.articleTitle }}</h1>
                   </div>
                   <div style="height: 90px;">
-                    <p class="article-text">
-                      啊是多久啊立刻撒旦吉萨利空打击撒赖扩大，马上就打算离开东京撒赖扩大吉萨离开阿克苏的距离喀什角动量看撒娇的撒利空打击撒赖可见度拉卡上来看大家阿斯利康大家埃里克就拉开圣诞节拉开教案设计的卢卡sadmsajdlksajd
-                      lkajdlka洒家打开拉萨建档立卡记录卡撒旦就拉山口就打卢克斯ja </p>
+                    <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
                     <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">

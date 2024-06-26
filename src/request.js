@@ -10,12 +10,12 @@ axios.interceptors.request.use(config => {
         config.headers['x-token'] = token;
     }
 
-    if (localStorage.getItem('emailToken')) {
+    if (localStorage.getItem('emailToken') !== null && localStorage.getItem('emailToken') !== undefined) {
         const emailToken = JSON.parse(localStorage.getItem('emailToken'));
         config.headers['email-token'] = emailToken;
     }
 
-    if (localStorage.getItem('captchaToken')) {
+    if (localStorage.getItem('captchaToken') !== null && localStorage.getItem('captchaToken') !== undefined) {
         const captchaToken = JSON.parse(localStorage.getItem('captchaToken'));
         config.headers['captchaToken'] = captchaToken;
     }
@@ -34,7 +34,7 @@ axios.interceptors.response.use(
             Message.error(err.response.data.message)
             return
         } else if (err.response.data.retCode === 401) {
-            Message.error('未登录或无权限')
+            Message.error('请先登录~')
             return
         }
         if (axios.isAxiosError(err)) {

@@ -7,7 +7,6 @@
       </div>
       <span v-if="token != null">
         <div class="isLogin" :style="'left:' + isLoginLeft + 'vw'" style="overflow: hidden;">
-          <!-- todo 将手机端和pc端合并 -->
           <!-- 手机端 -->
           <span v-if="isPhone">
             <div style="width:100vw;height:100%;overflow-y: scroll;">
@@ -176,7 +175,6 @@
                   <img :src="userInfo.userImg">
                   <div class="imgHover">更换图片</div>
                 </el-upload>
-
               </span>
               <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
                 <el-form-item prop="nickname" label="昵称：">
@@ -642,6 +640,7 @@ export default {
             message: "登录成功",
             type: 'success'
           });
+          localStorage.removeItem('captchaToken');
           this.$router.push('/');
         } else if (retCode == 500105) {
           this.getCaptcha();
@@ -909,6 +908,7 @@ export default {
         if (data.retCode == 200) {
           this.userInfo = data.data;
           this.retrievePswInner = true;
+          localStorage.removeItem('emailToken');
         } else {
           this.$message({
             message: data.message,
