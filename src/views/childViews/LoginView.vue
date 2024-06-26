@@ -374,7 +374,7 @@
                 </el-form-item>
                 <el-form-item prop="email">
                   <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-                  <el-button style="position: absolute;right: 0px;" @click="sendEmail(true)">
+                  <el-button style="position: absolute;right: 0px;" @click="sendEmail('register')">
                     <span v-if="showCaptcha">获取验证码</span>
                     <span v-else>{{ time }}&nbsp;s</span>
                   </el-button>
@@ -418,7 +418,7 @@
           <el-form-item>
             <span>请输入你的邮箱</span>
             <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-            <el-button style="position: absolute;right: 0px;" @click="sendEmail(false)">
+            <el-button style="position: absolute;right: 0px;" @click="sendEmail('changePsw')">
               <span v-if="showCaptcha">获取验证码</span>
               <span v-else>{{ time }}&nbsp;s</span>
             </el-button>
@@ -789,7 +789,7 @@ export default {
       }
     },
     // 发送邮箱验证码
-    sendEmail(bool) {
+    sendEmail(type) {
       // 定义邮箱格式正则表达式
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       // 使用正则表达式验证邮箱格式
@@ -811,7 +811,7 @@ export default {
         return;
       }
       // 发起请求
-      userApi.sendEmail(this.userRegister.email, bool).then(response => {
+      userApi.sendEmail(this.userRegister.email, type).then(response => {
         const retCode = response.data.retCode;
         if (retCode == 200) {
           localStorage.setItem('emailToken', JSON.stringify(response.data.data));

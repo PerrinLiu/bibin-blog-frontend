@@ -1,9 +1,26 @@
 import axios from "axios";
 axios.defaults.baseURL = "/api"
-
 import { Message } from 'element-ui'
 import { Notification } from 'element-ui'
+import { Loading } from 'element-ui';
+
+//loading对象
+let loading;
+
+function startLoading() {
+    loading = Loading.service({
+        lock: true,
+        text: '拼命加载中...',
+        background: 'rgba(255,255,255,0.5)',
+    })
+}
+function endLoading() {
+    loading.close()
+}
+
+
 axios.interceptors.request.use(config => {
+    startLoading();
     if (localStorage.getItem('token')) {
         // 在发送请求之前做些什么
         const token = JSON.parse(localStorage.getItem('token'));
@@ -27,8 +44,12 @@ axios.interceptors.request.use(config => {
 
 
 axios.interceptors.response.use(
-    response => response,
+    response => {
+        endLoading();
+        return response;
+    },
     err => {
+        endLoading();
         const res = err.response
         if (err.response.status === 400) {
             Message.error(err.response.data.message)
