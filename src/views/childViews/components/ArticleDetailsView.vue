@@ -64,7 +64,7 @@
     </div>
 
     <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item">
-      <div style="width: 90%;margin-left: 5%;height: 230px;">
+      <div style="width: 90%;margin-left: 5%;height: 200px;">
         <el-row :gutter="20">
           <el-col :span="4">
             <div style="width: 50px;height: 50px;">
@@ -83,7 +83,7 @@
         </el-row>
       </div>
       <div style="width: 90%;margin-left: 5%;">
-        <el-row :gutter="20" v-for="(item,index) in listComment" :key="index" style="margin-top: 40px;">
+        <el-row :gutter="20" v-for="(item,index) in listComment" :key="index" style="margin-top: 30px;">
           <el-col :span="3">
             <div style="width: 40px;height: 40px;">
               <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
@@ -92,7 +92,8 @@
           <el-col :span="20">
             <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
               <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                <p style="width: 80px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                <p
+                  style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
                   {{ item.userName }}
                 </p>
                 <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
@@ -121,11 +122,14 @@
                 <el-col :span="20">
                   <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
                     <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                      <p style="width: 80px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        {{ sub.userName }} <el-tag size="mini" type="info">回复</el-tag> {{ sub.replyUserName }}
+                      <p
+                        style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        {{ sub.userName }}
                       </p>
-                      <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        {{ sub.createTime }}
+                      <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
+                      <p
+                        style="max-width: 80px;margin-left: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        {{ sub.replyUserName }}
                       </p>
                     </div>
                     <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
@@ -137,12 +141,16 @@
                   </div>
                   <div style="position: relative;top:-5px">
                     {{ sub.content }}
-                    <div style="position: absolute;left: 0px;font-size: 14px;">
-                      <el-button icon="el-icon-delete" type="text" style="color: red" v-if="sub.userId == userInfo.id"
-                        @click="deleteComment(sub.id)">删除</el-button>
-                      <el-button icon="el-icon-chat-line-square" type="text" style="color: green"
-                        @click="replyComment(sub.id)">回复</el-button>
-                    </div>
+                  </div>
+                  <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
+                    <p
+                      style="width: 150px;display:inline;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;line-height: 20px;color:#666">
+                      {{ sub.createTime }}
+                    </p>
+                    <el-button icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;" v-if="sub.userId == userInfo.id"
+                      @click="deleteComment(sub.id)">删除</el-button>
+                    <el-button icon="el-icon-chat-line-square" type="text" style="color: green;padding: 5px 0px;"
+                      @click="replyComment(sub.id)">回复</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -187,6 +195,17 @@ export default {
           subComment: [
             {
               id: 3,
+              userId: '用户',
+              userImg: '2',
+              userName: '啊打开拉萨是阿松大',
+              replyUserName: '我是你爹',
+              content: '2',
+              createTime: '2021-01-01 00:00',
+              likeSum: 0,
+              liked: false,
+            },
+            {
+              id: 3,
               userId: 2,
               userImg: '2',
               userName: '2',
@@ -218,6 +237,97 @@ export default {
               likeSum: 0,
               liked: false,
             }
+          ]
+        },
+        {
+          id: 6,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 7,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 8,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 6,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 6,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 6,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
+          ]
+        },
+        {
+          id: 6,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+
           ]
         }
       ],
@@ -369,16 +479,16 @@ export default {
     },
     //点赞父级评论
     likeComment(id) {
-      this.listComment.forEach(item => {
-        if (item.id == id) {
-          item.liked = !item.liked
-          item.likeSum += item.liked ? 1 : -1
-        }
-      })
+
       articleApi.likeComment(id).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          console.log(data);
+          this.listComment.forEach(item => {
+            if (item.id == id) {
+              item.liked = !item.liked
+              item.likeSum += item.liked ? 1 : -1
+            }
+          })
         }
       })
     },
@@ -390,18 +500,20 @@ export default {
           subList = item.subComment;
         }
       })
-      if (subList != null) {
-        subList.forEach(item => {
-          if (item.id == id) {
-            item.liked = !item.liked
-            item.likeSum += item.liked ? 1 : -1
-          }
-        })
+      if (subList == null) {
+        return;
       }
       articleApi.likeComment(id).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          console.log(data);
+          if (subList != null) {
+            subList.forEach(item => {
+              if (item.id == id) {
+                item.liked = !item.liked
+                item.likeSum += item.liked ? 1 : -1
+              }
+            })
+          }
         }
       })
     }

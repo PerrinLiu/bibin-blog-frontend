@@ -33,7 +33,7 @@ export default {
         return request.post('/text/article/addComment', data)
     },
     likeComment(data) {
-        return request.post('/text/article/likeComment?commentId=' + data)
+        return request.post('/text/article/likeComment?commentId=' + data, null, { headers: { 'showLoading': false } })
     }
 
 }
