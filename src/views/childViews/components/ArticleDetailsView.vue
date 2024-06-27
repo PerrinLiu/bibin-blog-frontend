@@ -84,79 +84,91 @@
       </div>
       <div style="width: 90%;margin-left: 5%;">
         <el-row :gutter="20" v-for="(item,index) in listComment" :key="index" style="margin-top: 30px;">
-          <el-col :span="3">
-            <div style="width: 40px;height: 40px;">
-              <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
-            </div>
-          </el-col>
-          <el-col :span="20">
-            <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
-              <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                <p
-                  style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                  {{ item.userName }}
-                </p>
-                <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                  {{ item.createTime }}
-                </p>
+          <div @mouseenter="enter(item)" @mouseleave="leave(item)">
+            <el-col :span="3">
+              <div style="width: 40px;height: 40px;">
+                <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
               </div>
-              <div style="position: absolute;right: 0px;font-size: 14px;">
-                <el-button icon="el-icon-delete" type="text" style="color: red" v-if="item.userId == userInfo.id"
-                  @click="deleteComment(item.id)">删除</el-button>
-                <el-button icon="el-icon-chat-line-square" type="text" style="color: green" @click="replyComment(item.id)">回复</el-button>
-                &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
-                <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeComment(item.id)"
-                  :style="item.liked ? 'color: red;' : 'color: #333'">
-                </i>
+            </el-col>
+            <el-col :span="20">
+              <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
+                <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
+                  <p
+                    style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                    {{ item.userName }}
+                  </p>
+                  <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                    {{ item.createTime }}
+                  </p>
+                </div>
+                <div style="position: absolute;right: 0px;font-size: 14px;line-height: 40px;">
+                  <el-button icon="el-icon-delete" type="text" style="color: red;padding: 13px 0x;font-size: 12px"
+                    v-if="item.userId == userInfo.id && item.show" @click="deleteComment(item.id)">删除</el-button>
+                  <el-button v-if="item.show" icon="el-icon-chat-line-square" type="text"
+                    style="color: green;padding: 13px 0px;font-size: 12px" @click="replyComment(item.id)">回复</el-button>
+                  &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
+                  <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeComment(item.id)"
+                    :style="item.liked ? 'color: red;' : 'color: #333'">
+                  </i>
+                </div>
               </div>
-            </div>
-            <div style="position: relative;top:-5px;font-size: 14px">
-              {{ item.content }}
-              <!-- 子评论 -->
-              <el-row :gutter="20" v-for="(sub,index) in item.subComment" :key="index" style="margin-top: 10px;">
-                <el-col :span="3">
-                  <div style="width: 40px;height: 40px;">
-                    <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
-                  </div>
-                </el-col>
-                <el-col :span="20">
-                  <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
-                    <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                      <p
-                        style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        {{ sub.userName }}
-                      </p>
-                      <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
-                      <p
-                        style="max-width: 80px;margin-left: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                        {{ sub.replyUserName }}
-                      </p>
+              <div style="position: relative;top:-5px;font-size: 14px">
+                <div>
+                  {{ item.content }}
+                </div>
+                <!-- 子评论 -->
+                <el-row :gutter="20" v-for="(sub,index) in item.subComment" :key="index" style="margin-top: 10px;">
+                  <el-col :span="3">
+                    <div style="width: 40px;height: 40px;">
+                      <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
                     </div>
-                    <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
-                      &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
-                      <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeSubComment(sub.id,item.id)"
-                        :style="sub.liked ? 'color: red;' : 'color: #333'">
-                      </i>
+                  </el-col>
+                  <el-col :span="20">
+                    <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
+                      <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
+                        <p
+                          style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                          {{ sub.userName }}
+                        </p>
+                        <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
+                        <p
+                          style="max-width: 80px;margin-left: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                          {{ sub.replyUserName }}
+                        </p>
+                      </div>
+                      <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
+                        &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
+                        <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeSubComment(sub.id,item.id)"
+                          :style="sub.liked ? 'color: red;' : 'color: #333'">
+                        </i>
+                      </div>
                     </div>
-                  </div>
-                  <div style="position: relative;top:-5px">
-                    {{ sub.content }}
-                  </div>
-                  <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
-                    <p
-                      style="width: 150px;display:inline;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;line-height: 20px;color:#666">
-                      {{ sub.createTime }}
-                    </p>
-                    <el-button icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;" v-if="sub.userId == userInfo.id"
-                      @click="deleteComment(sub.id)">删除</el-button>
-                    <el-button icon="el-icon-chat-line-square" type="text" style="color: green;padding: 5px 0px;"
-                      @click="replyComment(sub.id)">回复</el-button>
-                  </div>
-                </el-col>
-              </el-row>
-            </div>
+                    <div style="position: relative;top:-5px">
+                      {{ sub.content }}
+                    </div>
+                    <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
+                      <el-row>
+                        <el-col :span="15">
+                          <p
+                            style="width: 150px;display:inline;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;line-height: 27px;color:#666;font-size: 12px;">
+                            {{ sub.createTime }}
+                          </p>
+                        </el-col>
+                        <el-col :span="9">
+                          <el-button icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px"
+                            v-if="sub.userId == userInfo.id" @click="deleteComment(sub.id)">删除</el-button>
+                          <el-button icon="el-icon-chat-line-square" type="text" style="color: green;padding: 0px 0px;font-size: 12px"
+                            @click="replyComment(sub.id)">回复</el-button>
+                        </el-col>
+                      </el-row>
 
-          </el-col>
+                    </div>
+                  </el-col>
+                </el-row>
+              </div>
+
+            </el-col>
+          </div>
         </el-row>
       </div>
     </el-drawer>
@@ -192,6 +204,7 @@ export default {
           createTime: '2021-01-01 16:00',
           likeSum: 150,
           liked: false,
+          show: false,
           subComment: [
             {
               id: 3,
@@ -226,6 +239,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
             {
               id: 4,
@@ -248,6 +262,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
@@ -261,6 +276,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
@@ -274,6 +290,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
@@ -287,6 +304,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
@@ -300,6 +318,7 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
@@ -313,23 +332,12 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
+          show: false,
           subComment: [
 
           ]
         },
-        {
-          id: 6,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          subComment: [
 
-          ]
-        }
       ],
       commentSearch: {
         articleId: 0,
@@ -364,6 +372,14 @@ export default {
   },
 
   methods: {
+    // 鼠标移入显示回复
+    enter(item) {
+      item.show = true
+    },
+    // 鼠标移出 隐藏回复
+    leave(item) {
+      item.show = false
+    },
     // 图片大小自适应
     changeImages() {
       setTimeout(() => {

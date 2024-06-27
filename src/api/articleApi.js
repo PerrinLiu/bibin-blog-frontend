@@ -27,13 +27,13 @@ export default {
         return request.post('/text/article/likeOrStarArticle?articleId=' + data.id + '&type=' + data.type, null, { headers: { 'showLoading': false } })
     },
     listComment(data) {
-        return request.get('/text/article/listComment?articleId=' + data.articleId + '&pageSize=' + data.pageSize + '&pageNum=' + data.pageNum)
+        return request.get('/text/comment/common/listComment?articleId=' + data.articleId + '&pageSize=' + data.pageSize + '&pageNum=' + data.pageNum)
     },
     addComment(data) {
-        return request.post('/text/article/addComment', data)
+        return request.post('/text/comment/addComment', data)
     },
     likeComment(data) {
-        return request.post('/text/article/likeComment?commentId=' + data, null, { headers: { 'showLoading': false } })
+        return request.post('/text/comment/likeComment?commentId=' + data, null, { headers: { 'showLoading': false } })
     }
 
 }
