@@ -32,5 +32,8 @@ export default {
     addComment(data) {
         return request.post('/text/article/addComment', data)
     },
+    likeComment(data) {
+        return request.post('/text/article/likeComment?commentId=' + data)
+    }
 
 }

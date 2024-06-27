@@ -64,7 +64,7 @@
     </div>
 
     <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item">
-      <div style="width: 90%;margin-left: 5%;height: 500px;">
+      <div style="width: 90%;margin-left: 5%;height: 230px;">
         <el-row :gutter="20">
           <el-col :span="4">
             <div style="width: 50px;height: 50px;">
@@ -76,24 +76,78 @@
               <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
               </el-input>
               <div style="text-align: right;margin-top: 15px;">
-                <el-button type="primary" @click="addComment">发布</el-button>
+                <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="addComment">发布</el-button>
               </div>
             </div>
           </el-col>
         </el-row>
       </div>
-      <div style="width: 90%;margin-left: 5%;height: 500px;">
-        <el-row :gutter="20">
-          <el-col :span="4">
-            <div style="width: 50px;height: 50px;">
+      <div style="width: 90%;margin-left: 5%;">
+        <el-row :gutter="20" v-for="(item,index) in listComment" :key="index" style="margin-top: 40px;">
+          <el-col :span="3">
+            <div style="width: 40px;height: 40px;">
               <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
             </div>
           </el-col>
           <el-col :span="20">
-            <div style="background-color: aliceblue;width: 100%;height: 30px;">
-              <!-- todo 评论样式待做 -->
-              {{ listComment }}
+            <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
+              <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
+                <p style="width: 80px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ item.userName }}
+                </p>
+                <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                  {{ item.createTime }}
+                </p>
+              </div>
+              <div style="position: absolute;right: 0px;font-size: 14px;">
+                <el-button icon="el-icon-delete" type="text" style="color: red" v-if="item.userId == userInfo.id"
+                  @click="deleteComment(item.id)">删除</el-button>
+                <el-button icon="el-icon-chat-line-square" type="text" style="color: green" @click="replyComment(item.id)">回复</el-button>
+                &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
+                <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeComment(item.id)"
+                  :style="item.liked ? 'color: red;' : 'color: #333'">
+                </i>
+              </div>
             </div>
+            <div style="position: relative;top:-5px;font-size: 14px">
+              {{ item.content }}
+              <!-- 子评论 -->
+              <el-row :gutter="20" v-for="(sub,index) in item.subComment" :key="index" style="margin-top: 10px;">
+                <el-col :span="3">
+                  <div style="width: 40px;height: 40px;">
+                    <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
+                  </div>
+                </el-col>
+                <el-col :span="20">
+                  <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
+                    <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
+                      <p style="width: 80px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        {{ sub.userName }} <el-tag size="mini" type="info">回复</el-tag> {{ sub.replyUserName }}
+                      </p>
+                      <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                        {{ sub.createTime }}
+                      </p>
+                    </div>
+                    <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
+                      &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
+                      <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeSubComment(sub.id,item.id)"
+                        :style="sub.liked ? 'color: red;' : 'color: #333'">
+                      </i>
+                    </div>
+                  </div>
+                  <div style="position: relative;top:-5px">
+                    {{ sub.content }}
+                    <div style="position: absolute;left: 0px;font-size: 14px;">
+                      <el-button icon="el-icon-delete" type="text" style="color: red" v-if="sub.userId == userInfo.id"
+                        @click="deleteComment(sub.id)">删除</el-button>
+                      <el-button icon="el-icon-chat-line-square" type="text" style="color: green"
+                        @click="replyComment(sub.id)">回复</el-button>
+                    </div>
+                  </div>
+                </el-col>
+              </el-row>
+            </div>
+
           </el-col>
         </el-row>
       </div>
@@ -120,7 +174,53 @@ export default {
         userId: null,
         parentId: null
       },
-      listComment: [],
+      listComment: [
+        {
+          id: 1,
+          userId: '用户',
+          userImg: '1',
+          userName: '啊大家阿是建档立卡',
+          content: '啊大家阿是建档立卡大家啊数控刀具克拉斯打卡机打开撒娇打开了撒娇看啥事大家啊登记卡受打击了啊速度快拉德季啊啊打开',
+          createTime: '2021-01-01 16:00',
+          likeSum: 150,
+          liked: false,
+          subComment: [
+            {
+              id: 3,
+              userId: 2,
+              userImg: '2',
+              userName: '2',
+              replyUserName: '卡',
+              content: '2',
+              createTime: '2021-01-01 00:00',
+              likeSum: 0,
+              liked: false,
+            }
+          ]
+        },
+        {
+          id: 2,
+          userId: 3,
+          userImg: '3',
+          userName: '啊大家阿是',
+          content: '3',
+          createTime: '2021-01-01 00:00',
+          likeSum: 1,
+          liked: true,
+          subComment: [
+            {
+              id: 4,
+              userId: 4,
+              userImg: '2',
+              userName: '2',
+              content: '2',
+              createTime: '2021-01-01 00:00',
+              likeSum: 0,
+              liked: false,
+            }
+          ]
+        }
+      ],
       commentSearch: {
         articleId: 0,
         pageNum: 1,
@@ -134,6 +234,12 @@ export default {
     },
     isPhone() {
       return this.$store.getters.isPhone
+    },
+    userInfo() {
+      if (this.$store.getters.user == null) {
+        return { id: '用户' }
+      }
+      return this.$store.getters.user
     }
   },
   mounted() {
@@ -258,6 +364,44 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.listComment = data.data
+        }
+      })
+    },
+    //点赞父级评论
+    likeComment(id) {
+      this.listComment.forEach(item => {
+        if (item.id == id) {
+          item.liked = !item.liked
+          item.likeSum += item.liked ? 1 : -1
+        }
+      })
+      articleApi.likeComment(id).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          console.log(data);
+        }
+      })
+    },
+    // 点赞子级
+    likeSubComment(id, parentId) {
+      let subList = null;
+      this.listComment.forEach(item => {
+        if (item.id == parentId) {
+          subList = item.subComment;
+        }
+      })
+      if (subList != null) {
+        subList.forEach(item => {
+          if (item.id == id) {
+            item.liked = !item.liked
+            item.likeSum += item.liked ? 1 : -1
+          }
+        })
+      }
+      articleApi.likeComment(id).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          console.log(data);
         }
       })
     }
