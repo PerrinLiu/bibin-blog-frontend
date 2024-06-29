@@ -63,113 +63,103 @@
       </div>
     </div>
 
+    <!-- 评论 -->
     <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item">
-      <div style="width: 90%;margin-left: 5%;height: 200px;">
+      <div class="comment-head">
         <el-row :gutter="20">
           <el-col :span="4">
-            <div style="width: 50px;height: 50px;">
-              <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
-            </div>
+            <img class="comment-userImg" src="@/assets/images/defaul.jpg" />
           </el-col>
           <el-col :span="20">
-            <div style="background-color: aliceblue;width: 100%;height: 30px;">
-              <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
-              </el-input>
-              <div style="text-align: right;margin-top: 15px;">
-                <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="addComment">发布</el-button>
-              </div>
+            <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
+            </el-input>
+            <div style="text-align: right;margin-top: 15px;">
+              <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="addComment">发布</el-button>
             </div>
           </el-col>
         </el-row>
       </div>
-      <div style="width: 90%;margin-left: 5%;">
-        <el-row :gutter="20" v-for="(item,index) in listComment" :key="index" style="margin-top: 30px;">
-          <div @mouseenter="enter(item)" @mouseleave="leave(item)">
+      <div class="comment-body">
+        <div v-for="(item,index) in listComment" :key="index" @mouseenter="enter(item)" @mouseleave="leave(item)" style="margin-top: 30px;">
+          <el-row :gutter="20">
             <el-col :span="3">
-              <div style="width: 40px;height: 40px;">
-                <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
+              <div class="comment-userImg">
+                <img src="@/assets/images/defaul.jpg" class="comment-userImg" />
               </div>
             </el-col>
             <el-col :span="20">
-              <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
-                <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                  <p
-                    style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                    {{ item.userName }}
-                  </p>
-                  <p style="width: 150px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                    {{ item.createTime }}
-                  </p>
+              <div class="comment-body-top">
+                <div class="comment-body-name">
+                  <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ item.userName }}</p>
+                  <p class="comment-body-name-p" style="width: 150px;">{{ item.createTime }}</p>
                 </div>
                 <div style="position: absolute;right: 0px;font-size: 14px;line-height: 40px;">
-                  <el-button icon="el-icon-delete" type="text" style="color: red;padding: 13px 0x;font-size: 12px"
-                    v-if="item.userId == userInfo.id && item.show" @click="deleteComment(item.id)">删除</el-button>
-                  <el-button v-if="item.show" icon="el-icon-chat-line-square" type="text"
-                    style="color: green;padding: 13px 0px;font-size: 12px" @click="replyComment(item.id)">回复</el-button>
+                  <el-button v-if="item.userId == userInfo.id && item.show" @click="deleteComment(item.id)" icon="el-icon-delete"
+                    type="text" style="color: red;padding: 13px 0x;font-size: 12px">
+                    删除
+                  </el-button>
+                  <el-button v-if="item.show" icon="el-icon-chat-line-square" @click="replyComment(item.id)" type="text"
+                    style="color: green;padding: 13px 0px;font-size: 12px">
+                    回复
+                  </el-button>
                   &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
-                  <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeComment(item.id)"
+                  <i @click="likeComment(item.id)" class="iconfont icon-like" style="font-size: 14px;cursor: pointer;"
                     :style="item.liked ? 'color: red;' : 'color: #333'">
                   </i>
                 </div>
               </div>
-              <div style="position: relative;top:-5px;font-size: 14px">
+              <div class="comment-body-content">
                 <div>
                   {{ item.content }}
                 </div>
                 <!-- 子评论 -->
-                <el-row :gutter="20" v-for="(sub,index) in item.subComment" :key="index" style="margin-top: 10px;">
-                  <el-col :span="3">
-                    <div style="width: 40px;height: 40px;">
-                      <img src="@/assets/images/defaul.jpg" style="width: 100%;height: 100%;border-radius: 50%;" />
-                    </div>
-                  </el-col>
-                  <el-col :span="20">
-                    <div style="position:relative;width: 100%;height: 30px;top: -10px;color: #666">
-                      <div style="position: absolute;left: 0px;width:280px;font-size: 12px;">
-                        <p
-                          style="max-width: 80px;margin-right: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                          {{ sub.userName }}
-                        </p>
-                        <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
-                        <p
-                          style="max-width: 80px;margin-left: 10px;display:inline-block;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
-                          {{ sub.replyUserName }}
-                        </p>
+                <div v-for="(sub,index) in item.subComment" :key="index" @mouseenter="enter(sub)" @mouseleave="leave(sub)"
+                  style="margin-top: 10px;">
+                  <el-row :gutter="20">
+                    <el-col :span="3">
+                      <img class="comment-userImg" src="@/assets/images/defaul.jpg" />
+                    </el-col>
+                    <el-col :span="20">
+                      <div class="comment-body-top">
+                        <div class="comment-body-name">
+                          <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ sub.userName }}</p>
+                          <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
+                          <p class="comment-body-name-p" style="max-width: 80px;margin-left: 10px;">{{ sub.replyUserName }} </p>
+                        </div>
+                        <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
+                          &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
+                          <i @click="likeSubComment(sub.id,item.id)" class="iconfont icon-like" style="font-size: 14px;cursor: pointer;"
+                            :style="sub.liked ? 'color: red;' : 'color: #333'">
+                          </i>
+                        </div>
                       </div>
-                      <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
-                        &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
-                        <i class="iconfont icon-like" style="font-size: 14px;cursor: pointer;" @click="likeSubComment(sub.id,item.id)"
-                          :style="sub.liked ? 'color: red;' : 'color: #333'">
-                        </i>
+                      <div style="position: relative;top:-5px">
+                        {{ sub.content }}
                       </div>
-                    </div>
-                    <div style="position: relative;top:-5px">
-                      {{ sub.content }}
-                    </div>
-                    <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
-                      <el-row>
-                        <el-col :span="15">
-                          <p
-                            style="width: 150px;display:inline;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;line-height: 27px;color:#666;font-size: 12px;">
-                            {{ sub.createTime }}
-                          </p>
-                        </el-col>
-                        <el-col :span="9">
-                          <el-button icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px"
-                            v-if="sub.userId == userInfo.id" @click="deleteComment(sub.id)">删除</el-button>
-                          <el-button icon="el-icon-chat-line-square" type="text" style="color: green;padding: 0px 0px;font-size: 12px"
-                            @click="replyComment(sub.id)">回复</el-button>
-                        </el-col>
-                      </el-row>
 
-                    </div>
-                  </el-col>
-                </el-row>
+                      <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
+                        <el-row>
+                          <el-col :span="15">
+                            <p class="comment-body-name-p"
+                              style="width: 150px;display:inline;color:#666;font-size: 12px;line-height: 27px;">
+                              {{ sub.createTime }}
+                            </p>
+                          </el-col>
+                          <el-col :span="9">
+                            <el-button v-if="sub.userId == userInfo.id && sub.show" @click="deleteComment(sub.id)" icon="el-icon-delete"
+                              type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
+                            <el-button v-if="sub.show" @click="replyComment(sub.id)" icon="el-icon-chat-line-square" type="text"
+                              style="color: green;padding: 0px 0px;font-size: 12px">回复</el-button>
+                          </el-col>
+                        </el-row>
+                      </div>
+                    </el-col>
+                  </el-row>
+                </div>
               </div>
-
             </el-col>
-          </div>
-        </el-row>
+          </el-row>
+        </div>
       </div>
     </el-drawer>
   </div>
@@ -187,7 +177,7 @@ export default {
         cover: '',
       },
       checkHeightOffset: 9,
-      drawer: false,
+      drawer: true,
       commentVo: {
         articleId: 0,
         content: '',
@@ -216,6 +206,7 @@ export default {
               createTime: '2021-01-01 00:00',
               likeSum: 0,
               liked: false,
+              show: false,
             },
             {
               id: 3,
@@ -227,6 +218,7 @@ export default {
               createTime: '2021-01-01 00:00',
               likeSum: 0,
               liked: false,
+              show: false,
             }
           ]
         },
@@ -250,6 +242,7 @@ export default {
               createTime: '2021-01-01 00:00',
               likeSum: 0,
               liked: false,
+              show: false,
             }
           ]
         },
@@ -459,7 +452,6 @@ export default {
     },
     // 获取评论
     getComment(id) {
-      console.log(this.articleDetails);
       this.drawer = true
       //获取评论
       this.commentSearch.articleId = id
@@ -581,5 +573,45 @@ export default {
   font-size: 20px;
   margin-right: 20px;
   cursor: pointer;
+}
+/* 评论样式 */
+.comment-head {
+  width: 90%;
+  margin-left: 5%;
+  height: 200px;
+}
+.comment-userImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.comment-body {
+  width: 90%;
+  margin-left: 5%;
+  height: 100%;
+}
+.comment-body-top {
+  position: relative;
+  width: 100%;
+  height: 30px;
+  top: -10px;
+  color: #666;
+}
+.comment-body-name {
+  position: absolute;
+  left: 0px;
+  width: 280px;
+  font-size: 12px;
+}
+.comment-body-name-p {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.comment-body-content {
+  position: relative;
+  top: -5px;
+  font-size: 14px;
 }
 </style>
