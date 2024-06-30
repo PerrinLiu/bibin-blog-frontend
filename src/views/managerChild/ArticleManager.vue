@@ -37,7 +37,7 @@
 
 <script>
 import articleApi from '@/api/articleApi';
-import WangEditorView from '../components/WangEditorView.vue';
+import WangEditorView from '@/components/WangEditorView.vue';
 export default {
   name: 'ArticleManager',
   components: {

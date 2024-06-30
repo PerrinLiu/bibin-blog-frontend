@@ -46,8 +46,8 @@
 </template>
   
   <script>
-import IndexPc from '@/views/components/indexView/IndexPc.vue'
-import IndexPhone from '@/views/components/indexView/IndexPhone.vue';
+import IndexPc from '@/components/indexView/IndexPc.vue'
+import IndexPhone from '@/components/indexView/IndexPhone.vue';
 import userApi from '@/api/userApi';
 export default {
   components: {
