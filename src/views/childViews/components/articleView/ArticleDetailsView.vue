@@ -94,23 +94,34 @@
                   <p class="comment-body-name-p" style="width: 150px;">{{ item.createTime }}</p>
                 </div>
                 <div style="position: absolute;right: 0px;font-size: 14px;line-height: 40px;">
-                  <el-button v-if="item.userId == userInfo.id && item.show" @click="deleteComment(item.id)" icon="el-icon-delete"
+                  <el-button v-if="item.userId == userInfo.userId && item.showDelete" @click="deleteComment(item.id)" icon="el-icon-delete"
                     type="text" style="color: red;padding: 13px 0x;font-size: 12px">
                     删除
                   </el-button>
-                  <el-button v-if="item.show" icon="el-icon-chat-line-square" @click="replyComment(item.id)" type="text"
+                  <el-button v-if="item.showDelete" icon="el-icon-chat-line-square" @click="changeReply(item)" type="text"
                     style="color: green;padding: 13px 0px;font-size: 12px">
-                    回复
+                    {{item.showReply ? '收起评论' : '回复'}}
                   </el-button>
+
                   &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
                   <i @click="likeComment(item.id)" class="iconfont icon-like" style="font-size: 14px;cursor: pointer;"
                     :style="item.liked ? 'color: red;' : 'color: #333'">
                   </i>
                 </div>
+
               </div>
+
               <div class="comment-body-content">
                 <div>
                   {{ item.content }}
+                </div>
+                <div v-show="item.showReply" style="margin-top: 20px;">
+                  <el-input type="textarea" :rows="6" resize="none" v-model="replyCommentVo.content" placeholder="发布你的想法~"
+                    style="width: 100%;">
+                  </el-input>
+                  <div style="text-align: right;margin-top: 15px;">
+                    <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="replyComment(item.id)">发布</el-button>
+                  </div>
                 </div>
                 <!-- 子评论 -->
                 <div v-for="(sub,index) in item.subComment" :key="index" @mouseenter="enter(sub)" @mouseleave="leave(sub)"
@@ -146,9 +157,9 @@
                             </p>
                           </el-col>
                           <el-col :span="9">
-                            <el-button v-if="sub.userId == userInfo.id && sub.show" @click="deleteComment(sub.id)" icon="el-icon-delete"
-                              type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
-                            <el-button v-if="sub.show" @click="replyComment(sub.id)" icon="el-icon-chat-line-square" type="text"
+                            <el-button v-if="sub.userId == userInfo.userId && sub.showDelete" @click="deleteComment(sub.id)"
+                              icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
+                            <el-button v-if="sub.showDelete" @click="replyComment(sub.id)" icon="el-icon-chat-line-square" type="text"
                               style="color: green;padding: 0px 0px;font-size: 12px">回复</el-button>
                           </el-col>
                         </el-row>
@@ -160,8 +171,10 @@
             </el-col>
           </el-row>
         </div>
+
       </div>
     </el-drawer>
+
   </div>
 </template>
 <script>
@@ -177,8 +190,13 @@ export default {
         cover: '',
       },
       checkHeightOffset: 9,
-      drawer: true,
+      drawer: false,
       commentVo: {
+        articleId: 0,
+        content: '',
+        userId: null
+      },
+      replyCommentVo: {
         articleId: 0,
         content: '',
         userId: null,
@@ -194,7 +212,7 @@ export default {
           createTime: '2021-01-01 16:00',
           likeSum: 150,
           liked: false,
-          show: false,
+          showDelete: false,
           subComment: [
             {
               id: 3,
@@ -206,7 +224,7 @@ export default {
               createTime: '2021-01-01 00:00',
               likeSum: 0,
               liked: false,
-              show: false,
+              showDelete: false,
             },
             {
               id: 3,
@@ -218,7 +236,7 @@ export default {
               createTime: '2021-01-01 00:00',
               likeSum: 0,
               liked: false,
-              show: false,
+              showDelete: false,
             }
           ]
         },
@@ -231,111 +249,14 @@ export default {
           createTime: '2021-01-01 00:00',
           likeSum: 1,
           liked: true,
-          show: false,
-          subComment: [
-            {
-              id: 4,
-              userId: 4,
-              userImg: '2',
-              userName: '2',
-              content: '2',
-              createTime: '2021-01-01 00:00',
-              likeSum: 0,
-              liked: false,
-              show: false,
-            }
-          ]
+          showDelete: false,
+          subComment: []
         },
-        {
-          id: 6,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-        {
-          id: 7,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-        {
-          id: 8,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-        {
-          id: 6,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-        {
-          id: 6,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-        {
-          id: 6,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          show: false,
-          subComment: [
-
-          ]
-        },
-
       ],
       commentSearch: {
         articleId: 0,
         pageNum: 1,
-        pageSize: 5
+        pageSize: 10
       }
     }
   },
@@ -367,11 +288,11 @@ export default {
   methods: {
     // 鼠标移入显示回复
     enter(item) {
-      item.show = true
+      item.showDelete = true
     },
     // 鼠标移出 隐藏回复
     leave(item) {
-      item.show = false
+      item.showDelete = false
     },
     // 图片大小自适应
     changeImages() {
@@ -459,35 +380,55 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.listComment = data.data
+          this.listComment.forEach(item => {
+            item.showReply = false
+          })
         }
       })
     },
     // 发布评论
     addComment() {
+      if (this.$store.getters.user == null) {
+        this.$message.warning('请先登录')
+        return;
+      }
       this.commentVo.articleId = this.articleDetails.id
       this.commentVo.userId = this.$store.getters.user.userId
       articleApi.addComment(this.commentVo).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          this.listComment = data.data
           this.getComment(this.articleDetails.id)
         }
       })
     },
+    changeReply(item) {
+      //关闭其他回复框
+      this.listComment.forEach(obj => {
+        if (obj.id != item.id) {
+          obj.showReply = false;
+        }
+      })
+      item.showReply = !item.showReply;
+      this.$forceUpdate();
+      this.replyCommentVo.content = ''
+    },
     replyComment(id) {
-      this.commentVo.parentId = id
-      this.commentVo.articleId = this.articleDetails.id
-      this.commentVo.userId = this.$store.getters.user.userId
-      articleApi.addComment(this.commentVo).then((res) => {
+      if (this.$store.getters.user == null) {
+        this.$message.warning('请先登录')
+        return;
+      }
+      this.replyCommentVo.parentId = id
+      this.replyCommentVo.articleId = this.articleDetails.id
+      this.replyCommentVo.userId = this.$store.getters.user.userId
+      articleApi.addComment(this.replyCommentVo).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          this.listComment = data.data
+          this.getComment(this.articleDetails.id)
         }
       })
     },
     //点赞父级评论
     likeComment(id) {
-
       articleApi.likeComment(id).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
