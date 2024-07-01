@@ -32,8 +32,11 @@ export default {
     addComment(data) {
         return request.post('/text/comment/addComment', data)
     },
-    likeComment(data) {
-        return request.post('/text/comment/likeComment?commentId=' + data, null, { headers: { 'showLoading': false } })
+    likeComment(commentId, userId) {
+        return request.post('/text/comment/likeComment?commentId=' + commentId + '&userId=' + userId, null, { headers: { 'showLoading': false } })
+    },
+    deleteComment(id) {
+        return request.delete('/text/comment/deleteComment?commentId=' + id)
     }
 
 }

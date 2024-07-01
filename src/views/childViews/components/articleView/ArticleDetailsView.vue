@@ -159,10 +159,18 @@
                           <el-col :span="9">
                             <el-button v-if="sub.userId == userInfo.userId && sub.showDelete" @click="deleteComment(sub.id)"
                               icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
-                            <el-button v-if="sub.showDelete" @click="replyComment(sub.id)" icon="el-icon-chat-line-square" type="text"
-                              style="color: green;padding: 0px 0px;font-size: 12px">回复</el-button>
+                            <el-button v-if="sub.showDelete" @click="changeReply(sub)" icon="el-icon-chat-line-square" type="text"
+                              style="color: green;padding: 0px 0px;font-size: 12px">{{sub.showReply ? '收起评论' : '回复'}}</el-button>
                           </el-col>
                         </el-row>
+                      </div>
+                      <div v-show="sub.showReply" style="margin-top: 20px;">
+                        <el-input type="textarea" :rows="6" resize="none" v-model="replyCommentVo.content" placeholder="发布你的想法~"
+                          style="width: 100%;">
+                        </el-input>
+                        <div style="text-align: right;margin-top: 15px;">
+                          <el-button icon="el-icon-s-promotion" size="small" type="primary" @click="replyComment(sub.id)">发布</el-button>
+                        </div>
                       </div>
                     </el-col>
                   </el-row>
@@ -171,8 +179,11 @@
             </el-col>
           </el-row>
         </div>
-
       </div>
+      <div v-if="pages > commentSearch.pageNum && listComment.length > 0" style="width: 100%;text-align: center;margin-bottom: 30px;">
+        <el-button type="success" size="small" @click="moreComment">查看更多</el-button>
+      </div>
+
     </el-drawer>
 
   </div>
@@ -202,62 +213,14 @@ export default {
         userId: null,
         parentId: null
       },
-      listComment: [
-        {
-          id: 1,
-          userId: '用户',
-          userImg: '1',
-          userName: '啊大家阿是建档立卡',
-          content: '啊大家阿是建档立卡大家啊数控刀具克拉斯打卡机打开撒娇打开了撒娇看啥事大家啊登记卡受打击了啊速度快拉德季啊啊打开',
-          createTime: '2021-01-01 16:00',
-          likeSum: 150,
-          liked: false,
-          showDelete: false,
-          subComment: [
-            {
-              id: 3,
-              userId: '用户',
-              userImg: '2',
-              userName: '啊打开拉萨是阿松大',
-              replyUserName: '我是你爹',
-              content: '2',
-              createTime: '2021-01-01 00:00',
-              likeSum: 0,
-              liked: false,
-              showDelete: false,
-            },
-            {
-              id: 3,
-              userId: 2,
-              userImg: '2',
-              userName: '2',
-              replyUserName: '卡',
-              content: '2',
-              createTime: '2021-01-01 00:00',
-              likeSum: 0,
-              liked: false,
-              showDelete: false,
-            }
-          ]
-        },
-        {
-          id: 2,
-          userId: 3,
-          userImg: '3',
-          userName: '啊大家阿是',
-          content: '3',
-          createTime: '2021-01-01 00:00',
-          likeSum: 1,
-          liked: true,
-          showDelete: false,
-          subComment: []
-        },
-      ],
+      listComment: [],
       commentSearch: {
         articleId: 0,
         pageNum: 1,
         pageSize: 10
-      }
+      },
+      //最大页码
+      pages: 0
     }
   },
   computed: {
@@ -269,7 +232,7 @@ export default {
     },
     userInfo() {
       if (this.$store.getters.user == null) {
-        return { id: '用户' }
+        return 'userInfo'
       }
       return this.$store.getters.user
     }
@@ -379,12 +342,17 @@ export default {
       articleApi.listComment(this.commentSearch).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          this.listComment = data.data
-          this.listComment.forEach(item => {
-            item.showReply = false
+          const commentList = data.data.records;
+          commentList.forEach(item => {
+            this.listComment.push(item)
           })
+          this.pages = data.data.pages
         }
       })
+    },
+    moreComment() {
+      this.commentSearch.pageNum += 1
+      this.getComment(this.articleDetails.id)
     },
     // 发布评论
     addComment() {
@@ -397,7 +365,9 @@ export default {
       articleApi.addComment(this.commentVo).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
+          this.resetComment()
           this.getComment(this.articleDetails.id)
+          this.commentVo.content = ''
         }
       })
     },
@@ -407,6 +377,11 @@ export default {
         if (obj.id != item.id) {
           obj.showReply = false;
         }
+        obj.subComment.forEach(sub => {
+          if (sub.id != item.id) {
+            sub.showReply = false
+          }
+        })
       })
       item.showReply = !item.showReply;
       this.$forceUpdate();
@@ -423,13 +398,22 @@ export default {
       articleApi.addComment(this.replyCommentVo).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
+          this.resetComment()
           this.getComment(this.articleDetails.id)
         }
       })
     },
+    resetComment() {
+      this.commentSearch.pageNum = 1
+      this.listComment = []
+    },
     //点赞父级评论
     likeComment(id) {
-      articleApi.likeComment(id).then((res) => {
+      if (this.userInfo == 'userInfo') {
+        this.$message.warning('请先登录')
+        return
+      }
+      articleApi.likeComment(id, this.$store.getters.user.userId).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.listComment.forEach(item => {
@@ -443,6 +427,10 @@ export default {
     },
     // 点赞子级
     likeSubComment(id, parentId) {
+      if (this.userInfo == 'userInfo') {
+        this.$message.warning('请先登录')
+        return
+      }
       let subList = null;
       this.listComment.forEach(item => {
         if (item.id == parentId) {
@@ -463,6 +451,15 @@ export default {
               }
             })
           }
+        }
+      })
+    },
+    deleteComment(id) {
+      articleApi.deleteComment(id).then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.resetComment()
+          this.getComment(this.articleDetails.id)
         }
       })
     }
@@ -529,7 +526,7 @@ export default {
 .comment-body {
   width: 90%;
   margin-left: 5%;
-  height: 100%;
+  margin-bottom: 20px;
 }
 .comment-body-top {
   position: relative;
