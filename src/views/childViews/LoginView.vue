@@ -170,73 +170,74 @@
               </span>
             </el-card>
             <div class="isLogin-left">
-              <span class="isLogin-userImg">
-                <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
-                  :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                  <img :src="userInfo.userImg">
-                  <div class="imgHover">更换图片</div>
-                </el-upload>
-              </span>
-              <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
-                <el-form-item prop="nickname" label="昵称：">
-                  <el-input v-model="userInfo.nickname"></el-input>
-                </el-form-item>
-                <el-form-item label="用户名：">
-                  {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-            userInfo.roleName }}》</span>
-                  <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                    <router-link to="/manager" style="text-decoration: none;">
-                      <strong>管理</strong>
-                    </router-link>
-                  </span>
-                </el-form-item>
-                <el-form-item prop="email" label="邮箱：">
-                  <span v-if="changeEmail">
-                    {{ userInfo.email }}
-                  </span>
-                  <span v-else>
-                    <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
-                  </span>
-                  &nbsp;&nbsp;
-                  <span v-if="changeEmail">
-                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
-                    </el-button>
-                  </span>
-                  <span v-else>
-                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
-                    </el-button>
-                  </span>
-                </el-form-item>
-                <el-form-item label="城市：">
-                  <span v-if="changeCity">
-                    {{ userInfo.city }}
-                  </span>
-                  <span v-else>
-                    <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
-                  </span>
-                  &nbsp;&nbsp;
-                  <span v-if="changeCity">
-                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
-                    </el-button>
-                  </span>
-                  <span v-else>
-                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
-                    </el-button>
-                  </span>
-                </el-form-item>
-                <el-form-item label="性别：">
-                  <el-radio-group v-model="userInfo.gender">
-                    <el-radio label="男"></el-radio>
-                    <el-radio label="女"></el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item>
-                  <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
-                    @click="update('updateUser')">提交</el-button>
-                  <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
-                </el-form-item>
+              <div style="margin-top: 30px">
+                <div class="isLogin-userImg" style="margin-bottom: 30px">
+                  <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+                    :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img :src="userInfo.userImg">
+                    <div class="imgHover">更换图片</div>
+                  </el-upload>
+                </div>
+                <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
+                  <el-form-item prop="nickname" label="昵称：">
+                    <el-input v-model="userInfo.nickname"></el-input>
+                  </el-form-item>
+                  <el-form-item label="用户名：">
+                    {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{userInfo.roleName }}》</span>
+                    <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
+                      <router-link to="/manager" style="text-decoration: none;">
+                        <strong>管理</strong>
+                      </router-link>
+                    </span>
+                  </el-form-item>
+                  <el-form-item prop="email" label="邮箱：">
+                    <span v-if="changeEmail">
+                      {{ userInfo.email }}
+                    </span>
+                    <span v-else>
+                      <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span v-if="changeEmail">
+                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
+                      </el-button>
+                    </span>
+                    <span v-else>
+                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
+                      </el-button>
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="城市：">
+                    <span v-if="changeCity">
+                      {{ userInfo.city }}
+                    </span>
+                    <span v-else>
+                      <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span v-if="changeCity">
+                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
+                      </el-button>
+                    </span>
+                    <span v-else>
+                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
+                      </el-button>
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="性别：">
+                    <el-radio-group v-model="userInfo.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
+                      @click="update('updateUser')">提交</el-button>
+                    <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
+                  </el-form-item>
 
-              </el-form>
+                </el-form>
+              </div>
             </div>
             <div class="isLogin-right">
               <div class="isLogin-right-top">
