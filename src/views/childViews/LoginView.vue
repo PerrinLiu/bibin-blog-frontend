@@ -609,12 +609,12 @@ export default {
     //获取验证码
     getCaptcha() {
       userApi.getGenerateBase64().then(response => {
-
-        this.captcha = "data:image/gif;base64," + response.data[1];
-        const str = response.data[0];
-        localStorage.setItem('captchaToken', JSON.stringify(str));
-      }).catch(err => {
-        console.log(err);
+        const data = this.ifSuccess(response.data);
+        if (data != null) {
+          this.captcha = "data:image/gif;base64," + response.data[1];
+          const str = response.data[0];
+          localStorage.setItem('captchaToken', JSON.stringify(str));
+        }
       })
     },
     // 接收的是表单信息
@@ -656,15 +656,6 @@ export default {
             type: 'warning'
           });
         }
-      }).catch(err => {
-        console.log(err);
-        if (err) {
-          this.$message({
-            message: "服务端错误",
-            type: 'info'
-          });
-        }
-
       }).finally(() => {
         this.showLogin = true;
       })
@@ -735,8 +726,6 @@ export default {
         });
         this.getUser();
         this.userOld = JSON.parse(JSON.stringify(this.userInfo));
-      }).catch(err => {
-        console.log(err);
       })
     },
     // 修改密码
@@ -830,8 +819,6 @@ export default {
             type: 'warning'
           });
         }
-      }).catch(err => {
-        console.log(err);
       })
     },
     //验证码重新倒计时
@@ -872,8 +859,6 @@ export default {
             duration: 1000
           });
         }
-      }).catch(err => {
-        console.log(err);
       })
     },
     isTrue() {
@@ -969,8 +954,6 @@ export default {
         this.userDiary.forEach(element => {
           element.createTime = element.createTime.substring(0, 10);
         });
-      }).catch(err => {
-        console.log(err);
       })
     },
     // 获取单个日记内容
@@ -981,8 +964,6 @@ export default {
         }
       }).then(response => {
         this.diaryBaseOne = response.data.data;
-      }).catch(err => {
-        console.log(err);
       })
     },
     delDiary(id) {
@@ -998,8 +979,6 @@ export default {
           message: response.data.message,
           type: 'success'
         })
-      }).catch(err => {
-        console.log(err);
       })
     }
   },

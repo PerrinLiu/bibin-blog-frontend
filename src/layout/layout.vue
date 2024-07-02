@@ -247,9 +247,8 @@ export default {
             this.token = null;
             this.$store.dispatch("clearUser")
           }
-        }).catch(err => {
+        }).finally(() => {
           localStorage.removeItem('token');
-          console.log(err);
         })
       }
     },

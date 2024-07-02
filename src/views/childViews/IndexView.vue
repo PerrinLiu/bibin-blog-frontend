@@ -144,8 +144,6 @@ export default {
       userApi.getAccess().then(response => {
         const data = response.data.data;
         this.access = data;
-      }).catch(err => {
-        console.log(err);
       })
     }
   },

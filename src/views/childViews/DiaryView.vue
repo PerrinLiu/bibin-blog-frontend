@@ -247,8 +247,6 @@ export default {
         this.diaryBase.forEach(element => {
           element.createTime = element.createTime.substring(0, 10);
         });
-      }).catch(err => {
-        console.log(err);
       }).finally(() => {
         this.loading = false;
       })
@@ -261,9 +259,6 @@ export default {
         this.diaryBase.forEach(element => {
           element.createTime = element.createTime.substring(0, 10);
         });
-      }).catch(err => {
-        console.log(err);
-
       }).finally(() => {
         this.loading = false;
       })
@@ -288,8 +283,6 @@ export default {
         }
       }).then(response => {
         this.diaryBaseOne = response.data.data;
-      }).catch(err => {
-        console.log(err);
       })
     },
     // 判断用户是否登录
