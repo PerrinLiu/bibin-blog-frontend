@@ -64,7 +64,7 @@
     </div>
 
     <!-- 评论 -->
-    <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item">
+    <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item" @close="resetComment">
       <div class="comment-head">
         <el-row :gutter="20">
           <el-col :span="4">
@@ -80,7 +80,7 @@
         </el-row>
       </div>
       <div class="comment-body">
-        <div v-for="(item,index) in listComment" :key="index" @mouseenter="enter(item)" @mouseleave="leave(item)" style="margin-top: 30px;">
+        <div v-for="(item,index) in listComment" :key="index" @mouseenter="enter(item)" @mouseleave="leave(item)" style="margin-top: 25px;">
           <el-row :gutter="20">
             <el-col :span="3">
               <div class="comment-userImg">
@@ -93,14 +93,14 @@
                   <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ item.userName }}</p>
                   <p class="comment-body-name-p" style="width: 150px;">{{ item.createTime }}</p>
                 </div>
-                <div style="position: absolute;right: 0px;font-size: 14px;line-height: 40px;">
+                <div style="position: absolute;right: 0px;font-size: 14px;line-height: 39px;">
                   <el-button v-if="item.userId == userInfo.userId && item.showDelete" @click="deleteComment(item.id)" icon="el-icon-delete"
                     type="text" style="color: red;padding: 13px 0x;font-size: 12px">
                     删除
                   </el-button>
-                  <el-button v-if="item.showDelete" icon="el-icon-chat-line-square" @click="changeReply(item)" type="text"
+                  <el-button icon="el-icon-chat-line-square" @click="changeReply(item)" type="text"
                     style="color: green;padding: 13px 0px;font-size: 12px">
-                    {{item.showReply ? '收起评论' : '回复'}}
+                    {{item.showReply ? '收起' : '回复'}}
                   </el-button>
 
                   &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
@@ -125,7 +125,7 @@
                 </div>
                 <!-- 子评论 -->
                 <div v-for="(sub,index) in item.subComment" :key="index" @mouseenter="enter(sub)" @mouseleave="leave(sub)"
-                  style="margin-top: 10px;">
+                  style="margin-top: 15px;">
                   <el-row :gutter="20">
                     <el-col :span="3">
                       <img class="comment-userImg" src="@/assets/images/defaul.jpg" />
@@ -150,17 +150,17 @@
 
                       <div style="position: relative;left: 0px;font-size: 14px;height: 20px;">
                         <el-row>
-                          <el-col :span="15">
+                          <el-col :span="12">
                             <p class="comment-body-name-p"
                               style="width: 150px;display:inline;color:#666;font-size: 12px;line-height: 27px;">
                               {{ sub.createTime }}
                             </p>
                           </el-col>
-                          <el-col :span="9">
+                          <el-col :span="12" style="line-height: 25px;">
                             <el-button v-if="sub.userId == userInfo.userId && sub.showDelete" @click="deleteComment(sub.id)"
                               icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
                             <el-button v-if="sub.showDelete" @click="changeReply(sub)" icon="el-icon-chat-line-square" type="text"
-                              style="color: green;padding: 0px 0px;font-size: 12px">{{sub.showReply ? '收起评论' : '回复'}}</el-button>
+                              style="color: green;padding: 0px 0px;font-size: 12px">{{sub.showReply ? '收起' : '回复'}}</el-button>
                           </el-col>
                         </el-row>
                       </div>
@@ -440,7 +440,7 @@ export default {
       if (subList == null) {
         return;
       }
-      articleApi.likeComment(id).then((res) => {
+      articleApi.likeComment(id, this.$store.getters.user.userId).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           if (subList != null) {
