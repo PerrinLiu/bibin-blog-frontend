@@ -86,6 +86,7 @@
             </div>
           </router-link>
         </el-card>
+        <el-empty :image-size="200" v-if="articleList.length == 0"></el-empty>
         <div style="width: 100%;height: 60px;">
           <router-link to="/article" style="text-decoration: none;">
             <el-button type="primary" style="position: absolute;bottom: 0;right: 0px;">查看更多</el-button>

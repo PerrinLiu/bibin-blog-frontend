@@ -47,6 +47,7 @@
               </el-card>
             </el-col>
           </el-row>
+          <el-empty :image-size="300" v-if="articleList.length == 0"></el-empty>
         </div>
         <div style="margin-top:20px;display: flex;justify-content: center;">
           <el-pagination background layout="prev, pager, next" :pageSize="searchVo.pageSize" :currentPage="searchVo.pageNum" :total="total"
@@ -54,7 +55,7 @@
           </el-pagination>
         </div>
         <!-- 用来撑起高度 -->
-        <div class=" content-after" style="height: 60px;">
+        <div class="content-after" style="height: 60px;">
         </div>
       </div>
     </div>
@@ -72,7 +73,7 @@ export default {
         pageNum: 1,
         searchText: "",
       },
-      total: 50,
+      total: 0,
       //文章列表
       articleList: [],
       //文章分组

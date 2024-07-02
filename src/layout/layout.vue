@@ -122,10 +122,13 @@
         <router-view ref="childRef"></router-view>
       </el-main>
 
-      <el-footer>
+      <el-footer style="height: 40px;">
         <span v-if="currentPath !== '/login'">
-          <div id="footer">
-            个人博客
+          <div id="footer" class="item">
+            <div style="position: absolute;width: 100vw;left: 22vw;text-align: right;">
+              <a href="https://beian.miit.gov.cn/" style="text-decoration: none;">粤ICP备2024274461号-1</a>
+              Copyright © {{ new Date().getFullYear() }} LLPY
+            </div>
           </div>
         </span>
       </el-footer>
