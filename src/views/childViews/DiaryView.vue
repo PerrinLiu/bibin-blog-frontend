@@ -51,7 +51,7 @@
             </el-header>
             <!-- 内容 -->
             <el-main style="position: relative;height: auto;">
-              <span v-if="diaryBase != null">
+              <span v-if="diaryBase.length != 0">
                 <div class="diary-container">
                   <!-- 循环遍历每一列 -->
                   <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column" ref="myCard">
@@ -76,13 +76,14 @@
                     </el-card>
                   </div>
                 </div>
+                <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                  @current-change="handleCurrentChange">
+                </el-pagination>
               </span>
               <span v-else>
                 <el-empty description="无任何数据"></el-empty>
               </span>
-              <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                @current-change="handleCurrentChange">
-              </el-pagination>
+
             </el-main>
 
           </el-container>
@@ -116,10 +117,7 @@
             </el-header>
             <!-- 内容 -->
             <el-main style="position: relative;height: auto;">
-              <span v-if="diaryBase == null">
-                <el-empty description="无任何数据"></el-empty>
-              </span>
-              <span v-else>
+              <span v-if="diaryBase.length != 0">
                 <div class="diary-container">
                   <!-- 循环遍历每一列 -->
                   <div v-for="(column, columnIndex) in columns" :key="columnIndex" class="column" ref="myCard">
@@ -142,11 +140,14 @@
                     </el-card>
                   </div>
                 </div>
+                <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                  @current-change="handleCurrentChange">
+                </el-pagination>
+              </span>
+              <span v-else>
+                <el-empty description="无任何数据"></el-empty>
               </span>
 
-              <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                @current-change="handleCurrentChange">
-              </el-pagination>
             </el-main>
 
           </el-container>
@@ -183,7 +184,7 @@ export default {
       columns: [], // 将日记信息分配到列中，每列是一个数组
       loading: false,  //加载
       column: null,  //布局列
-      diaryBase: null,  //日记基础信息
+      diaryBase: [],  //日记基础信息
       diaryBaseOne: null,
       flag: null,  //标记是否为电脑端布局
       showMe: true,  //只看我的

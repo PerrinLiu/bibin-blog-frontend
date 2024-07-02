@@ -13,7 +13,7 @@
 
     <div class="content item center" ref="contentContainer">
       <div>
-        <div class="content-inner" ref="myElement"
+        <div class="content-inner item" ref="myElement"
           :style="isPhone ? 'width:95%;max-width: 550px;margin-left: 2.5%;' : 'max-width: 1024px;min-width: 1024px;'">
           <div style="padding: 20px 20px 0 20px;">
             <h1>{{ articleDetails.articleTitle }}</h1>
@@ -477,7 +477,6 @@ export default {
 .content-inner {
   position: relative;
   margin-top: 50px;
-  box-shadow: 0px -2px 3px rgba(0, 0, 0, 0.5);
 }
 
 .center {

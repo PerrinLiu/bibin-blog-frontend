@@ -86,7 +86,7 @@
                     </div>
                     <!-- 照片，分为一组一组 -->
                     <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userPhoto == null">
+                      <span v-if="userPhoto.length == 0">
                         <el-empty description="没有任何照片~"></el-empty>
                       </span>
                       <span v-else>
@@ -109,7 +109,7 @@
                     </div>
                     <!-- 日记 -->
                     <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userDiary == null">
+                      <span v-if="userDiary.length == 0">
                         <el-empty description="你还没写过日记~"></el-empty>
                       </span>
                       <span v-else>
@@ -129,10 +129,11 @@
 
                           </div>
                         </el-card>
+                        <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                          @current-change="handleCurrentChange">
+                        </el-pagination>
                       </span>
-                      <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                        @current-change="handleCurrentChange">
-                      </el-pagination>
+
                     </div>
                   </div>
                 </div>
@@ -244,7 +245,7 @@
                 </div>
                 <!-- 照片，分为一组一组 -->
                 <div style="height:85%;overflow-y: scroll;">
-                  <span v-if="userPhoto == null">
+                  <span v-if="userPhoto.length == 0">
                     <el-empty description="没有任何照片~"></el-empty>
                   </span>
                   <span v-else>
@@ -270,7 +271,7 @@
                 </div>
                 <!-- 日记 -->
                 <div style="height:85%;overflow-y: scroll;">
-                  <span v-if="userDiary == null">
+                  <span v-if="userDiary.length == 0">
                     <el-empty description="你还没写过日记~"></el-empty>
                   </span>
                   <span v-else>
@@ -289,10 +290,10 @@
 
                       </div>
                     </el-card>
+                    <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                      @current-change="handleCurrentChange">
+                    </el-pagination>
                   </span>
-                  <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                    @current-change="handleCurrentChange">
-                  </el-pagination>
                 </div>
               </div>
 
@@ -506,9 +507,9 @@ export default {
       //修改用户时验证是否有变化
       userOld: {},
       //用户照片栏
-      userPhoto: null,
+      userPhoto: [],
       //用户日记
-      userDiary: null,
+      userDiary: [],
       //表单规则
       loginRules: {
         username: [
