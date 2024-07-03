@@ -7,7 +7,7 @@ import Vuex from 'vuex';
 import article from './modules/article'
 import userData from './modules/userData'
 import getters from './getters'
-import createPersistedstate from 'vuex-persistedstate'
+import createPersistedState from 'vuex-persistedstate'
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
@@ -18,11 +18,11 @@ const store = new Vuex.Store({
   getters,
   //插件,缓存数据
   plugins: [
-    createPersistedstate({
+    createPersistedState({
       key: 'allData',
-      paths: ['user', 'caseData'],
+      paths: ['article', 'userData'],
       storage: window.sessionStorage
-    })
+    }),
   ]
 });
 

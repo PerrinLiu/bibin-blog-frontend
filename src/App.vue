@@ -3,8 +3,7 @@
 
     <router-view :data-theme="curTheme" />
 
-    <el-button type="primary" round class="appBtn" @click="change()"
-      :style="curTheme == 'light' ? 'background:#333' : 'background:#ddd'">
+    <el-button type="primary" round class="appBtn" @click="change()" :style="curTheme == 'light' ? 'background:#333' : 'background:#ddd'">
       <i :class="curTheme == 'light' ? 'el-icon-s-opportunity' : 'el-icon-moon'"
         :style="curTheme == 'light' ? 'color:#fff' : 'color:#000'"></i>
     </el-button>

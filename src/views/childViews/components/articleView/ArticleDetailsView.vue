@@ -293,6 +293,15 @@ export default {
               }
             })
           })
+          this.$nextTick(() => {
+            const preTags = this.$el.querySelectorAll('pre');
+            preTags.forEach(preTag => {
+              preTag.style.backgroundColor = '#1c1d21';
+              preTag.style.borderRadius = '12px';
+              preTag.style.padding = '1.5em';
+              preTag.style.color = '#fff';
+            });
+          });
           this.articleDetails.articleGroupId = list.length == 0 ? null : list
         }
       })
@@ -551,5 +560,10 @@ export default {
   position: relative;
   top: -5px;
   font-size: 14px;
+}
+pre {
+  background-color: #1c1d21;
+  border-radius: 12px;
+  padding: 1.5em;
 }
 </style>
