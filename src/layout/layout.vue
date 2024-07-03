@@ -53,9 +53,10 @@
             <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue">Bibin</div>
           </router-link>
 
+          <!-- 统计 -->
           <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue;">
             <el-popover placement="top">
-              <div style="width: 600px; margin: 0">
+              <div :style="isMobile ? 'width: 90%;':'width: 600px;'" style="margin: 0">
                 <CommitViewVue ref="getCountDate"></CommitViewVue>
               </div>
               <span slot="reference" @click="getCount">
@@ -202,7 +203,8 @@ export default {
   methods: {
     //获取网站统计数据
     getCount() {
-      this.$refs.getCountDate.getData();
+      const day = this.isMobile ? 80 : 168
+      this.$refs.getCountDate.getData(day);
     },
     // 判断更改布局
     updateLayout() {

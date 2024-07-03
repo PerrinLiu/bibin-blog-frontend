@@ -57,13 +57,13 @@ export default {
     handleClick(item) {
       console.log(item.year + "-" + item.month + "-" + item.date)
     },
-    getData() {
+    getData(day) {
       if (this.countVo.visitCount != 0) {
         this.countVo.visitCount = 0
         return
       }
       this.loading = true
-      userApi.getCountData().then(res => {
+      userApi.getCountData(day).then(res => {
         const data = this.ifSuccess(res);
         if (data != null) {
           this.countVo = data.data
