@@ -300,6 +300,7 @@ export default {
               preTag.style.borderRadius = '12px';
               preTag.style.padding = '1.5em';
               preTag.style.color = '#fff';
+              preTag.style.overflow = 'auto';
             });
           });
           this.articleDetails.articleGroupId = list.length == 0 ? null : list
