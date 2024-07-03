@@ -30,6 +30,11 @@
           </template>
         </el-table-column>
       </el-table>
+      <div style="margin-top:20px;display: flex;justify-content: center;">
+        <el-pagination background layout="prev, pager, next" :pageSize="searchVo.pageSize" :currentPage="searchVo.pageNum" :total="total"
+          @current-change="changePage">
+        </el-pagination>
+      </div>
     </div>
     <el-dialog title="文章发布" :visible.sync="dialogVisible" width="80%" style="margin-top:-5vh ;" :close-on-click-modal="false">
       <WangEditorView ref="insertData" @childEvent="closeDialog" :options="groupList" :key="dialogVisible"></WangEditorView>
@@ -55,10 +60,11 @@ export default {
       tableData: [],
       dialogVisible: false,
       searchVo: {
-        pageSize: 15,
+        pageSize: 10,
         pageNum: 1,
         searchText: "",
       },
+      total: 0,
       groupList: [],
       articleDetails: {
 
@@ -84,6 +90,7 @@ export default {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.tableData = data.data.records
+          this.total = data.data.total
           this.tableData.forEach(element => {
             element.createTime = element.createTime.substring(0, 10);
           })
@@ -131,7 +138,11 @@ export default {
           this.listArticle();
         }
       })
-    }
+    },
+    changePage(val) {
+      this.searchVo.pageNum = val;
+      this.listArticle();
+    },
   }
 }
 </script>

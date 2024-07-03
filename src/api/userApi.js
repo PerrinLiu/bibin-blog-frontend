@@ -28,6 +28,9 @@ export default {
     getAccess() {
         return request.get('/user/user/getAccess');
     },
+    getCountData() {
+        return request.get('/user/user/common/getCountData');
+    },
     emailIsTrue(data) {
         return request.post('/user/user/emailIsTrue', data);
     },

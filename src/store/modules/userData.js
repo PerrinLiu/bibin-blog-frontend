@@ -12,7 +12,7 @@ const user = {
         SET_ISPHONE(state, isPhone) {
             state.isPhone = isPhone;
         },
-        CLAET_USER(state) {
+        CLEAT_USER(state) {
             state.user = null;
         },
     },
@@ -24,8 +24,8 @@ const user = {
         setIsPhone({ commit }, isPhone) {
             commit('SET_ISPHONE', isPhone)
         },
-        claetUser({ commit }) {
-            commit('CLAET_USER')
+        cleatUser({ commit }) {
+            commit('CLEAT_USER')
         }
     },
 }

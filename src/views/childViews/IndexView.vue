@@ -28,13 +28,7 @@
         <i @click="waveNext()" class="el-icon-arrow-down "></i>
       </div>
       <div style="position: relative;top: 50px;">
-        <span v-if="isPhone">
-          <IndexPhone :access="access" @childEvent="search"></IndexPhone>
-        </span>
-        <span v-else>
-          <IndexPc :access="access" @childEvent="search"></IndexPc>
-        </span>
-
+        <IndexPc :access="access"></IndexPc>
       </div>
       <!-- 用来撑起高度 -->
       <div class="content-after" style="height: 60px;">
@@ -47,12 +41,9 @@
   
   <script>
 import IndexPc from './components/indexView/IndexPc'
-import IndexPhone from './components/indexView/IndexPhone';
-import userApi from '@/api/userApi';
 export default {
   components: {
-    IndexPc,
-    IndexPhone
+    IndexPc
   },
   data() {
     return {
@@ -80,8 +71,6 @@ export default {
     this.updateLayout(); // 初始化时执行一次s
     //页面刷新时回到顶部
     this.scrollTop();
-    // 获得访问量
-    this.getAccess();
   },
   computed: {
     user() {
@@ -135,17 +124,6 @@ export default {
       };
       requestAnimationFrame(scrollStep);
     },
-    // 搜索
-    search(text) {
-      console.log(text);
-    },
-    // 获得访问量
-    getAccess() {
-      userApi.getAccess().then(response => {
-        const data = response.data.data;
-        this.access = data;
-      })
-    }
   },
   beforeDestroy() {
     if (this.intervalId !== null) {
