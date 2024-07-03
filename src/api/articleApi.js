@@ -8,6 +8,9 @@ export default {
     addArticle(data) {
         return request.post(article + '/addArticle', data)
     },
+    deleteArticle(id) {
+        return request.delete(article + '/deleteArticle?articleId=' + id)
+    },
     getGroupList() {
         return request.get(article + '/getGroupList')
     },
@@ -37,6 +40,6 @@ export default {
     },
     deleteComment(id) {
         return request.delete('/text/comment/deleteComment?commentId=' + id)
-    }
+    },
 
 }

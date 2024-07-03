@@ -609,10 +609,10 @@ export default {
     //获取验证码
     getCaptcha() {
       userApi.getGenerateBase64().then(response => {
-        const data = this.ifSuccess(response.data);
+        const data = this.ifSuccess(response);
         if (data != null) {
-          this.captcha = "data:image/gif;base64," + response.data[1];
-          const str = response.data[0];
+          this.captcha = "data:image/gif;base64," + data.data[1];
+          const str = data.data[0];
           localStorage.setItem('captchaToken', JSON.stringify(str));
         }
       })

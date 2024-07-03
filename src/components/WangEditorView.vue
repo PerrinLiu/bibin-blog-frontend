@@ -16,7 +16,7 @@
       <Toolbar style="border-bottom: 1px solid #ccc" :editor="editor" :defaultConfig="toolbarConfig" :mode="mode" />
       <Editor style="height: 500px; overflow-y: hidden" v-model="html" :defaultConfig="editorConfig" :mode="mode" @onCreated="onCreated" />
     </div>
-    <el-dialog title="文章发布" :visible.sync="dialogVisible" append-to-body width="50%" style="margin-top:-5vh ;"
+    <el-dialog title="文章发布" :visible.sync="dialogVisible" append-to-body width="1280px" style="margin-top:-5vh ;"
       :close-on-click-modal="false">
       <el-form :model="articleDto" label-width="120px">
         <el-form-item label="标题">
@@ -33,16 +33,17 @@
         <el-row>
           <el-col :span="9">
             <el-form-item label="封面">
-              <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+              <el-upload class="avatar-uploader" action="/api/text/image/common/uploadFile" :show-file-list="false" :headers="uploadHeaders"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
           </el-col>
-          <el-col :span="12">
+          <el-col :span="15">
             可选图片<br />
-            <el-tag style="width: 210px;height: 105px;" type="success" v-for="(item,index) in images" :key="index" @click="chooseImg(item)">
+            <el-tag style="width: 220px;height: 120px;padding: 10px;margin-left: 30px;margin-top: 20px;" type="success"
+              v-for="(item,index) in images" :key="index" @click="chooseImg(item)">
               <img width="200px" height="100px" :src="item" alt="">
             </el-tag>
           </el-col>
@@ -64,21 +65,13 @@ import articleApi from "@/api/articleApi";
 
 export default Vue.extend({
   components: { Editor, Toolbar },
+  props: ["options"],
   data() {
     return {
-      // 标签
-      options: [
-        {
-          value: '1',
-          articleType: 'java'
-        }, {
-          value: '2',
-          articleType: 'vue'
-        }
-      ],
       dialogVisible: false,
       // 文章
       articleDto: {
+        articleId: null,
         title: "",
         articleText: "",
         des: "",
@@ -86,7 +79,7 @@ export default Vue.extend({
         groupIds: []
       },
       editor: null,
-      html: "<p>hello</p>",
+      html: "",
       toolbarConfig: {},
       editorConfig: { MENU_CONF: {}, laceholder: "请输入内容..." },
       mode: "default", // or 'simple'
@@ -159,11 +152,12 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.getGroupList();
   },
   methods: {
     onCreated(editor) {
-      this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
+      setTimeout(() => {
+        this.editor = Object.seal(editor); // 一定要用 Object.seal() ，否则会报错
+      }, 100);
     },
     // 提取 img 标签中的 src，存入 images 列表
     extractImages() {
@@ -174,6 +168,9 @@ export default Vue.extend({
       const imgTags = doc.querySelectorAll('img');
       // 提取每个 img 标签的 src 属性并存入 images 列表
       this.images = Array.from(imgTags).map(img => img.src);
+      if (this.images.length > 6) {
+        this.images = this.images.slice(0, 6);
+      }
     },
     //发布文章
     insertText() {
@@ -187,7 +184,6 @@ export default Vue.extend({
       this.extractImages();
     },
     async add() {
-      console.log(this.articleDto);
       const res = await articleApi.addArticle(this.articleDto);
       const data_1 = this.ifSuccess(res);
       if (data_1 != null) {
@@ -196,25 +192,23 @@ export default Vue.extend({
           type: 'success'
         });
         this.dialogVisible = false;
-        return true;
-      } else {
-        return false;
+        this.articleDto = {
+          id: null,
+          title: "",
+          articleText: "",
+          des: "",
+          cover: "",
+          groupIds: []
+        }
+        this.$emit("childEvent");
       }
     },
-    //获取分组
-    getGroupList() {
-      articleApi.getGroupList().then((res) => {
-        const data = this.ifSuccess(res)
-        if (data != null) {
-          this.options = data.data;
-        }
-      })
-    },
-    // 头像上传完毕后，重新获取信息
+    // 封面上传完毕后
     handleAvatarSuccess(response) {
-      const data = this.ifSuccess(response);
-      if (data != null) {
-        this.articleDto.cover = data.data;
+      if (response.retCode == 200) {
+        this.articleDto.cover = response.data;
+      } else {
+        this.$message.error(response.message);
       }
     },
     // 上传前验证
@@ -232,7 +226,23 @@ export default Vue.extend({
     },
     chooseImg(src) {
       this.articleDto.cover = src;
-    }
+    },
+    changeData(articleVo) {
+      this.html = articleVo.articleText;
+      this.articleDto.articleId = articleVo.id;
+      this.articleDto.title = articleVo.articleTitle;
+      this.articleDto.des = articleVo.des;
+      this.articleDto.cover = articleVo.cover;
+      const group = [];
+      articleVo.articleGroupId.forEach(element => {
+        this.options.forEach(item => {
+          if (element == item.articleType) {
+            group.push(item.id);
+          }
+        })
+      });
+      this.articleDto.groupIds = group;
+    },
   },
   beforeDestroy() {
     const editor = this.editor;

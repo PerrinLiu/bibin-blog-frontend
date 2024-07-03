@@ -11,8 +11,8 @@
       </div>
     </div>
 
-    <div class="content item center" ref="contentContainer">
-      <div>
+    <div class="content item center">
+      <div ref="contentContainer">
         <div class="content-inner item" ref="myElement"
           :style="isPhone ? 'width:95%;max-width: 550px;margin-left: 2.5%;' : 'max-width: 1024px;min-width: 1024px;'">
           <div style="padding: 20px 20px 0 20px;">
@@ -21,7 +21,7 @@
 
             <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i><br v-if="isPhone" />
             <i class="iconfont icon-like top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
-            <i class="el-icon-star-on top-icon">&nbsp;收藏：{{articleDetails.likeSum}}</i>
+            <i class="el-icon-star-on top-icon">&nbsp;收藏：{{articleDetails.collectionsSum}}</i>
             <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
             <div class="top-icon">
               文章标签：
@@ -266,6 +266,7 @@ export default {
           const containerWidth = container.clientWidth;
           Array.from(images).forEach((image) => {
             const imageWidth = image.clientWidth;
+            console.log(imageWidth, containerWidth);
             if (imageWidth > containerWidth) {
               image.style.width = '100%';
               image.style.height = '';
