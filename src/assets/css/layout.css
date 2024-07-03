@@ -88,21 +88,21 @@
 /* 底部样式 */
 #footer {
   position: relative;
-  height: 60px;
+  height: 40px;
+  line-height: 40px;
   width: 150vw;
   left: -25vw;
-  color: #fff;
-  text-align: center;
+  color: #474747;
+  box-shadow: 0 2px 4px rgba(0, 0, 0);
   /* 线性渐变 */
-  background-image: linear-gradient(45deg,
+  /* background-image: linear-gradient(45deg,
       #b3e5fc,
       #4fc3f7,
       #29b6f6,
       #039be5,
       #0288d1);
   background-size: 300% 300%;
-  animation: gradientAnimation ease 3s infinite;
-  /* 应用渐变动画 */
+  animation: gradientAnimation ease 3s infinite; */
 }
 
 @keyframes gradientAnimation {

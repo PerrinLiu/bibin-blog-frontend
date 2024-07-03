@@ -86,7 +86,7 @@
                     </div>
                     <!-- 照片，分为一组一组 -->
                     <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userPhoto == null">
+                      <span v-if="userPhoto.length == 0">
                         <el-empty description="没有任何照片~"></el-empty>
                       </span>
                       <span v-else>
@@ -109,7 +109,7 @@
                     </div>
                     <!-- 日记 -->
                     <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userDiary == null">
+                      <span v-if="userDiary.length == 0">
                         <el-empty description="你还没写过日记~"></el-empty>
                       </span>
                       <span v-else>
@@ -129,10 +129,11 @@
 
                           </div>
                         </el-card>
+                        <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                          @current-change="handleCurrentChange">
+                        </el-pagination>
                       </span>
-                      <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                        @current-change="handleCurrentChange">
-                      </el-pagination>
+
                     </div>
                   </div>
                 </div>
@@ -169,73 +170,74 @@
               </span>
             </el-card>
             <div class="isLogin-left">
-              <span class="isLogin-userImg">
-                <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
-                  :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                  <img :src="userInfo.userImg">
-                  <div class="imgHover">更换图片</div>
-                </el-upload>
-              </span>
-              <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
-                <el-form-item prop="nickname" label="昵称：">
-                  <el-input v-model="userInfo.nickname"></el-input>
-                </el-form-item>
-                <el-form-item label="用户名：">
-                  {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{
-            userInfo.roleName }}》</span>
-                  <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                    <router-link to="/manager" style="text-decoration: none;">
-                      <strong>管理</strong>
-                    </router-link>
-                  </span>
-                </el-form-item>
-                <el-form-item prop="email" label="邮箱：">
-                  <span v-if="changeEmail">
-                    {{ userInfo.email }}
-                  </span>
-                  <span v-else>
-                    <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
-                  </span>
-                  &nbsp;&nbsp;
-                  <span v-if="changeEmail">
-                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
-                    </el-button>
-                  </span>
-                  <span v-else>
-                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
-                    </el-button>
-                  </span>
-                </el-form-item>
-                <el-form-item label="城市：">
-                  <span v-if="changeCity">
-                    {{ userInfo.city }}
-                  </span>
-                  <span v-else>
-                    <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
-                  </span>
-                  &nbsp;&nbsp;
-                  <span v-if="changeCity">
-                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
-                    </el-button>
-                  </span>
-                  <span v-else>
-                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
-                    </el-button>
-                  </span>
-                </el-form-item>
-                <el-form-item label="性别：">
-                  <el-radio-group v-model="userInfo.gender">
-                    <el-radio label="男"></el-radio>
-                    <el-radio label="女"></el-radio>
-                  </el-radio-group>
-                </el-form-item>
-                <el-form-item>
-                  <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
-                    @click="update('updateUser')">提交</el-button>
-                  <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
-                </el-form-item>
+              <div style="margin-top: 30px">
+                <div class="isLogin-userImg" style="margin-bottom: 30px">
+                  <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+                    :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                    <img :src="userInfo.userImg">
+                    <div class="imgHover">更换图片</div>
+                  </el-upload>
+                </div>
+                <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
+                  <el-form-item prop="nickname" label="昵称：">
+                    <el-input v-model="userInfo.nickname"></el-input>
+                  </el-form-item>
+                  <el-form-item label="用户名：">
+                    {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{userInfo.roleName }}》</span>
+                    <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
+                      <router-link to="/manager" style="text-decoration: none;">
+                        <strong>管理</strong>
+                      </router-link>
+                    </span>
+                  </el-form-item>
+                  <el-form-item prop="email" label="邮箱：">
+                    <span v-if="changeEmail">
+                      {{ userInfo.email }}
+                    </span>
+                    <span v-else>
+                      <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span v-if="changeEmail">
+                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
+                      </el-button>
+                    </span>
+                    <span v-else>
+                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
+                      </el-button>
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="城市：">
+                    <span v-if="changeCity">
+                      {{ userInfo.city }}
+                    </span>
+                    <span v-else>
+                      <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
+                    </span>
+                    &nbsp;&nbsp;
+                    <span v-if="changeCity">
+                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
+                      </el-button>
+                    </span>
+                    <span v-else>
+                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
+                      </el-button>
+                    </span>
+                  </el-form-item>
+                  <el-form-item label="性别：">
+                    <el-radio-group v-model="userInfo.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
+                      @click="update('updateUser')">提交</el-button>
+                    <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
+                  </el-form-item>
 
-              </el-form>
+                </el-form>
+              </div>
             </div>
             <div class="isLogin-right">
               <div class="isLogin-right-top">
@@ -244,7 +246,7 @@
                 </div>
                 <!-- 照片，分为一组一组 -->
                 <div style="height:85%;overflow-y: scroll;">
-                  <span v-if="userPhoto == null">
+                  <span v-if="userPhoto.length == 0">
                     <el-empty description="没有任何照片~"></el-empty>
                   </span>
                   <span v-else>
@@ -270,7 +272,7 @@
                 </div>
                 <!-- 日记 -->
                 <div style="height:85%;overflow-y: scroll;">
-                  <span v-if="userDiary == null">
+                  <span v-if="userDiary.length == 0">
                     <el-empty description="你还没写过日记~"></el-empty>
                   </span>
                   <span v-else>
@@ -289,10 +291,10 @@
 
                       </div>
                     </el-card>
+                    <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                      @current-change="handleCurrentChange">
+                    </el-pagination>
                   </span>
-                  <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                    @current-change="handleCurrentChange">
-                  </el-pagination>
                 </div>
               </div>
 
@@ -374,7 +376,7 @@
                 </el-form-item>
                 <el-form-item prop="email">
                   <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-                  <el-button style="position: absolute;right: 0px;" @click="sendEmail(true)">
+                  <el-button style="position: absolute;right: 0px;" @click="sendEmail('register')">
                     <span v-if="showCaptcha">获取验证码</span>
                     <span v-else>{{ time }}&nbsp;s</span>
                   </el-button>
@@ -418,7 +420,7 @@
           <el-form-item>
             <span>请输入你的邮箱</span>
             <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-            <el-button style="position: absolute;right: 0px;" @click="sendEmail(false)">
+            <el-button style="position: absolute;right: 0px;" @click="sendEmail('changePsw')">
               <span v-if="showCaptcha">获取验证码</span>
               <span v-else>{{ time }}&nbsp;s</span>
             </el-button>
@@ -506,9 +508,9 @@ export default {
       //修改用户时验证是否有变化
       userOld: {},
       //用户照片栏
-      userPhoto: null,
+      userPhoto: [],
       //用户日记
-      userDiary: null,
+      userDiary: [],
       //表单规则
       loginRules: {
         username: [
@@ -607,12 +609,12 @@ export default {
     //获取验证码
     getCaptcha() {
       userApi.getGenerateBase64().then(response => {
-
-        this.captcha = "data:image/gif;base64," + response.data[1];
-        const str = response.data[0];
-        localStorage.setItem('captchaToken', JSON.stringify(str));
-      }).catch(err => {
-        console.log(err);
+        const data = this.ifSuccess(response);
+        if (data != null) {
+          this.captcha = "data:image/gif;base64," + data.data[1];
+          const str = data.data[0];
+          localStorage.setItem('captchaToken', JSON.stringify(str));
+        }
       })
     },
     // 接收的是表单信息
@@ -654,15 +656,6 @@ export default {
             type: 'warning'
           });
         }
-      }).catch(err => {
-        console.log(err);
-        if (err) {
-          this.$message({
-            message: "服务端错误",
-            type: 'info'
-          });
-        }
-
       }).finally(() => {
         this.showLogin = true;
       })
@@ -733,8 +726,6 @@ export default {
         });
         this.getUser();
         this.userOld = JSON.parse(JSON.stringify(this.userInfo));
-      }).catch(err => {
-        console.log(err);
       })
     },
     // 修改密码
@@ -789,7 +780,7 @@ export default {
       }
     },
     // 发送邮箱验证码
-    sendEmail(bool) {
+    sendEmail(type) {
       // 定义邮箱格式正则表达式
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
       // 使用正则表达式验证邮箱格式
@@ -811,7 +802,7 @@ export default {
         return;
       }
       // 发起请求
-      userApi.sendEmail(this.userRegister.email, bool).then(response => {
+      userApi.sendEmail(this.userRegister.email, type).then(response => {
         const retCode = response.data.retCode;
         if (retCode == 200) {
           localStorage.setItem('emailToken', JSON.stringify(response.data.data));
@@ -828,8 +819,6 @@ export default {
             type: 'warning'
           });
         }
-      }).catch(err => {
-        console.log(err);
       })
     },
     //验证码重新倒计时
@@ -870,8 +859,6 @@ export default {
             duration: 1000
           });
         }
-      }).catch(err => {
-        console.log(err);
       })
     },
     isTrue() {
@@ -967,8 +954,6 @@ export default {
         this.userDiary.forEach(element => {
           element.createTime = element.createTime.substring(0, 10);
         });
-      }).catch(err => {
-        console.log(err);
       })
     },
     // 获取单个日记内容
@@ -979,8 +964,6 @@ export default {
         }
       }).then(response => {
         this.diaryBaseOne = response.data.data;
-      }).catch(err => {
-        console.log(err);
       })
     },
     delDiary(id) {
@@ -996,8 +979,6 @@ export default {
           message: response.data.message,
           type: 'success'
         })
-      }).catch(err => {
-        console.log(err);
       })
     }
   },

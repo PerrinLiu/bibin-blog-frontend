@@ -53,11 +53,23 @@
             <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue">Bibin</div>
           </router-link>
 
+          <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue;">
+            <el-popover placement="top">
+              <div style="width: 600px; margin: 0">
+                <CommitViewVue ref="getCountDate"></CommitViewVue>
+              </div>
+              <span slot="reference" @click="getCount">
+                <i class="el-icon-pie-chart"></i>
+                <span style="font-size: 12px;">统计</span>
+              </span>
+            </el-popover>
+
+          </div>
+
           <!-- 手机端布局 -->
           <span v-if="isMobile" class="float-right" style="line-height: 60px;font-size: 30px;cursor: pointer;">
             <!-- 导航标签 -->
             <i class="el-icon-s-fold" @click="drawer = true"></i>
-
           </span>
 
           <!-- 电脑端布局 -->
@@ -122,10 +134,13 @@
         <router-view ref="childRef"></router-view>
       </el-main>
 
-      <el-footer>
+      <el-footer style="height: 40px;">
         <span v-if="currentPath !== '/login'">
-          <div id="footer">
-            个人博客
+          <div id="footer" class="item">
+            <div style="position: absolute;width: 100vw;left: 25vw;text-align: center;">
+              <a href="https://beian.miit.gov.cn/" style="text-decoration: none;">粤ICP备2024274461号-1</a>
+              Copyright © {{ new Date().getFullYear() }} LLPY
+            </div>
           </div>
         </span>
       </el-footer>
@@ -135,8 +150,12 @@
 
 <script>
 import userApi from '@/api/userApi'
+import CommitViewVue from '@/components/CommitView'
 export default {
   name: 'HomePage',
+  components: {
+    CommitViewVue
+  },
   data() {
     return {
       // 头部一开始显示，通过滚动决定是否展示
@@ -147,6 +166,7 @@ export default {
       token: null,
       // 页面宽度，决定展示哪种布局
       isMobile: false, // 根据实际情况初始化
+      // 导航侧边栏
       drawer: false,
       // 头部手机端
       background: '',
@@ -177,8 +197,13 @@ export default {
       // 使用窗口大小监听来更新 isMobile 值
       window.addEventListener('resize', this.updateLayout);
     this.updateLayout(); // 初始化时执行一次
+    this.getAccess();
   },
   methods: {
+    //获取网站统计数据
+    getCount() {
+      this.$refs.getCountDate.getData();
+    },
     // 判断更改布局
     updateLayout() {
       // 判断是否时手机端
@@ -231,6 +256,9 @@ export default {
       };
       requestAnimationFrame(scrollStep);
     },
+    getAccess() {
+      userApi.getAccess();
+    },
     // 注销
     logout(command) {
       if (command == 'b') {
@@ -242,11 +270,10 @@ export default {
             });
             localStorage.removeItem('token');
             this.token = null;
-            this.$store.dispatch("clearUser")
+            this.$store.dispatch("cleatUser")
           }
-        }).catch(err => {
+        }).finally(() => {
           localStorage.removeItem('token');
-          console.log(err);
         })
       }
     },

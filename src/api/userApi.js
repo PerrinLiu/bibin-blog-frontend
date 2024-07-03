@@ -1,4 +1,4 @@
-import request from "@/request";
+import request from "@/utils/request";
 
 export default {
     getGenerateBase64() {
@@ -19,14 +19,17 @@ export default {
     register(data) {
         return request.post('/user/user/register', data)
     },
-    sendEmail(email, bool) {
-        return request.get('/user/user/sendEmail?email=' + email + '&bool=' + bool)
+    sendEmail(email, type) {
+        return request.get('/user/user/sendEmail?email=' + email + '&type=' + type)
     },
     updateUserImg(data) {
         return request.post('/user/user/updateUserImg', data)
     },
     getAccess() {
         return request.get('/user/user/getAccess');
+    },
+    getCountData() {
+        return request.get('/user/user/common/getCountData');
     },
     emailIsTrue(data) {
         return request.post('/user/user/emailIsTrue', data);

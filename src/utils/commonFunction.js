@@ -36,8 +36,8 @@ export function copyProperties(source, target) {
 }
 
 //判断请求是否成功
-export function ifSuccess(reponse) {
-    const data = reponse.data
+export function ifSuccess(response) {
+    const data = response.data
     if (data.retCode != 200) {
         Message.warning(data.message)
         return null;

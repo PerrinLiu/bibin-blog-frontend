@@ -17,7 +17,7 @@
           <el-input v-model="searchVo.title" placeholder="请输入内容" suffix-icon="el-icon-search"
             :style="isPhone ? 'width: 300px;' : 'width: 50%;'"></el-input>
         </div>
-        <div>
+        <div v-if="articleList.length > 0">
           <el-row>
             <el-col :span="isPhone ? 24 : 8" v-for="(o) in  articleList " :key="o.id">
               <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px;height: 390px;"
@@ -47,14 +47,15 @@
               </el-card>
             </el-col>
           </el-row>
+          <div style="margin-top:20px;display: flex;justify-content: center;">
+            <el-pagination background layout="prev, pager, next" :pageSize="searchVo.pageSize" :currentPage="searchVo.pageNum"
+              :total="total" @current-change="changePage">
+            </el-pagination>
+          </div>
         </div>
-        <div style="margin-top:20px;display: flex;justify-content: center;">
-          <el-pagination background layout="prev, pager, next" :pageSize="searchVo.pageSize" :currentPage="searchVo.pageNum" :total="total"
-            @current-change="changePage">
-          </el-pagination>
-        </div>
+        <el-empty :image-size="300" v-else></el-empty>
         <!-- 用来撑起高度 -->
-        <div class=" content-after" style="height: 60px;">
+        <div class="content-after" style="height: 60px;">
         </div>
       </div>
     </div>
@@ -72,7 +73,7 @@ export default {
         pageNum: 1,
         searchText: "",
       },
-      total: 50,
+      total: 0,
       //文章列表
       articleList: [],
       //文章分组

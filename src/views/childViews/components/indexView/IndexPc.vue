@@ -1,37 +1,16 @@
 <template>
   <div class="index-pc">
     <el-container>
-      <el-aside width="40%" style="position: relative;display: flex;  justify-content: center; /* 水平居中 */">
-        <div style="width: 50%;position: relative;top: -30px;min-width: 280px;">
-          <!-- 名片 -->
-          <el-card class="box-card box-card1" shadow="always">
-            <div style="text-align: center;">
-              <span><img class="card-img" width="100px" height="100px" src="@/assets/images/defaul.jpg" alt=""
-                  style="border-radius: 50%;border: 1px solid #030303;"></span>
-              <h2 style="font-size: 30px;">Bibin</h2>
-            </div>
-            <div style="position:relative;text-align: center;margin-top: -10px;display: flex;  justify-content: center; /* 水平居中 */">
-              <div style="float: left;line-height: 10px;">
-                <p style="font-size: 18px;font-weight: 900;">文章</p>
-                <div>0</div>
-              </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div style="float: left;line-height: 10px;">
-                <p style="font-size: 18px;font-weight: 900;">分类</p>
-                <div>0</div>
-              </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <div style="float: left;line-height: 10px;">
-                <p style="font-size: 18px;font-weight: 900;">访问量</p>
-                <div> {{ access }}</div>
-              </div>
-            </div>
-          </el-card>
+      <!-- 根据屏幕宽度，控制侧边栏宽度 -->
+      <el-aside :width="isPhone ? '100%' : '40%'" style="position: relative;display: flex;  justify-content: center; /* 水平居中 */">
+        <div style="position: relative;top: -30px;min-width: 280px;" :style="isPhone ? 'width: 80%;' : 'width: 50%'">
 
           <!-- 搜索框 -->
           <el-card class="box-card box-card2 item" shadow="always">
             <span style="position: relative;top: -10px;font-weight: 900;">搜搜</span>
-            <el-input placeholder="请输入内容" v-model="searchText">
+            <el-input placeholder="请输入内容" v-model="searchText" @keyup.enter.native="search()">
             </el-input>
-            <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;" @click="$emit('childEvent', searchText);"
+            <i style="position: absolute;top: 52px;right: 35px;font-size: 20px;cursor: pointer;" @click="search()"
               class="el-icon-search"></i>
           </el-card>
           <!-- 推荐文章 -->
@@ -50,10 +29,54 @@
             <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;分组</span>
             <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
           </el-card>
+          <!-- 手机样式 -->
+          <div v-if="isPhone">
+            <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;"
+              :body-style="{ padding: '0px' }">
 
+              <div style="height: 300px;width:100%;position: absolute;top: 0px;">
+                <img width="100%" height="100%" :src="item.cover" alt="">
+              </div>
+              <router-link style="text-decoration: none" :to="{ name: 'articleDetails', params: {id:item.id } }">
+                <div class="article-content" style="text-shadow:0 0 10px red;">
+                  <div style="height: 3cap;">
+                    <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
+                  </div>
+                  <div style="height: 90px;">
+                    <p class="article-text">{{item.des}}</p>
+                  </div>
+                  <div style="height: 40px;line-height: 40px;">
+                    <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
+                      {{o}}
+                    </el-tag>
+                    <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">
+                      无标签
+                    </el-tag>
+                  </div>
+                  <div style="height: 60px;line-height: 60px;">
+                    <span>
+                      <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                      <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                    </span>
+                  </div>
+                  <div style="height: 30px;">
+                    <i class="el-icon-date" style="font-size: 20px;color: #5CB6FF;">&nbsp;</i>{{ item.createTime }}
+                  </div>
+                </div>
+              </router-link>
+            </el-card>
+            <el-empty :image-size="200" v-if="articleList.length == 0"></el-empty>
+            <div style="width: 100%;height: 60px;">
+              <router-link to="/article" style="text-decoration: none;">
+                <el-button type="primary" style="position: absolute;bottom: 0;right: 0px;">查看更多</el-button>
+              </router-link>
+            </div>
+          </div>
         </div>
       </el-aside>
-      <el-main style="position: relative;width: 60vw;">
+      <!-- 电脑时展示 -->
+      <el-main v-if="!isPhone" style="position: relative;width: 60vw;">
         <div class="article-list">
           <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;"
             :body-style="{ padding: '0px' }">
@@ -95,6 +118,7 @@
               </el-col>
             </el-row>
           </el-card>
+          <el-empty :image-size="200" v-if="articleList.length == 0"></el-empty>
           <div style="width: 100%;height: 60px;">
             <router-link to="/article" style="text-decoration: none;">
               <el-button type="primary" style="position: absolute;bottom: 0;right: 0px;">查看更多</el-button>
@@ -109,7 +133,6 @@
   <script>
 import articleApi from '@/api/articleApi'
 export default {
-  props: ["access"],
   data() {
     return {
       //搜索内容
@@ -122,6 +145,11 @@ export default {
   },
   mounted() {
     this.getGroup()
+  },
+  computed: {
+    isPhone() {
+      return this.$store.getters.isPhone
+    }
   },
   methods: {
     getData() {
@@ -156,7 +184,11 @@ export default {
           this.getArticle();
         }
       })
-    }
+    },
+    // 搜索
+    search() {
+      this.getArticle();
+    },
   }
 }
   </script>
