@@ -12,7 +12,7 @@
     </div>
 
     <div class="content item center">
-      <div ref="contentContainer" style="width: 100%;display: flex;justify-content: center;">
+      <div style="width: 100%;display: flex;justify-content: center;">
         <div class="content-inner item" ref="myElement"
           :style="isPhone ? 'width:95%;max-width: 550px;' : 'max-width: 1024px;min-width: 1024px;'">
           <div style="padding: 20px 20px 0 20px;">
@@ -34,7 +34,7 @@
             </div>
 
           </div>
-          <div class="content-middle ">
+          <div class="content-middle " ref="contentContainer">
             <div style="padding: 20px 20px 0 20px;" v-html="articleDetails.articleText">
             </div>
             <div ref="statusBar" class="content-bottom item">
