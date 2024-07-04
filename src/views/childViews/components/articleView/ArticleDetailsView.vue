@@ -12,9 +12,9 @@
     </div>
 
     <div class="content item center">
-      <div ref="contentContainer">
+      <div ref="contentContainer" style="width: 100%;display: flex;justify-content: center;">
         <div class="content-inner item" ref="myElement"
-          :style="isPhone ? 'width:95%;max-width: 550px;margin-left: 2.5%;' : 'max-width: 1024px;min-width: 1024px;'">
+          :style="isPhone ? 'width:95%;max-width: 550px;' : 'max-width: 1024px;min-width: 1024px;'">
           <div style="padding: 20px 20px 0 20px;">
             <h1>{{ articleDetails.articleTitle }}</h1>
             <i class="el-icon-time top-icon">&nbsp;{{ articleDetails.createTime }}</i>
