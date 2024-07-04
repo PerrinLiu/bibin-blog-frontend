@@ -14,6 +14,10 @@
           <div>{{countVo.groupCount}}</div>
         </div>
         <div style="float: left;line-height: 10px;width:80px">
+          <p style="font-size: 18px;font-weight: 900;">碎片</p>
+          <div>{{countVo.diaryCount}}</div>
+        </div>
+        <div style="float: left;line-height: 10px;width:80px">
           <p style="font-size: 18px;font-weight: 900;">访问量</p>
           <div>{{countVo.visitCount}}</div>
         </div>
@@ -24,8 +28,8 @@
     <div>
       <ul class="graph">
         <el-tooltip class="item" effect="light" placement="top-start" v-for="(item, index) in countVo.commitDataList" :key="index"
-          :open-delay="500">
-          <div slot="content" style="text-align: center">{{item.year + '-' + item.month + '-' + item.date}}<br />新增：{{item.number}}</div>
+          :open-delay="300">
+          <div slot="content" style="text-align: center">{{item.year + '-' + item.month + '-' + item.date}}<br />新增文章：{{item.number}}</div>
           <li :data-level="item.level" class="li-day" :isToday="item.isToday" @click="handleClick(item)"></li>
         </el-tooltip>
       </ul>
@@ -45,6 +49,7 @@ export default {
       countVo: {
         articleCount: 0,
         groupCount: 0,
+        diaryCount: 0,
         visitCount: 0,
         commitDataList: [],
         monthBar: ["", "", "", "", "", "", "", "", "", "", "", ""],

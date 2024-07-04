@@ -14,6 +14,9 @@ export default {
     getGroupList() {
         return request.get(article + '/getGroupList')
     },
+    addGroup(groupName) {
+        return request.post(article + '/addGroup?groupName=' + groupName)
+    },
     listArticle(pageSize, pageNum, searchText) {
         return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&searchText=' + searchText)
     },

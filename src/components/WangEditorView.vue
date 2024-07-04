@@ -8,8 +8,6 @@
           <el-option v-for="item in options" :key="item.id" :label="item.articleType" :value="item.id">
           </el-option>
         </el-select>
-        &nbsp;&nbsp;
-
       </div>
     </div>
     <div style="border: 1px solid #ccc;height: 600px;">
@@ -68,6 +66,7 @@ export default Vue.extend({
   props: ["options"],
   data() {
     return {
+      //文章发布弹窗
       dialogVisible: false,
       // 文章
       articleDto: {

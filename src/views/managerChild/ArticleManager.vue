@@ -1,8 +1,17 @@
 <template>
   <div>
     <div>
+      <el-dialog title="新增标签" :visible.sync="dialogTableVisible" width="300px">
+        <el-input type="text" placeholder="请输入标签名称" v-model="groupVo" />
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogTableVisible = false">取 消</el-button>
+          <el-button type="primary" @click="addGroup()">确 定</el-button>
+        </span>
+      </el-dialog>
       <h1>文章管理</h1>
-      <el-button @click="dialogVisible = true">新增</el-button><br /><br />
+      <el-button @click="dialogVisible = true">新增</el-button>&nbsp;&nbsp;
+      <el-button type="primary" style="margin-left: 10px" @click="dialogTableVisible = true">新增标签</el-button><br /><br />
+
       <el-table :data="tableData" border style="width: 1100px" height="620">
         <el-table-column prop="articleTitle" label="标题">
         </el-table-column>
@@ -25,8 +34,10 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <el-button @click="handleClick(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteArticle(scope.row)" type="text" size="small">删除</el-button>
+            <el-button @click="handleClick(scope.row)" type="text" size="small" style="margin-right: 10px">编辑</el-button>
+            <el-popconfirm @confirm="deleteArticle(scope.row)" title="确定删除改文章?" onfirm-button-type="success">
+              <el-button slot="reference" type="text" size="small">删除</el-button>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
@@ -66,9 +77,10 @@ export default {
       },
       total: 0,
       groupList: [],
-      articleDetails: {
-
-      }
+      articleDetails: {},
+      //新增标签弹窗
+      dialogTableVisible: false,
+      groupVo: "",
     }
   },
   mounted() {
@@ -143,6 +155,25 @@ export default {
       this.searchVo.pageNum = val;
       this.listArticle();
     },
+    //新增分组
+    addGroup() {
+      if (this.groupVo.trim() == "") {
+        this.$message({
+          message: '分组名称不能为空',
+          type: 'warning'
+        });
+        return;
+      }
+      articleApi.addGroup(this.groupVo).then((res) => {
+        const data = this.ifSuccess(res);
+        if (data != null) {
+          this.$message.success("新增成功");
+          this.dialogTableVisible = false;
+          this.groupVo = "";
+          this.getGroup();
+        }
+      })
+    }
   }
 }
 </script>
