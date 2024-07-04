@@ -1,10 +1,10 @@
 <template>
-  <div class="manger" style="margin: -20px; background: #fff;">
+  <div class="manger" style="margin: -20px; background: #fff;height: 100vh;overflow: auto;">
     <el-container>
-      <el-header></el-header>
+      <el-header style="height: 30px;"></el-header>
       <el-container>
         <el-aside width="300px" style="margin-top: 100px;height: 82.5vh;">
-          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleOpen()" @close="handleClose()" router>
+          <el-menu :default-active="$route.path" class="el-menu-vertical-demo" router>
             <el-menu-item index="/manager">
               <i class="el-icon-menu"></i>
               <span slot="title">数据概览</span>
@@ -25,19 +25,6 @@
               <i class="el-icon-document"></i>
               <span slot="title">评论</span>
             </el-menu-item>
-            <el-submenu index="6">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>特有权限</span>
-              </template>
-
-              <span v-if="user != null">
-
-                <el-menu-item v-for="item in user.menuVos" :key="item.permissionId" index="1-1">
-                  {{ item.permissionName }}
-                </el-menu-item>
-              </span>
-            </el-submenu>
           </el-menu>
         </el-aside>
         <el-main>

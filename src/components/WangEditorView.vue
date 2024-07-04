@@ -28,12 +28,12 @@
         </el-form-item>
 
         <div style="position:relative;height: 50px;top: -10px;">
-          <el-button style="position: absolute;right: 0px;" @click="dialogVisible = false" type="primary">从文章提取</el-button>
+          <el-button style="position: absolute;right: 0px;" @click="getDes()" type="primary">从文章提取</el-button>
         </div>
         <el-row>
           <el-col :span="9">
             <el-form-item label="封面">
-              <el-upload class="avatar-uploader" action="/api/text/image/common/uploadFile" :show-file-list="false" :headers="uploadHeaders"
+              <el-upload class="avatar-uploader" action="/api/text/image/uploadFile" :show-file-list="false" :headers="uploadHeaders"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
                 <img width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -126,13 +126,18 @@ export default Vue.extend({
 
       // 用户自定义上传图片
       customUpload(file, insertFn) {
+        //校验格式
+        if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
+          alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+          return;
+        }
         var axios = require("axios");
         var FormData = require("form-data");
         var data = new FormData();
-        data.append("image", file); // file 即选中的文件
+        data.append("file", file); // file 即选中的文件
         var config = {
           method: "post",
-          url: "/api/text/article/uploadImg", //上传图片地址
+          url: "/api/text/image/uploadFile", //上传图片地址
           headers: {
             "Content-Type": "multipart/form-data",
             "X-Token": JSON.parse(localStorage.getItem("token")),
@@ -213,20 +218,23 @@ export default Vue.extend({
     },
     // 上传前验证
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isLt2M = file.size / 1024 / 1024 < 5;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      //校验格式
+      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
+        this.$message.warning('图片类型必须是.gif,jpeg,jpg,png中的一种');
+        return false;
       }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 5MB!');
+      //校验大小
+      if (file.size > 10 * 1024 * 1024) {
+        this.$message.warning('上传图片大小不能超过 10MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     },
+    // 选择封面
     chooseImg(src) {
       this.articleDto.cover = src;
     },
+    // 修改文章时，回显数据
     changeData(articleVo) {
       this.html = articleVo.articleText;
       this.articleDto.articleId = articleVo.id;
@@ -243,6 +251,25 @@ export default Vue.extend({
       });
       this.articleDto.groupIds = group;
     },
+    // 从文章提取
+    getDes() {
+      const editor = this.editor; // 获取 editor 实例
+      const htmlContent = editor.getHtml();
+      // 创建一个 DOM 元素来解析 HTML 内容
+      const div = document.createElement('div');
+      div.innerHTML = htmlContent;
+
+      // 移除所有代码块
+      const codeBlocks = div.querySelectorAll('pre');
+      codeBlocks.forEach(codeBlock => codeBlock.remove());
+
+      // 获取移除代码块后的纯文本内容并去除所有空格
+      let plainTextNoSpaces = div.innerText.replace(/\s+/g, '');
+      if (plainTextNoSpaces.length > 150) {
+        plainTextNoSpaces = plainTextNoSpaces.substring(0, 150)
+      }
+      this.articleDto.des = plainTextNoSpaces;
+    }
   },
   beforeDestroy() {
     const editor = this.editor;

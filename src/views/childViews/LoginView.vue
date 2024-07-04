@@ -25,7 +25,7 @@
                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">
                       《{{ userInfo.roleName }}》</span>
                     <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                      <router-link to="/manager" style="text-decoration: none;">
+                      <router-link target="_blank" to="/manager" style="text-decoration: none;">
                         <strong>管理</strong>
                       </router-link>
                     </span>
@@ -185,7 +185,7 @@
                   <el-form-item label="用户名：">
                     {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{userInfo.roleName }}》</span>
                     <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                      <router-link to="/manager" style="text-decoration: none;">
+                      <router-link target="_blank" to="/manager" style="text-decoration: none;">
                         <strong>管理</strong>
                       </router-link>
                     </span>
@@ -972,7 +972,6 @@ export default {
           diaryId: id,
         }
       }).then(response => {
-        console.log(response.data.data);
         this.getDiaryBaseByUser();
         this.showDiaryOne = !this.showDiaryOne;
         this.$message({

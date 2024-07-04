@@ -3,7 +3,7 @@
     <div>
       <h1>文章管理</h1>
       <el-button @click="dialogVisible = true">新增</el-button><br /><br />
-      <el-table :data="tableData" border style="width: 1100px">
+      <el-table :data="tableData" border style="width: 1100px" height="620">
         <el-table-column prop="articleTitle" label="标题">
         </el-table-column>
 
@@ -30,7 +30,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin-top:20px;display: flex;justify-content: center;">
+      <div style="margin-top:20px;display: flex;justify-content: left;">
         <el-pagination background layout="prev, pager, next" :pageSize="searchVo.pageSize" :currentPage="searchVo.pageNum" :total="total"
           @current-change="changePage">
         </el-pagination>

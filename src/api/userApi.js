@@ -20,7 +20,7 @@ export default {
         return request.post('/user/user/register', data)
     },
     sendEmail(email, type) {
-        return request.get('/user/user/sendEmail?email=' + email + '&type=' + type)
+        return request.post('/user/user/sendEmail?email=' + email + '&type=' + type + '&message=' + '')
     },
     updateUserImg(data) {
         return request.post('/user/user/updateUserImg', data)

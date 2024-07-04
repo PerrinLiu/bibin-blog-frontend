@@ -95,13 +95,23 @@ export default {
 
       // 用户自定义上传图片
       customUpload(file, insertFn) {
+        //校验格式
+        if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
+          alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+          return;
+        }
+        //校验大小
+        if (file.size > 3 * 1024 * 1024) {
+          alert("图片大小不能超过3M");
+          return;
+        }
         var axios = require("axios");
         var FormData = require("form-data");
         var data = new FormData();
-        data.append("image", file); // file 即选中的文件
+        data.append("file", file); // file 即选中的文件
         var config = {
           method: "post",
-          url: "/api/text/article/uploadImg", //上传图片地址
+          url: "/api/text/image/uploadFile", //上传图片地址
           headers: {
             "Content-Type": "multipart/form-data",
             "X-Token": JSON.parse(localStorage.getItem("token")),
@@ -190,7 +200,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.toolbarConfig);
   }
 }
 </script>

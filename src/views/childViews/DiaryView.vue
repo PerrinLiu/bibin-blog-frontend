@@ -175,6 +175,7 @@ export default {
       total: 0,
       pageNum: 1,
       pageSize: 15,
+      diaryBase: [],  //日记基础信息
       // 背景图片
       showImg: false,
       // 日记表单
@@ -184,7 +185,6 @@ export default {
       columns: [], // 将日记信息分配到列中，每列是一个数组
       loading: false,  //加载
       column: null,  //布局列
-      diaryBase: [],  //日记基础信息
       diaryBaseOne: null,
       flag: null,  //标记是否为电脑端布局
       showMe: true,  //只看我的
@@ -277,11 +277,7 @@ export default {
     },
     // 获取单个日记内容
     getDiaryOne(diaryId) {
-      textApi.getDiaryOne({
-        params: {
-          diaryId: diaryId
-        }
-      }).then(response => {
+      textApi.getDiaryOne(diaryId).then(response => {
         this.diaryBaseOne = response.data.data;
       })
     },

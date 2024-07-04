@@ -90,9 +90,6 @@ export default {
     }
   },
   methods: {
-    goDetail() {
-      console.log("点击了卡片, 跳转到详情页");
-    },
     changePage(val) {
       this.searchVo.pageNum = val;
       this.getArticle();

@@ -93,7 +93,7 @@ const routes = [
                     {
                         path: '/manager',
                         name: 'overview',
-                        component: () => import('../views//managerChild/overviewView.vue'),
+                        component: () => import('../views/managerChild/overviewView.vue'),
                         meta: {
                             title: 'Bibin | 概览'
                         }
@@ -101,7 +101,7 @@ const routes = [
                     {
                         path: 'diaryManager',
                         name: 'diaryManager',
-                        component: () => import('../views//managerChild/DiaryManager.vue'),
+                        component: () => import('../views/managerChild/DiaryManager.vue'),
                         meta: {
                             title: 'Bibin | 日记管理'
                         }
@@ -117,7 +117,7 @@ const routes = [
                     {
                         path: 'photoManager',
                         name: 'photoManager',
-                        component: () => import('../views//managerChild/PhotoManager.vue'),
+                        component: () => import('../views/managerChild/PhotoManager.vue'),
                         meta: {
                             title: 'Bibin | 照片管理'
                         }
@@ -125,7 +125,7 @@ const routes = [
                     {
                         path: 'messageManager',
                         name: 'messageManager',
-                        component: () => import('../views//managerChild/MessageManager.vue'),
+                        component: () => import('../views/managerChild/MessageManager.vue'),
                         meta: {
                             title: 'Bibin | 评论管理'
                         }
