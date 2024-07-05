@@ -5,6 +5,7 @@
 .float-right {
   float: right;
 }
+
 .div-with-lines {
   position: fixed;
   height: 100vh;
@@ -12,13 +13,12 @@
   background-size: cover;
   top: 0;
   left: 0;
-  background-image: linear-gradient(
-    to bottom,
-    transparent 1%,
-    #ccc 5%,
-    #ccc 1%,
-    transparent 12%
-  );
+  /* 取消线条 */
+  /* background-image: linear-gradient(to bottom,
+      transparent 1%,
+      #ccc 5%,
+      #ccc 1%,
+      transparent 12%); */
   background-size: 100% 6px;
   padding: 10px;
 }
@@ -34,13 +34,17 @@
   text-align: center;
   background-position: center center;
 }
-.backgroundImg-text-div{
+
+.backgroundImg-text-div {
   display: flex;
-  justify-content: center; /* 水平居中 */
-  align-items: center; /* 垂直居中 */
+  justify-content: center;
+  /* 水平居中 */
+  align-items: center;
+  /* 垂直居中 */
   width: 100%;
   height: 100vh;
 }
+
 .backgroundImg-text {
   top: 300px;
   color: #000;
@@ -50,33 +54,37 @@
   transition: 0.5s;
   cursor: pointer;
 }
+
 .backgroundImg-text:hover {
   transform: scale(1.5);
-  background: linear-gradient(
-    90deg,
-    #000000,
-    #ffffff
-  );
+  background: linear-gradient(90deg,
+      #000000,
+      #ffffff);
   background-clip: text;
   -webkit-background-clip: text;
   color: transparent;
   background-size: 200% 100%;
   animation: colorChange 3s linear infinite;
 }
+
 /* 定义动画效果 */
 @keyframes colorChange {
   0% {
     background-position: 0%;
   }
+
   25% {
     background-position: 100%;
   }
+
   50% {
     background-position: 0%;
   }
+
   75% {
     background-position: -100%;
   }
+
   100% {
     background-position: 0%;
   }
@@ -85,6 +93,8 @@
 .content {
   position: relative;
   margin-top: 96vh;
+  display: flex;
+  justify-content: center;
   height: auto;
   width: 100vw;
   left: -20px;
@@ -92,4 +102,8 @@
   background-size: cover;
   background-color: rgb(252, 252, 252);
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5), -1px -1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.content-before {
+  width: 1400px;
 }

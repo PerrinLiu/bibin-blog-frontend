@@ -27,13 +27,14 @@
       <div class="wave-next" style="z-index: 99;">
         <i @click="waveNext()" class="el-icon-arrow-down "></i>
       </div>
-      <div style="position: relative;top: 50px;">
+      <div style="position: relative;top: 50px;" class="content-before">
         <IndexPc :access="access"></IndexPc>
-      </div>
-      <!-- 用来撑起高度 -->
-      <div class="content-after" style="height: 60px;">
+        <!-- 用来撑起高度 -->
+        <div class="content-after" style="height: 60px;">
 
+        </div>
       </div>
+
     </div>
 
   </div>

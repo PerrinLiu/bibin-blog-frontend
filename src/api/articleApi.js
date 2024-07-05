@@ -23,6 +23,9 @@ export default {
     listIndexArticle() {
         return request.get(articleCommon + '/listIndexArticle')
     },
+    getRecommendArticle() {
+        return request.get(articleCommon + '/recommendArticle')
+    },
     getArticleOne(id) {
         return request.get(articleCommon + '/getArticle?articleId=' + id)
     },
@@ -44,5 +47,6 @@ export default {
     deleteComment(id) {
         return request.delete('/text/comment/deleteComment?commentId=' + id)
     },
+
 
 }

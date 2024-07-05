@@ -129,7 +129,7 @@
         </el-header>
       </transition>
       <el-main id="el-main">
-        <span v-if="showTop" style="position: fixed;z-index: 1;right: 20px;bottom: 70px;">
+        <span v-if="showTop" style="position: fixed;z-index: 1;right: 1.5%;bottom: 70px;">
           <i class="el-icon-top" style="font-size: 50px;font-weight: 900;cursor: pointer;color: black;" @click="backTop()"></i>
         </span>
         <router-view ref="childRef"></router-view>

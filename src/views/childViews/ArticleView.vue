@@ -12,7 +12,7 @@
     </div>
 
     <div class="content item center" style="margin-top: 50vh;">
-      <div class="content-inner" :style="isPhone ? 'width: 100%;' : 'min-width: 1024px;'">
+      <div class="content-inner content-before" :style="isPhone ? 'width: 100%;' : 'min-width: 1024px;'">
         <div class="center">
           <el-input v-model="searchVo.title" placeholder="请输入内容" suffix-icon="el-icon-search"
             :style="isPhone ? 'width: 300px;' : 'width: 50%;'"></el-input>
@@ -140,7 +140,7 @@ export default {
 }
 
 .content-inner {
-  width: 70%;
+  width: 1400px;
   margin-top: 50px;
 }
 

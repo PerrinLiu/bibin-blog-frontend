@@ -2,8 +2,8 @@
   <div class="index-pc">
     <el-container>
       <!-- 根据屏幕宽度，控制侧边栏宽度 -->
-      <el-aside :width="isPhone ? '100%' : '40%'" style="position: relative;display: flex;  justify-content: center; /* 水平居中 */">
-        <div style="position: relative;top: -30px;min-width: 280px;" :style="isPhone ? 'width: 80%;' : 'width: 50%'">
+      <el-aside :width="isPhone ? '100%' : '30%'" style="position: relative;display: flex;  justify-content: center; /* 水平居中 */">
+        <div style="position: relative;top: -30px;min-width: 280px;" :style="isPhone ? 'width: 80%;' : 'width: 80%'">
 
           <!-- 搜索框 -->
           <el-card class="box-card box-card2 item" shadow="always">
@@ -16,18 +16,48 @@
           <!-- 推荐文章 -->
           <el-card class="box-card box-card1" shadow="always">
             <span style="font-weight: 900;position: relative;"><i class="el-icon-reading"></i>&nbsp;推荐文章</span>
-            <el-empty style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
+            <div v-for="o in recommendArticleList " :key="o.id"
+              style=" height: 30px;margin-top: 15px;line-height: 30px;padding:0 10px;border-radius: 10px;border: 1px solid #ebeef5;">
+              <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;font-weight: 600;">
+                <el-popover placement="right-start" :title="o.articleTitle" width="300" trigger="hover" :content="o.des">
+                  <p class="article-title" style="margin: 0;color: #030303;" slot="reference"> {{ o.articleTitle }}</p>
+                </el-popover>
+
+              </router-link>
+            </div>
+
+            <el-empty v-if="recommendArticleList.length == 0" style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
           </el-card>
-          <!-- 赞赏 -->
-          <el-card class="box-card box-card3 item" shadow="always">
+          <!-- todo 赞赏暂时关闭 -->
+          <!-- <el-card class="box-card box-card3 item" shadow="always">
             <span style="font-weight: 900;"><i class="el-icon-chicken"></i>&nbsp;赞赏</span>
             <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
-          </el-card>
+          </el-card> -->
 
           <!-- 文章分类 -->
           <el-card class="box-card box-card3 item" shadow="always">
-            <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;分组</span>
-            <el-empty style="position: relative;top: -60px;" description="暂无标签"></el-empty>
+            <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
+            <div style="overflow: auto;margin-bottom: 10px;">
+              <el-row>
+                <el-col :span="20" v-for="(o) in  options " :key="o.id" style="margin-top: 14px;">
+                  <router-link :to="{ name: 'article', params: {id:o.id } }" style="text-decoration: none;">
+                    <div style="height: 70px;width: 90%;border: 1px solid #545454;padding: 5px;border-radius: 5px;">
+                      <p style="margin: 0;padding: 7px;font-weight: bold;">{{ o.articleType }}</p>
+                      <p style="margin: 0;padding: 7px;"><span style="font-size: 12px;">相关文章：</span>
+                        <span v-if="o.number == null || o.number == 0">
+                          <el-tag type="warning" style="height: 27px;line-height: 27px;">暂无</el-tag>
+                        </span>
+                        <span v-else>
+                          <el-tag type="info" style="height: 27px;line-height: 27px;"> {{ o.number }}</el-tag>
+                        </span>
+                      </p>
+                    </div>
+                  </router-link>
+                </el-col>
+              </el-row>
+            </div>
+
+            <el-empty v-if="options.length == 0" style="position: relative;top: -60px;" description="暂无分组"></el-empty>
           </el-card>
           <!-- 手机样式 -->
           <div v-if="isPhone">
@@ -76,7 +106,7 @@
         </div>
       </el-aside>
       <!-- 电脑时展示 -->
-      <el-main v-if="!isPhone" style="position: relative;width: 60vw;">
+      <el-main v-if="!isPhone" style="position: relative;">
         <div class="article-list">
           <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;"
             :body-style="{ padding: '0px' }">
@@ -91,7 +121,9 @@
               <el-col :span="12">
                 <div class="article-content">
                   <div style="height: 3cap;">
-                    <h1 style="color: #030303;font-size: 25px;line-height: 17px;">{{ item.articleTitle }}</h1>
+                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;">
+                      {{ item.articleTitle }}
+                    </p>
                   </div>
                   <div style="height: 90px;">
                     <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
@@ -141,10 +173,14 @@ export default {
       articleList: [],
       //文章分组
       options: [],
+      //推荐文章
+      recommendArticleList: [],
     }
   },
   mounted() {
+    // 获取文章分组和数据
     this.getGroup()
+    this.getRecommendArticle()
   },
   computed: {
     isPhone() {
@@ -152,9 +188,7 @@ export default {
     }
   },
   methods: {
-    getData() {
-      this.getGroup();
-    },
+    // 获取文章
     getArticle() {
       articleApi.listIndexArticle().then((res) => {
         const data = this.ifSuccess(res)
@@ -175,6 +209,7 @@ export default {
         }
       })
     },
+    // 获取文章分组和数据
     getGroup() {
       articleApi.getGroupList().then((res) => {
         const data = this.ifSuccess(res)
@@ -182,6 +217,15 @@ export default {
           this.options = data.data;
           this.$store.dispatch("setGroupList", data.data);
           this.getArticle();
+        }
+      })
+    },
+    // 获取推荐文章
+    getRecommendArticle() {
+      articleApi.getRecommendArticle().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.recommendArticleList = data.data
         }
       })
     },
@@ -246,12 +290,12 @@ export default {
 }
 
 .box-card3 {
-  height: 250px;
+  /* height: 250px; */
 }
 .article-list {
   position: relative;
   margin-top: -50px;
-  width: 70%;
+  width: 100%;
   min-width: 600px;
 }
 .article-content {
@@ -259,7 +303,13 @@ export default {
   margin-left: 15px;
   height: 280px;
   min-width: 300px;
-  color: #666;
+}
+.article-title {
+  width: 95%;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .article-text {
   width: 95%;
@@ -270,5 +320,6 @@ export default {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
+  color: #728086;
 }
 </style>

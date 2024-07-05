@@ -12,7 +12,7 @@
     </div>
 
     <div class="content" style="margin-top: 50vh;">
-      <div style="height: 500px">
+      <div class="content-before" style="height: 500px;">
         <el-empty :image-size="200" description="等我开发~"></el-empty>
       </div>
       <!-- 用来撑起高度 -->

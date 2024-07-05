@@ -16,7 +16,7 @@
     </div>
 
     <div class="content item" style="margin-top: 45vh;display: flex;justify-content: center;">
-      <div style="width: 70%;height: 800px;">
+      <div style="height: 800px;" class="content-before">
         <div v-if="!loveShow" style="height: 200px;margin-top: 30px;">
           里面的内容是秘密喔~
           <el-input v-model="lovePsw" type="password"></el-input>

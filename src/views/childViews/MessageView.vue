@@ -12,7 +12,7 @@
     </div>
 
     <div class="content" style="margin-top: 50vh;display:flex;justify-content: center;">
-      <div style="height: 1000px;width: 70%;max-width: 1080px;margin-top: 20px;">
+      <div style="height: 1000px;margin-top: 20px;" class="content-before">
         <el-empty :image-size="200" description="等我开发~"></el-empty>
         <el-card v-for="item in 5" :key="item" shadow="hover" :body-style="{ padding: '20px' }"
           style="border-radius: 10px;margin-top: 10px;">

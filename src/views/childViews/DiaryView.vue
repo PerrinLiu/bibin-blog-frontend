@@ -91,7 +91,7 @@
       </span>
       <!-- 电脑端 -->
       <span v-else>
-        <div style="position: relative;width: 70vw;min-width: 1024px;min-height: 600px;">
+        <div style="position: relative;width: 70vw;min-width: 1024px;min-height: 600px;width: 1400px;" class="content-before">
           <el-container>
             <!-- 头部 -->
             <el-header id="header" style="width: 50vw;min-width: 720px;">

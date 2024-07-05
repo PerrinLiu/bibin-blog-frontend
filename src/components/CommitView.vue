@@ -10,7 +10,7 @@
           <div>{{countVo.articleCount}}</div>
         </div>
         <div style="float: left;line-height: 10px;width:80px">
-          <p style="font-size: 18px;font-weight: 900;">分类</p>
+          <p style="font-size: 18px;font-weight: 900;">标签</p>
           <div>{{countVo.groupCount}}</div>
         </div>
         <div style="float: left;line-height: 10px;width:80px">
