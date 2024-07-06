@@ -15,12 +15,12 @@
           </el-card>
           <!-- 推荐文章 -->
           <el-card class="box-card box-card1" shadow="always">
-            <span style="font-weight: 900;position: relative;"><i class="el-icon-reading"></i>&nbsp;推荐文章</span>
+            <span style="font-weight: 600;position: relative;"><i class="el-icon-reading"></i>&nbsp;推荐文章</span>
             <div v-for="o in recommendArticleList " :key="o.id"
               style=" height: 30px;margin-top: 15px;line-height: 30px;padding:0 10px;border-radius: 10px;border: 1px solid #ebeef5;">
-              <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;font-weight: 600;">
-                <el-popover placement="right-start" :title="o.articleTitle" width="300" trigger="hover" :content="o.des">
-                  <p class="article-title" style="margin: 0;color: #030303;" slot="reference"> {{ o.articleTitle }}</p>
+              <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;">
+                <el-popover placement="right-start" :title="o.articleTitle" width="300" trigger="hover" :content="o.des" :open-delay="200">
+                  <p class="article-title" style="margin: 0;color: #01687C;font-weight: 100" slot="reference"> {{ o.articleTitle }}</p>
                 </el-popover>
 
               </router-link>
@@ -40,7 +40,7 @@
             <div style="overflow: auto;margin-bottom: 10px;">
               <el-row>
                 <el-col :span="20" v-for="(o) in  options " :key="o.id" style="margin-top: 14px;">
-                  <router-link :to="{ name: 'article', params: {id:o.id } }" style="text-decoration: none;">
+                  <router-link :to="{ name: 'article', query: {groups:o.id } }" style="text-decoration: none;color: #545454">
                     <div style="height: 70px;width: 90%;border: 1px solid #545454;padding: 5px;border-radius: 5px;">
                       <p style="margin: 0;padding: 7px;font-weight: bold;">{{ o.articleType }}</p>
                       <p style="margin: 0;padding: 7px;"><span style="font-size: 12px;">相关文章：</span>
@@ -113,8 +113,8 @@
             <el-row>
               <router-link :to="{ name: 'articleDetails', params: {id:item.id } }">
                 <el-col :span="12">
-                  <div style="height: 300px;">
-                    <img width="100%" height="100%" :src="item.cover" alt="">
+                  <div style="height: 300px;overflow: hidden;">
+                    <img class="oversize-img" width="100%" height="100%" :src="item.cover" alt="">
                   </div>
                 </el-col>
               </router-link>
@@ -231,7 +231,7 @@ export default {
     },
     // 搜索
     search() {
-      this.getArticle();
+      this.$router.push({ path: "/article", query: { searchText: this.searchText } })
     },
   }
 }
@@ -247,12 +247,6 @@ export default {
 
 .box-card:hover {
   transform: scale(1.01);
-}
-
-.card-img:hover {
-  cursor: pointer;
-  transition: 0.5s;
-  rotate: 360deg;
 }
 
 .box-card1 {
@@ -306,7 +300,6 @@ export default {
 }
 .article-title {
   width: 95%;
-  font-weight: bold;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

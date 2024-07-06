@@ -17,8 +17,11 @@ export default {
     addGroup(groupName) {
         return request.post(article + '/addGroup?groupName=' + groupName)
     },
-    listArticle(pageSize, pageNum, searchText) {
-        return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&searchText=' + searchText)
+    listArticle(pageSize, pageNum, sort) {
+        return request.get(article + '/listArticle?pageSize=' + pageSize + '&pageNum=' + pageNum + '&sort=' + sort)
+    },
+    searchArticle(searchVo) {
+        return request.get(articleCommon + '/searchArticle?pageSize=' + searchVo.pageSize + '&pageNum=' + searchVo.pageNum + '&sort=' + searchVo.sort + '&searchText=' + searchVo.searchText + '&groups=' + searchVo.groups)
     },
     listIndexArticle() {
         return request.get(articleCommon + '/listIndexArticle')

@@ -173,6 +173,8 @@ export default {
       background: '',
       // 回到顶部
       showTop: '',
+      //滚动5px执行一次
+      scrollIndex: 0,
     }
   },
   computed: {
@@ -226,6 +228,9 @@ export default {
     },
     //监听滚动事件
     handleScroll() {
+      if (this.scrollIndex++ < 5) {
+        return
+      }
       const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
       if (currentScrollTop > this.scrollTop) {
         // 向下滚动
@@ -242,6 +247,7 @@ export default {
       }
       // 更新上一次的滚动距离
       this.scrollTop = currentScrollTop;
+      this.scrollIndex = 0
     },
     // 回到顶部
     backTop() {
@@ -276,6 +282,7 @@ export default {
           }
         }).finally(() => {
           localStorage.removeItem('token');
+          this.$store.dispatch("cleatUser")
         })
       }
     },

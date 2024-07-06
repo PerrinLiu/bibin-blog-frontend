@@ -152,3 +152,10 @@
 .phone-nav #el-menu-item {
   margin-left: 0px;
 }
+
+
+/* 图片放大 */
+.oversize-img:hover {
+  transition: 0.5s;
+  transform: scale(1.1);
+}

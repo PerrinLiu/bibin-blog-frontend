@@ -73,7 +73,7 @@ export default {
       searchVo: {
         pageSize: 10,
         pageNum: 1,
-        searchText: "",
+        sort: "1",
       },
       total: 0,
       groupList: [],
@@ -98,7 +98,7 @@ export default {
     },
     //获取文章
     listArticle() {
-      articleApi.listArticle(this.searchVo.pageSize, this.searchVo.pageNum, this.searchVo.searchText).then((res) => {
+      articleApi.listArticle(this.searchVo.pageSize, this.searchVo.pageNum, this.searchVo.sort).then((res) => {
         const data = this.ifSuccess(res)
         if (data != null) {
           this.tableData = data.data.records

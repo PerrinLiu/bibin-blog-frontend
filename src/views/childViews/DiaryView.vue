@@ -91,11 +91,11 @@
       </span>
       <!-- 电脑端 -->
       <span v-else>
-        <div style="position: relative;width: 70vw;min-width: 1024px;min-height: 600px;width: 1400px;" class="content-before">
+        <div style="position: relative;width: 70vw;min-width: 1024px;max-width: 1400px;min-height: 600px;" class="content-before">
           <el-container>
             <!-- 头部 -->
-            <el-header id="header" style="width: 50vw;min-width: 720px;">
-              <div class="float-left" style="position:relative;left: 200px;">
+            <el-header id="header">
+              <div class="float-left">
                 <h3 style="color: rgb(70, 70, 70);cursor: pointer;">
                   <span v-if="showMe" @click="searchMe()">
                     <i class="el-icon-s-help"></i>&nbsp;&nbsp;只看我的
@@ -145,7 +145,7 @@
                 </el-pagination>
               </span>
               <span v-else>
-                <el-empty description="无任何数据"></el-empty>
+                <el-empty description="暂无碎片"></el-empty>
               </span>
 
             </el-main>
