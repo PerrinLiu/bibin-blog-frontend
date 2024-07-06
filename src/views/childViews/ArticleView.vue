@@ -20,11 +20,14 @@
         </div>
         <!-- 标签类型 -->
         <div class="center content-inner-group">
-          <span class="content-inner-tag" v-for="item in options" :key="item.id">
-            <el-tag class="groupTag" :type="item.isClick ? 'success' : 'info'" @click="searchByGroup(item)">
-              {{item.articleType}}
-            </el-tag>
-          </span>
+          <el-row>
+            <el-col v-for="item in options" :key="item.id" :span="isPhone ? 8 : 4" style="margin-top: 14px;text-align: center;">
+              <el-tag class="groupTag" :type="item.isClick ? 'success' : 'info'" @click="searchByGroup(item)">
+                {{item.articleType}}
+              </el-tag>
+            </el-col>
+          </el-row>
+
         </div>
         <div v-if="articleList.length > 0">
           <!-- 排序类型 -->
@@ -251,8 +254,7 @@ export default {
 }
 .content-inner-group {
   margin-bottom: 40px;
-  margin-top: 30px;
-  width: 1400px;
+  margin-top: 20px;
 }
 .groupTag {
   font-size: 16px;
