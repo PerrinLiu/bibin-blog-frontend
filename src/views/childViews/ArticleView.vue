@@ -88,7 +88,7 @@ export default {
     return {
       showImg: false,
       searchVo: {
-        pageSize: 15,
+        pageSize: 16,
         pageNum: 1,
         sort: "3",
         searchText: "",

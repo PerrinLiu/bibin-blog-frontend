@@ -183,7 +183,7 @@ export default {
         const data = response.data;
         if (data.retCode == 200) {
           this.$message({
-            message: data.message,
+            message: "添加日记成功，待管理员审核",
             type: 'success',
             duration: 1000
           })
