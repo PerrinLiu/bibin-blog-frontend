@@ -20,7 +20,7 @@
         </div>
         <!-- 标签类型 -->
         <div class="center content-inner-group">
-          <el-row>
+          <el-row style="width: 100%;">
             <el-col v-for="item in options" :key="item.id" :span="isPhone ? 8 : 4" style="margin-top: 14px;text-align: center;">
               <el-tag class="groupTag" :type="item.isClick ? 'success' : 'info'" @click="searchByGroup(item)">
                 {{item.articleType}}
