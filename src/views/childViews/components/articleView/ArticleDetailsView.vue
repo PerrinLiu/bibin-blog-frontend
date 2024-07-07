@@ -190,9 +190,12 @@
 </template>
 <script>
 import articleApi from '@/api/articleApi';
+import Hljs from 'highlight.js';
+import 'highlight.js/styles/github.css'; // 选择你喜欢的样式
 
 export default {
   name: 'ArticleDetailsView',
+
   data() {
     return {
       showImg: false,
@@ -220,7 +223,7 @@ export default {
         pageSize: 10
       },
       //最大页码
-      pages: 0
+      pages: 0,
     }
   },
   computed: {
@@ -266,7 +269,6 @@ export default {
           const containerWidth = container.clientWidth;
           Array.from(images).forEach((image) => {
             const imageWidth = image.clientWidth;
-            console.log(imageWidth, containerWidth);
             if (imageWidth > containerWidth) {
               image.style.width = '100%';
               image.style.height = '';
@@ -294,18 +296,50 @@ export default {
             })
           })
           this.$nextTick(() => {
+            this.highlightCode();
+            const vm = this.$message;
             const preTags = this.$el.querySelectorAll('pre');
             preTags.forEach(preTag => {
-              preTag.style.backgroundColor = '#1c1d21';
-              preTag.style.borderRadius = '12px';
-              preTag.style.padding = '1.5em';
-              preTag.style.color = '#fff';
-              preTag.style.overflow = 'auto';
+              const code = preTag.querySelector("code");
+              code.style.backgroundColor = '#1c1d21';
+              code.style.borderRadius = '12px';
+              code.style.padding = '2em';
+              code.style.color = '#fff';
+              code.style.overflow = 'auto';
+
+              const button = document.createElement("button");
+              button.textContent = "复制代码";
+              button.className = "copy-button";
+              button.style.position = "absolute";
+              button.style.right = "1.5em";
+              button.style.borderRadius = "4px";
+              button.style.color = "green";
+              button.style.cursor = "pointer";
+              button.addEventListener("click", function () {
+                copyToClipboard(code.textContent, vm);
+              });
+              code.parentNode.insertBefore(button, code);
             });
+            function copyToClipboard(text, obj) {
+              const tempInput = document.createElement("textarea");
+              tempInput.value = text;
+              document.body.appendChild(tempInput);
+              tempInput.select();
+              document.execCommand("copy");
+              document.body.removeChild(tempInput);
+              obj.success("复制成功");
+            }
           });
           this.articleDetails.articleGroupId = list.length == 0 ? null : list
         }
       })
+    },
+    highlightCode() {
+      // 查找所有的<pre><code>块并高亮
+      const blocks = this.$el.querySelectorAll('pre code');
+      blocks.forEach((block) => {
+        Hljs.highlightBlock(block);
+      });
     },
     // 检测高度，改变状态栏的位置
     checkHeight() {
@@ -561,10 +595,5 @@ export default {
   position: relative;
   top: -5px;
   font-size: 14px;
-}
-pre {
-  background-color: #1c1d21;
-  border-radius: 12px;
-  padding: 1.5em;
 }
 </style>
