@@ -239,11 +239,9 @@ export default {
         return
       }
       const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      console.log(window.innerHeight);
       if (currentScrollTop > this.scrollTop) {
-        // 向下滚动
+        // 向下滚动 
         this.show = false;
-        console.log('向下滚动');
       } else {
         // 向上滚动
         this.show = true;
@@ -251,7 +249,8 @@ export default {
           this.background = 'background-color: rgba(255, 255, 255, 1);color: #000; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);'
           this.menuColor = 'color:#555'
         } else {
-          this.background = ''
+          this.background = this.$route.path.includes('manager') ? 'background-color: rgba(0, 0, 0, 1);color: #fff; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);' :
+            ""
           this.menuColor = 'color:white'
         }
       }

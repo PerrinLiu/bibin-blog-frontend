@@ -51,16 +51,19 @@ export default {
     }
   },
   mounted() {
-    console.log(this.user);
-    if (this.user == null || (this.user.roleName != '管理员' && this.user.roleName != '系统管理员')) {
-      this.$router.push('/login')
-    }
-  },
-  handleOpen(index) {
-    console.log(index);
-  },
-  handleClose() {
+    setTimeout(() => {
+      if (this.user == null || (this.user.roleName != '管理员' && this.user.roleName != '系统管理员')) {
+        this.$alert('你没有权限访问此页面', '警告', {
+          confirmButtonText: '确定',
+          callback: () => {
+            this.$router.push('/login')
+          }
+        });
+      }
+    }, 500);
 
+  },
+  methods: {
   }
 }
 </script>
