@@ -3,6 +3,7 @@ axios.defaults.baseURL = "/api"
 import { Message } from 'element-ui'
 import { Notification } from 'element-ui'
 import { Loading } from 'element-ui';
+import store from '@/store';
 
 
 //loading对象
@@ -75,6 +76,7 @@ axios.interceptors.response.use(
             return
         } else if (err.response.data.retCode === 401) {
             Message.error('请先登录~')
+            store.dispatch("cleatUser")
             return
         }
         if (axios.isAxiosError(err)) {

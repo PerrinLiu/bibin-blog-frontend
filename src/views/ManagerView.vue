@@ -50,6 +50,12 @@ export default {
       return this.$store.getters.user
     }
   },
+  mounted() {
+    console.log(this.user);
+    if (this.user == null || (this.user.roleName != '管理员' && this.user.roleName != '系统管理员')) {
+      this.$router.push('/login')
+    }
+  },
   handleOpen(index) {
     console.log(index);
   },

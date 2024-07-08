@@ -71,8 +71,7 @@
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item style="position:relative;left: -10%;">
-                    <el-button plain style="position: relative; left: 0%;" class="noLogin-left-btn2"
-                      @click="update('updateUser')">提交</el-button>
+                    <el-button plain style="position: relative; left: 0%;width: 100px;" @click="update('updateUser')">提交</el-button>
                     <el-button style="position: relative;left: 10%;" @click="updatePsw()">修改密码</el-button>
                   </el-form-item>
 
@@ -231,8 +230,7 @@
                     </el-radio-group>
                   </el-form-item>
                   <el-form-item>
-                    <el-button style="position: relative; left: 10%;" class="noLogin-left-btn2" plain
-                      @click="update('updateUser')">提交</el-button>
+                    <el-button style="position: relative; left: 10%;width: 100px;" plain @click="update('updateUser')">提交</el-button>
                     <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
                   </el-form-item>
 
