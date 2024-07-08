@@ -15,14 +15,14 @@
       <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 50px;">
         <div class="content-inner" ref="myElement"
           :style="isPhone ? 'width:95%;max-width: 550px;' : 'max-width: 1124px;min-width: 1124px;'">
-          <div style="padding: 20px 20px 0 20px;">
+          <div style="padding: 20px 20px 0 20px;font-size: 12px">
             <h1>{{ articleDetails.articleTitle }}</h1>
             <i class="el-icon-time top-icon">&nbsp;{{ articleDetails.createTime }}</i>
-
-            <i class="el-icon-view top-icon">&nbsp;阅读量：{{articleDetails.readSum}}</i><br v-if="isPhone" />
-            <i class="iconfont icon-like top-icon">&nbsp;点赞：{{articleDetails.likeSum}}</i>
-            <i class="el-icon-star-on top-icon">&nbsp;收藏：{{articleDetails.collectionsSum}}</i>
-            <i class="el-icon-s-comment top-icon">&nbsp;评论数：{{ articleDetails.commentSum }}</i>
+            <i style="width: 60px; display: inline-block;"></i>
+            <i class="iconfont icon-ico_yueduliang top-icon"></i>&nbsp;{{articleDetails.readSum}}&nbsp;&nbsp;&nbsp;<br v-if="isPhone" />
+            <i class="iconfont icon-dianzan-yidianzan top-icon"></i>&nbsp;{{articleDetails.likeSum}}&nbsp;&nbsp;
+            <i class="iconfont icon-shoucang top-icon"></i>&nbsp;{{articleDetails.collectionsSum}}&nbsp;&nbsp;
+            <i class="iconfont icon-pinglun top-icon"></i>&nbsp;{{ articleDetails.commentSum }}&nbsp;&nbsp;
             <div class="top-icon">
               文章标签：
               <el-tag style="margin-right:16px" v-for="(item,index) in articleDetails.articleGroupId" :key="index">
@@ -40,17 +40,14 @@
             <div ref="statusBar" class="content-bottom item">
               <div style="position: relative;">
                 <div class="bottom-status">
-                  <i class="iconfont icon-like status-icon" @click="likeOne(articleDetails.id)"
-                    :style="articleDetails.liked ? 'color: red;' : 'color: #333'">
-                    &nbsp;{{articleDetails.likeSum}}
-                  </i>
-                  <i class="el-icon-star-on status-icon" @click="starOne(articleDetails.id)"
-                    :style="articleDetails.star ? 'color: red;' : 'color: #333'">
-                    &nbsp;{{articleDetails.collectionsSum}}
-                  </i>
-                  <i class="el-icon-s-comment  status-icon" @click="getComment(articleDetails.id)">
-                    &nbsp;{{ articleDetails.commentSum }}
-                  </i>
+                  <i class="iconfont status-icon" @click="likeOne(articleDetails.id)"
+                    :class="articleDetails.liked ? 'icon-dianzan-yidianzan' : 'icon-dianzan-weidianzan'"></i>
+                  {{articleDetails.likeSum}}&nbsp;&nbsp;&nbsp;
+                  <i class="iconfont status-icon" @click="starOne(articleDetails.id)"
+                    :class="articleDetails.star ? 'icon-shoucang' : 'icon-weishoucang'"></i>
+                  {{articleDetails.collectionsSum}}&nbsp;&nbsp;&nbsp;
+                  <i class="iconfont icon-pinglun  status-icon" @click="getComment(articleDetails.id)"></i>
+                  {{ articleDetails.commentSum }}
                 </div>
 
               </div>
@@ -104,8 +101,8 @@
                   </el-button>
 
                   &nbsp;{{item.likeSum == 0 ? '' : item.likeSum}}
-                  <i @click="likeComment(item.id)" class="iconfont icon-like" style="font-size: 14px;cursor: pointer;"
-                    :style="item.liked ? 'color: red;' : 'color: #333'">
+                  <i @click="likeComment(item.id)" class="iconfont " style="font-size: 14px;cursor: pointer;"
+                    :class="item.liked ? 'icon-dianzan-yidianzan' : 'icon-dianzan-weidianzan'">
                   </i>
                 </div>
 
@@ -531,7 +528,6 @@ export default {
 }
 .top-icon {
   font-size: 13px;
-  margin-right: 20px;
   margin-bottom: 20px;
   color: #999;
 }
@@ -553,7 +549,6 @@ export default {
 }
 .status-icon {
   font-size: 20px;
-  margin-right: 20px;
   cursor: pointer;
 }
 /* 评论样式 */

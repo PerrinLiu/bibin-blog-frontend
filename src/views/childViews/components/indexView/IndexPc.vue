@@ -15,7 +15,7 @@
           </el-card>
           <!-- 推荐文章 -->
           <el-card class="box-card box-card1" shadow="always">
-            <span style="font-weight: 600;position: relative;"><i class="el-icon-reading"></i>&nbsp;推荐文章</span>
+            <span style="font-weight: 600;position: relative;"><i class="iconfont icon-xiezuoyeshu"></i>&nbsp;推荐文章</span>
             <div v-for="o in recommendArticleList " :key="o.id"
               style=" height: 30px;margin-top: 15px;line-height: 30px;padding:0 10px;border-radius: 10px;border: 1px solid #ebeef5;">
               <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;">
@@ -36,7 +36,7 @@
 
           <!-- 文章分类 -->
           <el-card class="box-card box-card3 item" shadow="always">
-            <span style="font-weight: 900;"><i class="el-icon-location-outline"></i>&nbsp;标签</span>
+            <span style="font-weight: 900;"><i class="iconfont icon-a-appround13"></i>&nbsp;标签</span>
             <div style="overflow: auto;margin-bottom: 10px;">
               <el-row>
                 <el-col :span="20" v-for="(o) in  options " :key="o.id" style="margin-top: 14px;">
@@ -85,9 +85,10 @@
                   </div>
                   <div style="height: 60px;line-height: 60px;">
                     <span>
-                      <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
-                      <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
-                      <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                      <i class="iconfont icon-ico_yueduliang"
+                        style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-dianzan-yidianzan" style="font-size: 24px;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                      <i class="iconfont icon-pinglun" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
                     </span>
                   </div>
                   <div style="height: 30px;">
@@ -138,9 +139,10 @@
                   </div>
                   <div style="height: 60px;line-height: 60px;">
                     <span>
-                      <i class="el-icon-hot-water" style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
-                      <i class="iconfont icon-like" style="font-size: 24px;color: red;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
-                      <i class="el-icon-s-comment" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                      <i class="iconfont icon-ico_yueduliang"
+                        style="font-size: 24px;color: green"></i>&nbsp;{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-dianzan-yidianzan" style="font-size: 24px;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                      <i class="iconfont icon-pinglun" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
                     </span>
                   </div>
                   <div style="height: 30px;">
@@ -252,7 +254,7 @@ export default {
 .box-card1 {
   height: 300px;
   background-size: 300% 300%;
-  background-image: linear-gradient(90deg, #728086, #8bceee, #88949b);
+  background-image: linear-gradient(90deg, #8bc0d6, #61bae4, #1490d8);
   animation: colorChange 5s linear infinite;
 }
 

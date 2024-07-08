@@ -38,7 +38,7 @@
           <el-menu-item id="el-menu-item" index="/photo" @click="drawer = false"><i class="el-icon-picture-outline"></i>照片墙
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/message" @click="drawer = false"><i class="el-icon-s-comment"></i>留言
+          <el-menu-item id="el-menu-item" index="/message" @click="drawer = false"><i class="iconfont icon-pinglun"></i>留言
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
         </el-menu>
@@ -50,7 +50,7 @@
       <transition name="el-zoom-in-center">
         <el-header v-if="show" id="layout-header" :style="background">
           <router-link style="text-decoration: none;" to="/">
-            <div class="float-left layout-header-left" style="font-size: 30px;color:aliceblue">Bibin</div>
+            <div class="float-left layout-header-left" style="font-size: 30px;" :style="menuColor">Bibin</div>
           </router-link>
 
           <!-- 统计 -->
@@ -60,8 +60,8 @@
                 <CommitViewVue ref="getCountDate"></CommitViewVue>
               </div>
               <span slot="reference" @click="getCount">
-                <i class="el-icon-pie-chart"></i>
-                <span style="font-size: 12px;">统计</span>
+                <i class="iconfont icon-tongjibaobiao" style="font-size: 30px;"></i>
+                <span style="font-size: 12px;" :style="menuColor">统计</span>
               </span>
             </el-popover>
 
@@ -76,22 +76,22 @@
           <!-- 电脑端布局 -->
           <span v-else>
             <el-menu class="el-menu-demo float-right" active-text-color="none" background-color="rgba(0, 0, 0, 0)" mode="horizontal" router>
-              <el-menu-item id="el-menu-item" index="/"><i class="el-icon-school"></i>首页
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/"><i class="iconfont icon-a-appround36"></i>首页
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
-              <el-menu-item id="el-menu-item" index="/love"><i class="el-icon-moon-night"></i>记恋
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/love"><i class="iconfont icon-aiqing"></i>记恋
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
-              <el-menu-item id="el-menu-item" index="/article"><i class="el-icon-notebook-1"></i>文章
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/article"><i class="iconfont icon-shuji"></i>文章
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
-              <el-menu-item id="el-menu-item" index="/diary"><i class="el-icon-edit"></i>碎片
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/diary"><i class="iconfont icon-a-appround11"></i>碎片
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
-              <el-menu-item id="el-menu-item" index="/photo"><i class="el-icon-picture-outline"></i>照片墙
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/photo"><i class="iconfont icon-a-appround32"></i>照片墙
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
-              <el-menu-item id="el-menu-item" index="/message"><i class="el-icon-s-comment"></i>留言
+              <el-menu-item id="el-menu-item" :style="menuColor" index="/message"><i class="iconfont icon-a-appround"></i>留言
 
                 <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
               </el-menu-item>
@@ -175,6 +175,7 @@ export default {
       showTop: '',
       //滚动5px执行一次
       scrollIndex: 0,
+      menuColor: 'color:white',
     }
   },
   computed: {
@@ -189,6 +190,11 @@ export default {
     currentPath() {
       return this.$route.path; // 通过 $route 对象获取当前路径
     },
+  },
+  watch: {
+    $route() {
+      this.show = true;
+    }
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll);
@@ -226,18 +232,28 @@ export default {
         this.$store.dispatch("setIsPhone", this.isMobile)
       }
     },
+
     //监听滚动事件
     handleScroll() {
       if (this.scrollIndex++ < 5) {
         return
       }
       const currentScrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      console.log(window.innerHeight);
       if (currentScrollTop > this.scrollTop) {
         // 向下滚动
         this.show = false;
+        console.log('向下滚动');
       } else {
         // 向上滚动
         this.show = true;
+        if (currentScrollTop > window.innerHeight - 100) {
+          this.background = 'background-color: rgba(255, 255, 255, 1);color: #000; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);'
+          this.menuColor = 'color:#555'
+        } else {
+          this.background = ''
+          this.menuColor = 'color:white'
+        }
       }
       //如果滚条了当前页面的高度，展示回到顶部按钮
       if (currentScrollTop > window.innerHeight) {

@@ -56,9 +56,9 @@
                   <div style="margin-top: 15px;position: relative;">
                     <span style="font-size: 16px;color: #ccc;">{{o.createTime}}</span>
                     <span style="font-size: 16px;position: absolute;right: 0px;">
-                      <i class="el-icon-hot-water" style="font-size: 16px;color: green">&nbsp;</i>{{o.readSum}}&nbsp;&nbsp;
-                      <i class="iconfont icon-like" style="font-size: 16px;color: red;"></i>&nbsp;{{o.likeSum}}&nbsp;&nbsp;
-                      <i class="el-icon-s-comment" style="font-size: 16px;"></i>&nbsp;{{ o.commentSum }}&nbsp;
+                      <i class="iconfont icon-ico_yueduliang"></i>&nbsp;{{o.readSum}}&nbsp;&nbsp;
+                      <i class="iconfont icon-dianzan-yidianzan"></i>&nbsp;{{o.likeSum}}&nbsp;&nbsp;
+                      <i class="iconfont icon-pinglun"></i>&nbsp;{{ o.commentSum }}&nbsp;
                     </span>
                   </div>
 

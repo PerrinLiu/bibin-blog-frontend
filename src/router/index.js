@@ -26,7 +26,7 @@ const routes = [
                 name: 'index',
                 component: IndexViews,
                 meta: {
-                    title: 'Bibin | 首页'
+                    title: 'Bibin | 刘林培言的博客'
                 }
             },
             {
