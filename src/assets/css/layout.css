@@ -159,6 +159,6 @@
 
 /* 图片放大 */
 .oversize-img:hover {
-  transition: 0.5s;
-  transform: scale(1.1);
+  transition: 1s;
+  transform: scale(1.2);
 }

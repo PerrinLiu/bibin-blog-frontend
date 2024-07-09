@@ -29,18 +29,19 @@
             <el-empty v-if="recommendArticleList.length == 0" style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
           </el-card>
           <!-- todo 赞赏暂时关闭 -->
-          <!-- <el-card class="box-card box-card3 item" shadow="always">
-            <span style="font-weight: 900;"><i class="el-icon-chicken"></i>&nbsp;赞赏</span>
+          <el-card class="box-card box-card3 item" shadow="always">
+            <span style="font-weight: 900;"><i class="iconfont icon-pinglun"></i>&nbsp;最新留言</span>
             <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
-          </el-card> -->
+          </el-card>
 
           <!-- 文章分类 -->
           <el-card class="box-card box-card3 item" shadow="always">
             <span style="font-weight: 900;"><i class="iconfont icon-a-appround13"></i>&nbsp;标签</span>
-            <div style="overflow: auto;margin-bottom: 10px;">
+            <div style="position: relative;margin-bottom: 10px;">
               <el-row>
-                <el-col :span="20" v-for="(o) in  options " :key="o.id" style="margin-top: 14px;">
-                  <router-link :to="{ name: 'article', query: {groups:o.id } }" style="text-decoration: none;color: #545454">
+                <el-col :span="20" v-for="(o,index) in  options " :key="o.id" :style="index < 5 ? 'margin-top: 14px;' : ''">
+                  <router-link v-if="index < 5" :to="{ name: 'article', query: {groups:o.id } }"
+                    style="text-decoration: none;color: #545454">
                     <div style="height: 70px;width: 90%;border: 1px solid #545454;padding: 5px;border-radius: 5px;">
                       <p style="margin: 0;padding: 7px;font-weight: bold;">{{ o.articleType }}</p>
                       <p style="margin: 0;padding: 7px;"><span style="font-size: 12px;">相关文章：</span>
@@ -53,8 +54,13 @@
                       </p>
                     </div>
                   </router-link>
+
                 </el-col>
               </el-row>
+              <!-- 查看更多标签 -->
+              <router-link v-if="options.length > 5" to="/article" style="text-decoration: none;color: #545454">
+                <el-button style="width: 80%;margin-top: 14px">查看更多</el-button>
+              </router-link>
             </div>
 
             <el-empty v-if="options.length == 0" style="position: relative;top: -60px;" description="暂无分组"></el-empty>
@@ -109,33 +115,55 @@
       <!-- 电脑时展示 -->
       <el-main v-if="!isPhone" style="position: relative;">
         <div class="article-list">
-          <el-card class="box-card item" v-for="item in articleList" :key="item.id" style=" height: 300px;"
+          <el-card class="box-card item" v-for="(item,index) in articleList" :key="item.id" style=" height: 300px;"
             :body-style="{ padding: '0px' }">
             <el-row>
-              <router-link :to="{ name: 'articleDetails', params: {id:item.id } }">
-                <el-col :span="12">
+              <el-col :span="12">
+                <router-link v-if="index%2 == 0" :to="{ name: 'articleDetails', params: {id:item.id } }">
                   <div style="height: 300px;overflow: hidden;">
                     <img class="oversize-img" width="100%" height="100%" :src="item.cover" alt="">
                   </div>
-                </el-col>
-              </router-link>
-              <el-col :span="12">
-                <div class="article-content">
+                </router-link>
+                <div v-else class="article-content">
                   <div style="height: 3cap;">
-                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;">
-                      {{ item.articleTitle }}
-                    </p>
+                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;width: 100%;">{{ item.articleTitle }}</p>
+                  </div>
+                  <div style="height: 90px;">
+                    <p class="article-text" style="width: 100%;">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
+                  </div>
+                  <div style="height: 40px;line-height: 40px;">
+                    <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">{{o}}</el-tag>
+                    <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">无标签</el-tag>
+                  </div>
+                  <div style="height: 60px;line-height: 60px;">
+                    <span>
+                      <i class="iconfont icon-ico_yueduliang"
+                        style="font-size: 24px;color: green"></i>&nbsp;{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-dianzan-yidianzan" style="font-size: 24px;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
+                      <i class="iconfont icon-pinglun" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
+                    </span>
+                  </div>
+                  <div style="height: 30px;">
+                    <i class="el-icon-date" style="font-size: 20px;color: #5CB6FF;">&nbsp;</i>{{ item.createTime }}
+                  </div>
+                </div>
+              </el-col>
+              <el-col :span="12">
+                <router-link v-if="index%2 == 1" :to="{ name: 'articleDetails', params: {id:item.id } }">
+                  <div style="height: 300px;overflow: hidden;">
+                    <img class="oversize-img" width="100%" height="100%" :src="item.cover" alt="">
+                  </div>
+                </router-link>
+                <div v-else class="article-content" style="text-align: right;margin-right: 30px;">
+                  <div style="height: 3cap;">
+                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;">{{ item.articleTitle }}</p>
                   </div>
                   <div style="height: 90px;">
                     <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
-                    <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
-                      {{o}}
-                    </el-tag>
-                    <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">
-                      无标签
-                    </el-tag>
+                    <el-tag style="margin-left:16px" v-for="(o,index) in item.articleGroupId" :key="index">{{o}}</el-tag>
+                    <el-tag v-if="item.articleGroupId.length == 0" style="margin-right:16px">无标签</el-tag>
                   </div>
                   <div style="height: 60px;line-height: 60px;">
                     <span>
@@ -296,7 +324,7 @@ export default {
 }
 .article-content {
   position: relative;
-  margin-left: 15px;
+  margin-left: 30px;
   height: 280px;
   min-width: 300px;
 }

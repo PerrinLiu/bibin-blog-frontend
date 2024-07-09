@@ -105,5 +105,11 @@
 }
 
 .content-before {
-  width: 1400px;
+  max-width: 1400px;
+}
+
+
+.content-center {
+  display: flex;
+  justify-content: center;
 }

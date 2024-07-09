@@ -87,7 +87,7 @@
             <el-col :span="20">
               <div class="comment-body-top">
                 <div class="comment-body-name">
-                  <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ item.userName }}</p>
+                  <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ item.nickname }}</p>
                   <p class="comment-body-name-p" style="width: 150px;">{{ item.createTime }}</p>
                 </div>
                 <div style="position: absolute;right: 0px;font-size: 14px;line-height: 39px;">
@@ -130,9 +130,9 @@
                     <el-col :span="20">
                       <div class="comment-body-top">
                         <div class="comment-body-name">
-                          <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ sub.userName }}</p>
+                          <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ sub.nickname }}</p>
                           <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
-                          <p class="comment-body-name-p" style="max-width: 80px;margin-left: 10px;">{{ sub.replyUserName }} </p>
+                          <p class="comment-body-name-p" style="max-width: 80px;margin-left: 10px;">{{ sub.replyNickname }} </p>
                         </div>
                         <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
                           &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}

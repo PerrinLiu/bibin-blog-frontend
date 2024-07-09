@@ -933,16 +933,17 @@ export default {
     },
     // 上传前验证
     beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
       const isLt2M = file.size / 1024 / 1024 < 5;
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!');
+      //校验格式
+      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
+        this.$message.warning('图片类型必须是.gif,jpeg,jpg,png中的一种!');
+        return false
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 5MB!');
+        this.$message.warning('上传头像图片大小不能超过 5MB!');
+        return false
       }
-      return isJPG && isLt2M;
+      return true;
     },
     // 获取单个用户日记基本信息
     getDiaryBaseByUser() {

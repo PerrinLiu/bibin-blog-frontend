@@ -2,7 +2,8 @@
 const getters = {
     groupList: state => state.article.groupList,
     isPhone: state => state.userData.isPhone,
-    user: state => state.userData.user
+    user: state => state.userData.user,
+    userList: state => state.userData.userList
 
 }
 export default getters

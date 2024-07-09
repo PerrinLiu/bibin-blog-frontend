@@ -86,6 +86,14 @@ const routes = [
                 }
             },
             {
+                path: '/photoByUser/:userId',
+                name: 'photoByUser',
+                component: () => import('@/views/childViews/components/photoView/photoUser.vue'),
+                meta: {
+                    title: '用户照片'
+                },
+            },
+            {
                 path: '/manager',
                 name: 'manager',
                 component: () => import('../views/ManagerView.vue'),

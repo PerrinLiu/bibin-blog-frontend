@@ -141,7 +141,6 @@ export default {
   methods: {
     getParams() {
       this.searchVo.searchText = this.$route.query.searchText == undefined ? "" : this.$route.query.searchText;
-
       this.getData();
     },
     changePage(val) {

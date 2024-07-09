@@ -70,7 +70,7 @@
           <!-- 手机端布局 -->
           <span v-if="isMobile" class="float-right" style="line-height: 60px;font-size: 30px;cursor: pointer;">
             <!-- 导航标签 -->
-            <i class="el-icon-s-fold" @click="drawer = true"></i>
+            <i class="el-icon-s-fold" style="color: aliceblue;" @click="drawer = true"></i>
           </span>
 
           <!-- 电脑端布局 -->

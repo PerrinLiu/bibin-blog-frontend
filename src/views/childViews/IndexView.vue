@@ -1,10 +1,9 @@
 <template>
-  <div class="index-page  ">
+  <div class="index-page">
     <div class="div-with-lines">
       <div class="backgroundImg-text-div">
         <h1 class="backgroundImg-text" :style="isPhone ? 'font-size: 40px;' : ''">Hi,Bibin!</h1>
       </div>
-
     </div>
     <transition name="el-zoom-in-top">
       <div v-show="showImg" class="backgroundImg" :style="`background-image: url(${userImg})`" style="background-position: center center;">
