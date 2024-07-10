@@ -65,7 +65,7 @@
                         <span style="position: relative;top: -20px;font-size: 12px;" class="time">{{ o.createTime }}&nbsp;&nbsp;&nbsp;
                           {{ o.nickname }}
                           <span style="position: absolute;right: 20px;top: -25px;">
-                            <img style="width:40px;height:40px;border-radius: 50%;" :src="o.userImg">
+                            <el-image lazy style="width:40px;height:40px;border-radius: 50%;" :src="o.userImg"></el-image>
                           </span>
                           <span style="position: absolute;top:-20px;right:80px;font-size: 30px;cursor: pointer;"
                             @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
@@ -127,7 +127,7 @@
                       <div class="card-content">
                         <h3 style="position: relative;top: -20px;">{{ o.diaryTitle }} </h3>
                         <span style="position: absolute;right: 0px;">
-                          <img style="width:80px;height: 80px;border-radius: 50%;" :src="o.userImg">
+                          <el-image lazy style="width:80px;height: 80px;border-radius: 50%;" :src="o.userImg"></el-image>
                         </span>
                         <span style="position: absolute;top:20px;right:130px;font-size: 36px;cursor: pointer;"
                           @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">

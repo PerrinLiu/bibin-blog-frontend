@@ -3,20 +3,17 @@
     <div class="backgroundImg">
       <transition name="el-zoom-in-top">
         <div v-show="showImg" class="backgroundImg"
-          style="position: inherit;height:900px;top:-200px;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF7.webp')">
+          style="position: inherit;height:100vh;background-image: url('https://llpy-blog.oss-cn-shenzhen.aliyuncs.com/background/%E8%83%8C%E6%99%AF7.webp')">
         </div>
       </transition>
-
     </div>
 
     <div class="backgroundImg-text-div" style="height: 0vh;position: relative;top: 22vh;">
-
       <h1 :style="'font-size:' + size + 'px'" class="backgroundImg-text">{{ formattedTime }}</h1>
-
     </div>
 
-    <div class="content item" style="margin-top: 45vh;display: flex;justify-content: center;">
-      <div style="height: 800px;" class="content-before">
+    <div class="content item" style="margin-top: 43.5vh;display: flex;justify-content: center;background: none">
+      <div style="height: 50vh" class="content-before">
         <div v-if="!loveShow" style="height: 200px;margin-top: 30px;">
           里面的内容是秘密喔~
           <el-input v-model="lovePsw" type="password"></el-input>

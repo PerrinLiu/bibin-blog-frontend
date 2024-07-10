@@ -8,6 +8,20 @@ import store from '@/store'; // 导入 Vuex Store
 Vue.config.productionTip = false
 import { ifSuccess } from '@/utils/commonFunction'
 import '@/assets/iconfont/iconfont.css'
+//图片懒加载
+import VueLazyload from 'vue-lazyload';
+Vue.use(VueLazyload,
+  {
+    preLoad: 1.3, //预加载的宽高比loading: 
+    loadimage: require("@/assets/images/defaul.jpg"), //图片加载状态下显示的图片
+    error: require("@/assets/images/defaul.jpg"), //图片加载失败时显示的图片
+    dispatchEvent: true,
+    attempt: 1, // 加载错误后最大尝试次数
+  })
+
+//图片预览
+import hevueImgPreview from 'hevue-img-preview'
+Vue.use(hevueImgPreview)
 
 Vue.prototype.ifSuccess = ifSuccess
 

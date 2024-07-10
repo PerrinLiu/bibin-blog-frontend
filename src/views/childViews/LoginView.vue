@@ -14,7 +14,7 @@
                 <span>
                   <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
                     :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                    <img :src="userInfo.userImg">
+                    <img lazy :src="userInfo.userImg">
                   </el-upload>
                 </span>
                 <el-form class="login-phone-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
@@ -91,8 +91,9 @@
                       <span v-else>
                         <el-card class="float-left" v-for="(o) in 10" :key="o"
                           style="width:46%;height:100px;margin-left: 2vw;margin-top: 15px;">
-                          <img width="100%" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            class="image">
+                          <el-image lazy width="100%"
+                            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                            class="image"></el-image>
                           <div class="el-card-hover">
                             <span class="el-card-hover-span">
                               <span style="font-size: 16px;font-weight: 800;margin-right: 30px;">照片</span>
@@ -251,8 +252,9 @@
                     <el-row>
                       <el-col style="height: 140px;width: 100px;" v-for="(o, index) in 10" :key="o" :offset="index > 0 ? 3 : 3">
                         <el-card :body-style="{ padding: '0px' }" style="margin:10px -30px;height:120px;">
-                          <img width="100%" src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            class="image">
+                          <el-image lazy width="100%"
+                            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                            class="image"></el-image>
                         </el-card>
                         <div class="el-card-hover">
                           <span class="el-card-hover-span">
@@ -315,7 +317,7 @@
                 <el-form-item prop="captcha">
                   <el-input v-model="userQuery.captcha" @keyup.enter.native="login('userQuery')" type="text"
                     placeholder="请输入验证码"></el-input>
-                  <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()" :src="captcha" />
+                  <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()" :src="captcha">
                   <span
                     style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">看不清？点一下</span>
                 </el-form-item>

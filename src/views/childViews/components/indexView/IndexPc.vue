@@ -71,7 +71,7 @@
               :body-style="{ padding: '0px' }">
 
               <div style="height: 300px;width:100%;position: absolute;top: 0px;">
-                <img width="100%" height="100%" :src="item.cover" alt="">
+                <el-image lazy width="100%" height="100%" :src="item.cover" alt=""></el-image>
               </div>
               <router-link style="text-decoration: none" :to="{ name: 'articleDetails', params: {id:item.id } }">
                 <div class="article-content" style="text-shadow:0 0 10px red;">
@@ -121,7 +121,7 @@
               <el-col :span="12">
                 <router-link v-if="index%2 == 0" :to="{ name: 'articleDetails', params: {id:item.id } }">
                   <div style="height: 300px;overflow: hidden;">
-                    <img class="oversize-img" width="100%" height="100%" :src="item.cover" alt="">
+                    <img class="oversize-img" width="100%" style="height: 300px;display: block" v-lazy="item.cover" alt="">
                   </div>
                 </router-link>
                 <div v-else class="article-content">
@@ -151,7 +151,7 @@
               <el-col :span="12">
                 <router-link v-if="index%2 == 1" :to="{ name: 'articleDetails', params: {id:item.id } }">
                   <div style="height: 300px;overflow: hidden;">
-                    <img class="oversize-img" width="100%" height="100%" :src="item.cover" alt="">
+                    <img class="oversize-img" width="100%" style="height: 300px" v-lazy="item.cover" alt="">
                   </div>
                 </router-link>
                 <div v-else class="article-content" style="text-align: right;margin-right: 30px;">

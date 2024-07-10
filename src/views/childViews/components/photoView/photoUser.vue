@@ -8,26 +8,34 @@
       </transition>
     </div>
     <!-- todo 待完善图片界面 -->
-    <div class="content" style="margin-top: 30vh;background: none;">
-      <div class="content-before" style="width: 70vw;">
+    <div class="content" style="margin-top: 35vh;background: none;">
+      <div class="content-before" style="width: 70vw;min-height: 800px;">
         <div style="height: 200px;">
           <el-row>
-            <el-col :span="4">
-              <div style="width: 150px;margin-top: 20px;">
-                <img style="border-radius: 50%;" width="100%" height="150px" class="userImg" :src="userVo.userImg">
+            <el-col :span="3">
+              <div style="margin-top: 20px;">
+                <el-image lazy style="border-radius: 50%;height: 130px;width: 130px;" class="userImg" :src="userVo.userImg"></el-image>
               </div>
             </el-col>
             <el-col :span="20">
-              <div style="width: 100%;margin-top: 20px;">
-                {{ userVo }}
+              <div style="width: 100%;margin-top: 20px;color: aliceblue">
+                <span>{{ userVo.nickname }}</span><br /><br />
+                <span><i class="iconfont icon-a-appround32" style="font-size: 24px;"></i>&nbsp;照片数：{{ userVo.photoCount }}</span>
               </div>
             </el-col>
           </el-row>
         </div>
-        <div v-for="item in imgList" :key="item.id">
-          <el-card :body-style="{ padding: '0px' }">
-            <img :src="item.thumbnailImgUrl" class="image">
-          </el-card>
+        <div>
+          <el-row style="width: 100%;">
+            <el-col :span="6" v-for="item in imgList" :key="item.id">
+              <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px">
+                <div style="height: 144px;cursor: pointer;overflow: hidden">
+                  <el-image lazy width="100%" :src="item.thumbnailImgUrl" class="image oversize-img"
+                    @click="previewImg(item.imgUrl)"></el-image>
+                </div>
+              </el-card>
+            </el-col>
+          </el-row>
         </div>
         <!-- 用来撑起高度 -->
         <div class="content-after" style="height: 60px;">
@@ -45,7 +53,7 @@ export default {
     return {
       imgList: [],
       showImg: false,
-      userVo: {}
+      userVo: {},
     }
   },
   mounted() {
@@ -68,6 +76,9 @@ export default {
           this.imgList = data.data
         }
       })
+    },
+    previewImg(url) {
+      this.$hevueImgPreview(url)
     }
   }
 }

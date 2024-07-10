@@ -20,7 +20,7 @@
         <el-row style="margin-top: 10px;width: 100%;">
           <el-col :span="8" v-for="(o) in imgCounts" :key="o.userId" style="margin-top: 10px;">
             <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px">
-              <img width="100%" height="170" :src="o.userImg" class="image">
+              <el-image lazy style="height: 170px;width:100%" :src="o.userImg" class="image"></el-image>
               <div style="padding: 14px;">
                 <span style="font-size: 24px;font-weight: 600;">{{o.nickname}}</span>
                 <div style="height: 35px;position: relative;margin-top: 5px;">

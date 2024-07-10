@@ -33,7 +33,8 @@
             <el-form-item label="封面">
               <el-upload class="avatar-uploader" action="/api/text/image/uploadFile" :show-file-list="false" :headers="uploadHeaders"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                <img width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover">
+                <el-image width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover"
+                  lazy></el-image>
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
@@ -42,7 +43,7 @@
             可选图片<br />
             <el-tag style="width: 220px;height: 120px;padding: 10px;margin-left: 30px;margin-top: 20px;" type="success"
               v-for="(item,index) in images" :key="index" @click="chooseImg(item)">
-              <img width="200px" height="100px" :src="item" alt="">
+              <el-image lazy width="200px" height="100px" :src="item" alt=""></el-image>
             </el-tag>
           </el-col>
         </el-row>

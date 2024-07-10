@@ -65,7 +65,7 @@
       <div class="comment-head">
         <el-row :gutter="20">
           <el-col :span="4">
-            <img class="comment-userImg" src="@/assets/images/defaul.jpg" />
+            <el-image lazy class="comment-userImg" src="@/assets/images/defaul.jpg"></el-image>
           </el-col>
           <el-col :span="20">
             <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
@@ -81,7 +81,7 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <div class="comment-userImg">
-                <img src="@/assets/images/defaul.jpg" class="comment-userImg" />
+                <el-image lazy src="@/assets/images/defaul.jpg" class="comment-userImg"></el-image>
               </div>
             </el-col>
             <el-col :span="20">
@@ -125,7 +125,7 @@
                   style="margin-top: 15px;">
                   <el-row :gutter="20">
                     <el-col :span="3">
-                      <img class="comment-userImg" src="@/assets/images/defaul.jpg" />
+                      <el-image lazy class="comment-userImg" src="@/assets/images/defaul.jpg"></el-image>
                     </el-col>
                     <el-col :span="20">
                       <div class="comment-body-top">
