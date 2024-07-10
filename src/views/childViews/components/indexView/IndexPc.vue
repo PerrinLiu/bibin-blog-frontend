@@ -156,10 +156,10 @@
                 </router-link>
                 <div v-else class="article-content" style="text-align: right;margin-right: 30px;">
                   <div style="height: 3cap;">
-                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;">{{ item.articleTitle }}</p>
+                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;width: 100%;">{{ item.articleTitle }}</p>
                   </div>
                   <div style="height: 90px;">
-                    <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
+                    <p class="article-text" style="width: 100%;">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
                     <el-tag style="margin-left:16px" v-for="(o,index) in item.articleGroupId" :key="index">{{o}}</el-tag>

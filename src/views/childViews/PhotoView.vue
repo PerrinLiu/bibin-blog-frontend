@@ -12,7 +12,7 @@
     </div>
 
     <div class="content item" style="margin-top: 50vh;">
-      <div class="content-before" style="width: 70vw;">
+      <div class="content-before" style="width: 70vw;min-height: 600px;">
         <div class="content-center" style="margin-top: 30px;">
           <el-input v-model="searchVo.searchText" placeholder="请输入昵称进行搜索" suffix-icon="el-icon-search" @keyup.enter.native="getImgCount()"
             :style="isPhone ? 'width: 300px;' : 'width:30%;'"></el-input>
@@ -35,7 +35,7 @@
           </el-col>
         </el-row>
 
-        <el-empty v-if="imgCounts.length == 0" :image-size="200" description="等我开发~"></el-empty>
+        <el-empty v-if="imgCounts.length == 0" :image-size="200" description="暂无照片~"></el-empty>
         <!-- 用来撑起高度 -->
         <div class="content-after" style="height: 60px;">
         </div>
