@@ -19,5 +19,14 @@ export default {
 
     listImgByUserId(userId) {
         return request.get(imageCommon + 'listImgByUserId?userId=' + userId)
+    },
+    listImgMy() {
+        return request.get(image + 'listImgByUser')
+    },
+    deleteImg(id) {
+        return request.delete(image + 'deleteImg?imgId=' + id)
+    },
+    openOrClose(id) {
+        return request.put(image + 'openOrCloseImg?imgId=' + id)
     }
 }

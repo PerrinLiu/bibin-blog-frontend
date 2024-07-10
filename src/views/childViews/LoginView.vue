@@ -5,262 +5,120 @@
       </div>
       <div class="backgroundImg">
       </div>
+      <!-- 个人信息展示 -->
       <span v-if="token != null">
-        <div class="isLogin" :style="'left:' + isLoginLeft + 'vw'" style="overflow: hidden;">
-          <!-- 手机端 -->
-          <span v-if="isPhone">
-            <div style="width:100vw;height:100%;overflow-y: scroll;">
-              <div class="isLogin-phone">
-                <span>
-                  <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
-                    :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                    <img lazy :src="userInfo.userImg">
-                  </el-upload>
-                </span>
-                <el-form class="login-phone-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
-                  <el-form-item prop="nickname" label="昵称：">
-                    <el-input v-model="userInfo.nickname"></el-input>
-                  </el-form-item>
-                  <el-form-item label="用户名：">
-                    {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">
-                      《{{ userInfo.roleName }}》</span>
-                    <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                      <router-link target="_blank" to="/manager" style="text-decoration: none;">
-                        <strong>管理</strong>
-                      </router-link>
-                    </span>
-                  </el-form-item>
-                  <el-form-item prop="email" label="邮箱：">
-                    <span v-if="changeEmail">
-                      {{ userInfo.email }}
-                    </span>
-                    <span v-else>
-                      <el-input style="width: 70%;" v-model="userInfo.email"></el-input>
-                    </span>
-                    &nbsp;&nbsp;
-                    <span v-if="changeEmail">
-                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
-                      </el-button>
-                    </span>
-                    <span v-else>
-                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
-                      </el-button>
-                    </span>
-                  </el-form-item>
-                  <el-form-item label="城市：">
-                    <span v-if="changeCity">
-                      {{ userInfo.city }}
-                    </span>
-                    <span v-else>
-                      <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
-                    </span>
-                    &nbsp;&nbsp;
-                    <span v-if="changeCity">
-                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
-                      </el-button>
-                    </span>
-                    <span v-else>
-                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
-                      </el-button>
-                    </span>
-                  </el-form-item>
-                  <el-form-item label="性别：">
-                    <el-radio-group v-model="userInfo.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item style="position:relative;left: -10%;">
-                    <el-button plain style="position: relative; left: 0%;width: 100px;" @click="update('updateUser')">提交</el-button>
-                    <el-button style="position: relative;left: 10%;" @click="updatePsw()">修改密码</el-button>
-                  </el-form-item>
+        <el-card v-if="showDiaryOne" class="box-card" style="position: fixed;top: 20vh;z-index: 999;"
+          :style="isPhone ? 'left: 10vw;' : 'left: 30vw;'">
+          <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="是否删除该碎片">
+            <span slot="reference" style="cursor: pointer;font-size: 20px;"><i class="el-icon-delete"></i></span>
+          </el-popconfirm>
 
-                </el-form>
-
-                <!-- 照片和日记 -->
-                <div style="position: relative;top: 50px;width: 96vw;">
-                  <div class="isLogin-right-top">
-                    <div class="isLogin-right-top-top">
-                      <h3>我的照片</h3>
-                    </div>
-                    <!-- 照片，分为一组一组 -->
-                    <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userPhoto.length == 0">
-                        <el-empty description="没有任何照片~"></el-empty>
-                      </span>
-                      <span v-else>
-                        <el-card class="float-left" v-for="(o) in 10" :key="o"
-                          style="width:46%;height:100px;margin-left: 2vw;margin-top: 15px;">
-                          <el-image lazy width="100%"
-                            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            class="image"></el-image>
-                          <div class="el-card-hover">
-                            <span class="el-card-hover-span">
-                              <span style="font-size: 16px;font-weight: 800;margin-right: 30px;">照片</span>
-                            </span>
-                          </div>
-                        </el-card>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="isLogin-right-bottom">
-                    <div class="isLogin-right-top-top">
-                      <h3>我的日记</h3>
-                    </div>
-                    <!-- 日记 -->
-                    <div style="height:85%;overflow-y: scroll;">
-                      <span v-if="userDiary.length == 0">
-                        <el-empty description="你还没写过日记~"></el-empty>
-                      </span>
-                      <span v-else>
-                        <el-card style="width: 90%;margin: 10px 2%;" v-for="o in userDiary" :key="o.id" :body-style="{ padding: '0px' }">
-                          <!-- 卡片内容 -->
-                          <div class="card-content" style="width:100%;margin-bottom: 0px;margin-left: 20px;">
-                            <h5 style="position: relative;height:20px;top: -3px;">
-                              {{ o.diaryTitle }}</h5>
-                            <span style="position: relative;top: -20px;font-size: 12px;" class="time">
-                              {{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
-                              <span style="position: absolute;top:-20px;right:-110%;font-size: 30px;cursor: pointer;"
-                                @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
-                                <i class="el-icon-thumb"></i>
-                              </span>
-
-                            </span>
-
-                          </div>
-                        </el-card>
-                        <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
-                          @current-change="handleCurrentChange">
-                        </el-pagination>
-                      </span>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-            <el-card v-if="showDiaryOne" class="box-card" style="position: fixed;top: 20vh;left: 10vw;z-index: 999;">
-              <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？">
-                <span slot="reference" style="cursor: pointer;font-size: 20px;"><i class="el-icon-delete"></i></span>
-              </el-popconfirm>
-
-              <span @click="showDiaryOne = !showDiaryOne" style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;">
-                <i class="el-icon-close"></i>
-              </span>
-              <span v-if="diaryBaseOne != null">
-                <div style="width: 280px;" v-html="diaryBaseOne.diaryText">
-                </div>
-              </span>
-            </el-card>
+          <span @click="showDiaryOne = !showDiaryOne" style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;">
+            <i class="el-icon-close"></i>
           </span>
-
-          <!-- 电脑端 -->
-          <span v-else>
-            <el-card v-if="showDiaryOne" class="box-card" style="position: fixed;top: 20vh;left: 30vw;z-index: 999;">
-              <el-popconfirm @confirm="delDiary(diaryBaseOne.diaryId)" title="这是一段内容确定删除吗？">
-                <span slot="reference" style="cursor: pointer;font-size: 20px;"><i class="el-icon-delete"></i></span>
-              </el-popconfirm>
-
-              <span @click="showDiaryOne = !showDiaryOne" style="position: absolute;cursor: pointer;font-size: 20px;right: 20px;"><i
-                  class="el-icon-close"></i></span>
-              <span v-if="diaryBaseOne != null">
-                <div style="width: 600px;" v-html="diaryBaseOne.diaryText">
-                </div>
-              </span>
-            </el-card>
-            <div class="isLogin-left">
-              <div style="margin-top: 30px">
-                <div class="isLogin-userImg" style="margin-bottom: 30px">
-                  <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
-                    :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                    <img :src="userInfo.userImg">
-                    <div class="imgHover">更换图片</div>
-                  </el-upload>
-                </div>
-                <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
-                  <el-form-item prop="nickname" label="昵称：">
-                    <el-input v-model="userInfo.nickname"></el-input>
-                  </el-form-item>
-                  <el-form-item label="用户名：">
-                    {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{userInfo.roleName }}》</span>
-                    <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
-                      <router-link target="_blank" to="/manager" style="text-decoration: none;">
-                        <strong>管理</strong>
-                      </router-link>
-                    </span>
-                  </el-form-item>
-                  <el-form-item prop="email" label="邮箱：">
-                    <span v-if="changeEmail">
-                      {{ userInfo.email }}
-                    </span>
-                    <span v-else>
-                      <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
-                    </span>
-                    &nbsp;&nbsp;
-                    <span v-if="changeEmail">
-                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
-                      </el-button>
-                    </span>
-                    <span v-else>
-                      <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
-                      </el-button>
-                    </span>
-                  </el-form-item>
-                  <el-form-item label="城市：">
-                    <span v-if="changeCity">
-                      {{ userInfo.city }}
-                    </span>
-                    <span v-else>
-                      <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
-                    </span>
-                    &nbsp;&nbsp;
-                    <span v-if="changeCity">
-                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
-                      </el-button>
-                    </span>
-                    <span v-else>
-                      <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
-                      </el-button>
-                    </span>
-                  </el-form-item>
-                  <el-form-item label="性别：">
-                    <el-radio-group v-model="userInfo.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
-                    </el-radio-group>
-                  </el-form-item>
-                  <el-form-item>
-                    <el-button style="position: relative; left: 10%;width: 100px;" plain @click="update('updateUser')">提交</el-button>
-                    <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
-                  </el-form-item>
-
-                </el-form>
+          <span v-if="diaryBaseOne != null">
+            <div ref="contentContainer" style="overflow: auto;height: 50vh" :style="isPhone ? 'width: 280px;' : 'width: 600px;'"
+              v-html="diaryBaseOne.diaryText">
+            </div>
+          </span>
+        </el-card>
+        <div class="isLogin" :style="'left:' + isLoginLeft + 'vw'" style="overflow: hidden;">
+          <div class="isLogin-left" :style="isPhone ? 'width: 100vw;' : ''">
+            <!-- 手机端电脑端共用个人信息 -->
+            <div style="margin-top: 30px">
+              <div class="isLogin-userImg" style="margin-bottom: 30px">
+                <el-upload class="avatar-uploader" action="/api/user/user/updateUserImg" :show-file-list="false" :headers="uploadHeaders"
+                  :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                  <img style=" position: relative;width:90px;height: 90px;border: 1px solid #6d2626;cursor: pointer; border-radius: 5rem;"
+                    :src="userInfo.userImg">
+                  <div class="imgHover">更换图片</div>
+                </el-upload>
+              </div>
+              <el-form class="login-from" :model="userInfo" label-width="80px" :rules="registerRules" ref="updateUser">
+                <el-form-item prop="nickname" label="昵称：">
+                  <el-input v-model="userInfo.nickname"></el-input>
+                </el-form-item>
+                <el-form-item label="用户名：">
+                  {{ userInfo.username }}&nbsp;&nbsp;&nbsp;<span style="color: rgb(0, 143, 136);">《{{userInfo.roleName }}》</span>
+                  <span v-if="userInfo.roleName == '管理员' || userInfo.roleName == '系统管理员'">&nbsp;&nbsp;&nbsp;
+                    <router-link target="_blank" to="/manager" style="text-decoration: none;">
+                      <strong>管理</strong>
+                    </router-link>
+                  </span>
+                </el-form-item>
+                <el-form-item prop="email" label="邮箱：">
+                  <span v-if="changeEmail">
+                    {{ userInfo.email }}
+                  </span>
+                  <span v-else>
+                    <el-input style="width: 50%;" v-model="userInfo.email"></el-input>
+                  </span>
+                  &nbsp;&nbsp;
+                  <span v-if="changeEmail">
+                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-edit" circle>
+                    </el-button>
+                  </span>
+                  <span v-else>
+                    <el-button plain size="mini" @click="changeEmail = !changeEmail" icon="el-icon-check" circle>
+                    </el-button>
+                  </span>
+                </el-form-item>
+                <el-form-item label="城市：">
+                  <span v-if="changeCity">
+                    {{ userInfo.city }}
+                  </span>
+                  <span v-else>
+                    <el-input style="width: 35%;" v-model="userInfo.city"></el-input>
+                  </span>
+                  &nbsp;&nbsp;
+                  <span v-if="changeCity">
+                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-edit" circle>
+                    </el-button>
+                  </span>
+                  <span v-else>
+                    <el-button plain size="mini" @click="changeCity = !changeCity" icon="el-icon-check" circle>
+                    </el-button>
+                  </span>
+                </el-form-item>
+                <el-form-item label="性别：">
+                  <el-radio-group v-model="userInfo.gender">
+                    <el-radio label="男"></el-radio>
+                    <el-radio label="女"></el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-form>
+              <div style="margin-left: 10%">
+                <el-button style="position: relative; left: 10%;width: 100px;" plain @click="update('updateUser')">提交</el-button>
+                <el-button style="position: relative;left: 30%;" @click="updatePswDialog = !updatePswDialog">修改密码</el-button>
               </div>
             </div>
-            <div class="isLogin-right">
+            <!--  手机端 照片和日记 -->
+            <div v-if="isPhone" style="position: relative;top: 50px;width: 96vw;">
               <div class="isLogin-right-top">
-                <div class="isLogin-right-top-top" style="border-top-right-radius: 1rem;">
+                <div class="isLogin-right-top-top">
                   <h3>我的照片</h3>
                 </div>
                 <!-- 照片，分为一组一组 -->
                 <div style="height:85%;overflow-y: scroll;">
-                  <span v-if="userPhoto.length == 0">
+                  <div style="margin: 10px">
+                    <el-upload action="/api/text/image/uploadFile" :show-file-list="false" :headers="uploadHeaders"
+                      :on-success="photoUploadSuccess" :before-upload="beforeAvatarUpload">
+                      <el-button size="small" type="primary">上传图片</el-button>
+                    </el-upload>
+                  </div>
+                  <span v-if="imgList.length == 0">
                     <el-empty description="没有任何照片~"></el-empty>
                   </span>
                   <span v-else>
                     <el-row>
-                      <el-col style="height: 140px;width: 100px;" v-for="(o, index) in 10" :key="o" :offset="index > 0 ? 3 : 3">
-                        <el-card :body-style="{ padding: '0px' }" style="margin:10px -30px;height:120px;">
-                          <el-image lazy width="100%"
-                            src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
-                            class="image"></el-image>
+                      <el-col :span="8" v-for="(o, index) in imgList" :key="o.id">
+                        <el-card :body-style="{ padding: '0px' }" style="margin: 20px;cursor: pointer;height: 50px;width: 80%">
+                          <img style=" height: 50px;width: 100%;" v-lazy="o.thumbnailImgUrl" class="image" @click="previewImg(index)">
                         </el-card>
-                        <div class="el-card-hover">
-                          <span class="el-card-hover-span">
-                            <span style="font-size: 16px;font-weight: 800;">照片</span>
-                          </span>
-                        </div>
+                        <el-popconfirm @confirm="deleteImg(o.id)" title="这是一段内容确定删除吗？">
+                          <el-button slot="reference" style="position: relative;top: -20px;left: 20px;" type="text">删除</el-button>
+                        </el-popconfirm>
+
                       </el-col>
                     </el-row>
                   </span>
@@ -279,29 +137,97 @@
                     <el-card style="width: 90%;margin: 10px 2%;" v-for="o in userDiary" :key="o.id" :body-style="{ padding: '0px' }">
                       <!-- 卡片内容 -->
                       <div class="card-content" style="width:100%;margin-bottom: 0px;margin-left: 20px;">
-                        <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
-                        </h5>
+                        <h5 style="position: relative;height:20px;top: -3px;">
+                          {{ o.diaryTitle }}</h5>
                         <span style="position: relative;top: -20px;font-size: 12px;" class="time">
                           {{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
-                          <span style="position: absolute;top:-20px;right:-200%;font-size: 30px;cursor: pointer;"
+                          <span style="position: absolute;top:-20px;right:-110%;font-size: 30px;cursor: pointer;"
                             @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
                             <i class="el-icon-thumb"></i>
                           </span>
-                        </span>
 
+                        </span>
                       </div>
                     </el-card>
                     <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
                       @current-change="handleCurrentChange">
                     </el-pagination>
                   </span>
+
                 </div>
               </div>
-
             </div>
-          </span>
+          </div>
+          <!-- 电脑端照片和日记 -->
+          <div v-if="!isPhone" class="isLogin-right">
+            <div class="isLogin-right-top">
+              <div class="isLogin-right-top-top" style="border-top-right-radius: 1rem;">
+                <h3>我的照片</h3>
+              </div>
+              <!-- 照片，分为一组一组 -->
+              <div style="height:85%;overflow-y: scroll;">
+                <div style="margin: 10px">
+                  <el-upload action="/api/text/image/uploadFile" :show-file-list="false" :headers="uploadHeaders"
+                    :on-success="photoUploadSuccess" :before-upload="beforeAvatarUpload">
+                    <el-button size="small" type="primary">上传图片</el-button>
+                  </el-upload>
+                </div>
+                <span v-if="imgList.length == 0">
+                  <el-empty description="没有任何照片~"></el-empty>
+                </span>
+                <span v-else>
+                  <el-row>
+                    <el-col style="height: 140px;width: 100px;" v-for="(o, index) in imgList" :key="index" :offset="index > 0 ? 3 : 3">
+                      <el-card :body-style="{ padding: '0px' }" style="margin:10px -30px;height:90px;cursor: pointer;">
+                        <img width="100%" height="90px" v-lazy="o.thumbnailImgUrl" class="image" @click="previewImg(index)">
+                        <el-tag style="position: relative;top: -40px;left: 5px;" type="text">{{o.isOpen == 0 ? '公开' : '私密'}}</el-tag>
+                      </el-card>
+                      <el-button style="position: relative;top: -15px;left: -30px;" @click="openOrClose(o.id)"
+                        type="text">{{o.isOpen == 0 ? '设为私密' : '设为公开'}}</el-button>
+                      <el-popconfirm @confirm="deleteImg(o.id)" title="是否删除该图片">
+                        <el-button slot="reference" style="position: relative;top: -15px;left: 35px;" type="text">删除</el-button>
+                      </el-popconfirm>
+                    </el-col>
+                  </el-row>
+                </span>
+              </div>
+            </div>
+            <div class="isLogin-right-bottom">
+              <div class="isLogin-right-top-top">
+                <h3>我的日记</h3>
+              </div>
+              <!-- 日记 -->
+              <div style="height:85%;overflow-y: scroll;">
+                <span v-if="userDiary.length == 0">
+                  <el-empty description="你还没写过日记~"></el-empty>
+                </span>
+                <span v-else>
+                  <el-card style="width: 90%;margin: 10px 2%;" v-for="o in userDiary" :key="o.id" :body-style="{ padding: '0px' }">
+                    <!-- 卡片内容 -->
+                    <div class="card-content" style="width:100%;margin-bottom: 0px;margin-left: 20px;">
+                      <h5 style="position: relative;height:20px;top: -3px;">{{ o.diaryTitle }}
+                      </h5>
+                      <span style="position: relative;top: -20px;font-size: 12px;" class="time">
+                        {{ o.createTime }}&nbsp;&nbsp;&nbsp; {{ o.nickname }}
+                        <span style="position: absolute;top:-20px;right:-200%;font-size: 30px;cursor: pointer;"
+                          @click="getDiaryOne(o.diaryId); showDiaryOne = !showDiaryOne">
+                          <i class="el-icon-thumb"></i>
+                        </span>
+                      </span>
+
+                    </div>
+                  </el-card>
+                  <el-pagination background layout="prev, pager, next" :total="total" :page-size="pageSize" :current-page="pageNum"
+                    @current-change="handleCurrentChange">
+                  </el-pagination>
+                </span>
+              </div>
+            </div>
+
+          </div>
         </div>
       </span>
+      <!-- 登录注册 -->
       <span v-else>
         <div class="noLogin" :style="'left:' + noLoginLeft + 'vw'">
           <transition name="el-zoom-in-center">
@@ -317,9 +243,8 @@
                 <el-form-item prop="captcha">
                   <el-input v-model="userQuery.captcha" @keyup.enter.native="login('userQuery')" type="text"
                     placeholder="请输入验证码"></el-input>
-                  <img style="position:absolute;right: 0px;cursor:pointer" @click="getCaptcha()" :src="captcha">
-                  <span
-                    style="position: absolute;width:150px;top:35px;font-size: 12px;right: -10px;color:red;cursor: pointer;">看不清？点一下</span>
+                  <img style="position:absolute;right: 0px;cursor:pointer" :style="isPhone ? 'width: 80px;height: 40px' : ''"
+                    @click="getCaptcha()" :src="captcha">
                 </el-form-item>
                 <span class="noLogin-left-btn1" @click="retrievePsw = true">忘记密码?</span>
 
@@ -375,18 +300,20 @@
                     placeholder="密码"></el-input>
                 </el-form-item>
                 <el-form-item prop="email">
-                  <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input>
-                  <el-button style="position: absolute;right: 0px;" @click="sendEmail('register')">
+                  <el-input v-model="userRegister.email" type="text" placeholder="邮箱"></el-input><br v-if="isPhone" />
+                  <el-button style="position: absolute;right: 0px;margin-top: 5px" @click="sendEmail('register')">
                     <span v-if="showCaptcha">获取验证码</span>
                     <span v-else>{{ time }}&nbsp;s</span>
                   </el-button>
                 </el-form-item>
-                <el-form-item prop="captcha">
-                  <el-input v-model="userRegister.captcha" type="text" placeholder="验证码"></el-input>
-                </el-form-item>
-                <el-form-item>
-                  <el-button class="noLogin-left-btn2" type="primary" @click="register('userRegister')">注册</el-button>
-                </el-form-item>
+                <div :style="isPhone ? 'margin-top:50px;' : ''">
+                  <el-form-item prop="captcha">
+                    <el-input v-model="userRegister.captcha" type="text" placeholder="验证码"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button class="noLogin-left-btn2" type="primary" @click="register('userRegister')">注册</el-button>
+                  </el-form-item>
+                </div>
 
               </el-form>
 
@@ -396,7 +323,7 @@
 
       </span>
 
-      <el-dialog title="修改密码" :visible.sync="updatePswDialog" :modal="false" min-width="300px" width="30%" :close-on-click-modal="false">
+      <el-dialog title="修改密码" :visible.sync="updatePswDialog" :modal="false" width="350px" :close-on-click-modal="false">
         <el-form :model="updatePswData">
           <el-form-item prop="password">
             <el-input v-model="updatePswData.oldPassword" type="password" show-password autocomplete="new-password"
@@ -415,7 +342,7 @@
         </el-form>
       </el-dialog>
 
-      <el-dialog title="找回密码" :visible.sync="retrievePsw" :modal="false" min-width="300px" width="30%" :close-on-click-modal="false">
+      <el-dialog title="找回密码" :visible.sync="retrievePsw" :modal="false" width="350px" :close-on-click-modal="false">
         <el-form :model="updatePswData">
           <el-form-item>
             <span>请输入你的邮箱</span>
@@ -432,7 +359,7 @@
           <el-button @click="isTrue()">提交</el-button>
         </el-form>
 
-        <el-dialog title="修改密码" :visible.sync="retrievePswInner" :modal="false" min-width="300px" width="30%" :close-on-click-modal="false">
+        <el-dialog title="修改密码" :visible.sync="retrievePswInner" :modal="false" width="350px" :close-on-click-modal="false">
           <el-form :model="updatePswData">
             <span>{{ userInfo.username }}</span>
             <el-form-item>
@@ -453,6 +380,7 @@
 <script>
 import userApi from '@/api/userApi';
 import textApi from '@/api/textApi';
+import imageApi from '@/api/imageApi';
 export default {
   data() {
     return {
@@ -508,7 +436,8 @@ export default {
       //修改用户时验证是否有变化
       userOld: {},
       //用户照片栏
-      userPhoto: [],
+      imgList: [],
+      imgUrls: [],
       //用户日记
       userDiary: [],
       //表单规则
@@ -556,7 +485,8 @@ export default {
       updatePswDialog: false,
       //忘记密码窗口
       retrievePsw: false,
-      retrievePswInner: false
+      retrievePswInner: false,
+
     }
   },
   created() {
@@ -573,6 +503,7 @@ export default {
     if (this.token != null) {
       this.getUser();
       this.getDiaryBaseByUser();
+      this.listImgByUser()
     }
     // 使用窗口大小监听来更新 isMobile 值
     window.addEventListener('resize', this.updateLayout);
@@ -933,6 +864,42 @@ export default {
         type: 'success'
       })
     },
+    // 照片墙图片上传成功
+    photoUploadSuccess() {
+      //获取用户图片
+      this.$message({
+        message: "上传成功",
+        type: 'success'
+      })
+      this.listImgByUser()
+    },
+    listImgByUser() {
+      imageApi.listImgMy().then(res => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.imgList = data.data,
+            this.imgList.forEach(item => {
+              this.imgUrls.push(item.imgUrl)
+            })
+        }
+      })
+    },
+    previewImg(index) {
+      this.$hevueImgPreview({
+        multiple: true, // 开启多图预览模式
+        nowImgIndex: index, // 多图预览，默认展示第二张图片
+        imgList: this.imgUrls, // 需要预览的多图数组
+      })
+    },
+    openOrClose(id) {
+      imageApi.openOrClose(id).then(res => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.$message.success(data.message)
+          this.listImgByUser()
+        }
+      })
+    },
     // 上传前验证
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 5;
@@ -942,7 +909,7 @@ export default {
         return false
       }
       if (!isLt2M) {
-        this.$message.warning('上传头像图片大小不能超过 5MB!');
+        this.$message.warning('图片大小不能超过 5MB!');
         return false
       }
       return true;
@@ -959,13 +926,28 @@ export default {
     },
     // 获取单个日记内容
     getDiaryOne(diaryId) {
-      textApi.getDiaryOne({
-        params: {
-          diaryId: diaryId
-        }
-      }).then(response => {
+      textApi.getDiaryOne(diaryId).then(response => {
         this.diaryBaseOne = response.data.data;
+        this.changeImages();
       })
+    },
+    // 图片大小自适应
+    changeImages() {
+      setTimeout(() => {
+        const container = this.$refs.contentContainer;
+        if (container) {
+          const images = container.getElementsByTagName('img');
+          const containerWidth = container.clientWidth;
+          Array.from(images).forEach((image) => {
+            const imageWidth = image.clientWidth;
+            if (imageWidth > containerWidth) {
+              image.style.width = '100%';
+              image.style.height = '';
+            }
+          })
+        }
+      }, 10);
+
     },
     delDiary(id) {
       textApi.deleteDiaryOne({
@@ -979,6 +961,14 @@ export default {
           message: response.data.message,
           type: 'success'
         })
+      })
+    },
+    deleteImg(id) {
+      imageApi.deleteImg(id).then(response => {
+        const data = this.ifSuccess(response)
+        if (data != null) {
+          this.listImgByUser(this.userInfo.userId)
+        }
       })
     }
   },

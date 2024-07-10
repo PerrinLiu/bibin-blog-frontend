@@ -4,7 +4,7 @@
     <el-dialog title="碎片内容" :visible.sync="showDiaryOne" :width="isPhone ? '90%' : '50%'">
       <el-card class="box-card">
         <span v-if="diaryBaseOne != null">
-          <div style="width: 100%;" v-html="diaryBaseOne.diaryText">
+          <div ref="contentContainer" style="width: 100%;" v-html="diaryBaseOne.diaryText">
           </div>
         </span>
       </el-card>
@@ -279,6 +279,7 @@ export default {
     getDiaryOne(diaryId) {
       textApi.getDiaryOne(diaryId).then(response => {
         this.diaryBaseOne = response.data.data;
+        this.changeImages();
       })
     },
     // 判断用户是否登录
@@ -296,6 +297,24 @@ export default {
     diaryYN() {
       if (!this.isLogin()) return;
       this.dialogDiary = true;
+    },
+    // 图片大小自适应
+    changeImages() {
+      setTimeout(() => {
+        const container = this.$refs.contentContainer;
+        if (container) {
+          const images = container.getElementsByTagName('img');
+          const containerWidth = container.clientWidth;
+          Array.from(images).forEach((image) => {
+            const imageWidth = image.clientWidth;
+            if (imageWidth > containerWidth) {
+              image.style.width = '100%';
+              image.style.height = '';
+            }
+          })
+        }
+      }, 10);
+
     },
     // 计算卡片列的布局
     calculateColumnLayout() {

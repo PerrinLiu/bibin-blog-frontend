@@ -27,11 +27,10 @@
         </div>
         <div>
           <el-row style="width: 100%;">
-            <el-col :span="6" v-for="item in imgList" :key="item.id">
+            <el-col :span="6" v-for="(item,index) in imgList" :key="item.id">
               <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px">
                 <div style="height: 144px;cursor: pointer;overflow: hidden">
-                  <el-image lazy width="100%" :src="item.thumbnailImgUrl" class="image oversize-img"
-                    @click="previewImg(item.imgUrl)"></el-image>
+                  <el-image lazy width="100%" :src="item.thumbnailImgUrl" class="image oversize-img" @click="previewImg(index)"></el-image>
                 </div>
               </el-card>
             </el-col>
@@ -54,6 +53,7 @@ export default {
       imgList: [],
       showImg: false,
       userVo: {},
+      imgUrls: []
     }
   },
   mounted() {
@@ -73,12 +73,19 @@ export default {
       imageApi.listImgByUserId(userId).then(res => {
         const data = this.ifSuccess(res)
         if (data != null) {
-          this.imgList = data.data
+          this.imgList = data.data,
+            this.imgList.forEach(item => {
+              this.imgUrls.push(item.imgUrl)
+            })
         }
       })
     },
-    previewImg(url) {
-      this.$hevueImgPreview(url)
+    previewImg(index) {
+      this.$hevueImgPreview({
+        multiple: true, // 开启多图预览模式
+        nowImgIndex: index, // 多图预览，默认展示第二张图片
+        imgList: this.imgUrls, // 需要预览的多图数组
+      })
     }
   }
 }

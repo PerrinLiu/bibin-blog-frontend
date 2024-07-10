@@ -33,8 +33,7 @@
             <el-form-item label="封面">
               <el-upload class="avatar-uploader" action="/api/text/image/uploadFile" :show-file-list="false" :headers="uploadHeaders"
                 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                <el-image width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover"
-                  lazy></el-image>
+                <img width="300px" height="200px" v-if="articleDto.cover!=null && articleDto.cover!=''" :src="articleDto.cover">
                 <i v-else class="el-icon-plus avatar-uploader-icon"></i>
               </el-upload>
             </el-form-item>
