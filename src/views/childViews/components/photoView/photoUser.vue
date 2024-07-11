@@ -28,9 +28,10 @@
         <div>
           <el-row style="width: 100%;">
             <el-col :span="6" v-for="(item,index) in imgList" :key="item.id">
-              <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px">
-                <div style="height: 144px;cursor: pointer;overflow: hidden">
-                  <el-image lazy width="100%" :src="item.thumbnailImgUrl" class="image oversize-img" @click="previewImg(index)"></el-image>
+              <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px;width: 256px;">
+                <div style="width:256px;height: 144px;cursor: pointer;overflow: hidden">
+                  <el-image lazy width="100%" style="height: 144px" :src="item.thumbnailImgUrl" class="image oversize-img"
+                    @click="previewImg(index)"></el-image>
                 </div>
               </el-card>
             </el-col>
