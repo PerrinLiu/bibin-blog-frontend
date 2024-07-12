@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import commentApi from '@/api/commentApi';
 export default {
   data() {
     return {
@@ -51,7 +52,6 @@ export default {
   methods: {
     // 添加弹幕
     addDanmu() {
-      console.log("点击");
       if (this.msgVo.text.trim() == "") {
         this.$message.warning("留言不能为空");
         return;
@@ -65,21 +65,31 @@ export default {
         animationDuration: this.windowWidth / 100 + 's'
       }
       this.messages.push(this.msgVo);
+
+      //如果已经登录调用api保存
+      if (this.$store.getters.user != null) {
+        commentApi.addDanmu(this.msgVo).then((res) => {
+          const data = this.ifSuccess(res)
+          if (data != null) {
+            this.$message.success("留言成功");
+          }
+        })
+      } else {
+        this.$message.warning("成功留言但未登录，无法保存留言");
+      }
       this.msgVo = {
         text: "",
         userImg: this.$store.getters.userInfo == null ? require("@/assets/images/defaul.jpg") : this.$store.getters.userInfo.userImg,
       }
-      //调用api保存
     },
     getMsgData() {
-      for (let i = 0; i < 10; i++) {
-        const data = {
-          userImg: require("@/assets/images/defaul.jpg"),
-          text: i + "弹幕",
+      commentApi.getDanmu().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.msgData = data.data
+          this.startRandomMessages();
         }
-        this.msgData.push(data);
-      }
-      this.startRandomMessages();
+      })
     },
     // 添加弹幕
     addMessage() {
