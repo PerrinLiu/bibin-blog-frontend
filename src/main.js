@@ -37,7 +37,7 @@ messages.forEach(type => {
         message: options
       }
       // 默认设置
-      options.duration = 1000 // 显示多久,单位毫秒
+      options.duration = 2000 // 显示多久,单位毫秒
       options.showClose = true // 是否显示关闭按钮
       options.offset = 200 // 距离顶部距离
     }

@@ -45,7 +45,7 @@
                 :style="isPhone ? 'width: 80%;margin-left: 10%;' : ''">
                 <router-link :to="{ name: 'articleDetails', params: {id:o.id } }">
                   <div style="position: relative;overflow: hidden;height: 170px;">
-                    <el-image lazy class="oversize-img" width="100%" height="170px" style="cursor: pointer;" :src="o.cover"></el-image>
+                    <el-image lazy class="oversize-img" style="cursor: pointer;height: 170px;width: 100px;" :src="o.cover"></el-image>
                     <div class="article-tag">
                       <el-tag class="tag" v-for="(tag,index) in o.articleGroupId" :key="index" type="info">{{tag}}</el-tag>
                     </div>

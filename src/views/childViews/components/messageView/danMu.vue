@@ -2,7 +2,7 @@
   <div class="danmu-container">
     <div style="height: 100vh;position: relative;z-index: 100;display: flex;justify-content: center;top: 35vh;">
       <div style="position: relative;top: -15px;">
-        <el-input placeholder="快来留言！！！" v-model="msgVo.text" clearable style="width: 300px;" @blur="closeBtn" @focus="showBtn = true">
+        <el-input placeholder="快来留言！！！" v-model="msgVo.text" clearable style="width: 300px;" @focus="showBtn = true">
         </el-input>&nbsp;&nbsp;&nbsp;
         <el-button v-if="showBtn" round type="primary" style="height: 40px;" @click="addDanmu">发送</el-button>
       </div>
@@ -56,12 +56,17 @@ export default {
         this.$message.warning("留言不能为空");
         return;
       }
+      if (this.msgVo.text.length > 30) {
+        this.$message.warning("留言不能超过30个字");
+        return
+      }
       // 先在本地保存
       this.msgData.push(this.msgVo);
       const right = this.windowWidth < 500 ? -60 : this.windowWidth < 1000 ? -40 : this.windowWidth < 1500 ? -30 : -20;
       this.msgVo.style = {
         right: `${right}%`,
-        top: '20px',
+        top: `${Math.random() * 1000}px`,
+        background: `rgb(${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)},${Math.floor(Math.random() * 255)})`,
         animationDuration: this.windowWidth / 100 + 's'
       }
       this.messages.push(this.msgVo);
@@ -71,12 +76,13 @@ export default {
         commentApi.addDanmu(this.msgVo).then((res) => {
           const data = this.ifSuccess(res)
           if (data != null) {
-            this.$message.success("留言成功");
+            this.$message.success("发送成功");
           }
         })
       } else {
-        this.$message.warning("成功留言但未登录，无法保存留言");
+        this.$message.warning("成功发送但未登录，将不会保存");
       }
+      this.showBtn = false;
       this.msgVo = {
         text: "",
         userImg: this.$store.getters.userInfo == null ? require("@/assets/images/defaul.jpg") : this.$store.getters.userInfo.userImg,
@@ -120,7 +126,6 @@ export default {
     startRandomMessages() {
       this.addMessage(this.windowHeight, this.windowWidth);
       this.timer = setInterval(() => {
-        console.log(this.msgData.length);
         if (this.msgData.length > this.messages.length) {
           this.addMessage(this.windowHeight, this.windowWidth);
         }
@@ -131,12 +136,6 @@ export default {
       clearInterval(this.timer);
       this.timer = null;
     },
-    // 关闭发送弹幕按钮
-    closeBtn() {
-      setTimeout(() => {
-        this.showBtn = false;
-      }, 500);
-    }
   },
 
   beforeDestroy() {

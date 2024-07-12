@@ -31,7 +31,20 @@
           <!-- todo 赞赏暂时关闭 -->
           <el-card class="box-card box-card3 item" shadow="always">
             <span style="font-weight: 900;"><i class="iconfont icon-pinglun"></i>&nbsp;最新留言</span>
-            <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
+            <div v-for="o in recentCommentList" :key="o.id" style="margin-top: 15px;">
+              <el-row>
+                <el-col :span="4">
+                  <img :src="o.userImg" height="30" width="30">
+                </el-col>
+                <el-col :span="20" style="position: relative">
+                  <p class="recent-comment-nickname">{{ o.nickname }} </p>
+                  <p class="recent-comment-time">{{ o.createTime }}</p>
+                  <p class="recent-comment-content">{{ o.content}}</p>
+                  <p class="recent-comment-from">来自：<span style="color: red;">{{ o.articleTitle }}</span></p>
+                </el-col>
+              </el-row>
+            </div>
+            <el-empty v-if="recentCommentList.length == 0" style="position: relative;top: -60px;" description="暂无留言"></el-empty>
           </el-card>
 
           <!-- 文章分类 -->
@@ -194,6 +207,7 @@
   
   <script>
 import articleApi from '@/api/articleApi'
+import commentApi from '@/api/commentApi'
 export default {
   data() {
     return {
@@ -205,12 +219,15 @@ export default {
       options: [],
       //推荐文章
       recommendArticleList: [],
+      //最近评论
+      recentCommentList: []
     }
   },
   mounted() {
     // 获取文章分组和数据
     this.getGroup()
     this.getRecommendArticle()
+    this.getComment()
   },
   computed: {
     isPhone() {
@@ -235,6 +252,18 @@ export default {
               })
             })
             element.articleGroupId = list
+          })
+        }
+      })
+    },
+    // 获取最近的评论
+    getComment() {
+      commentApi.getRecentComment().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.recentCommentList = data.data
+          this.recentCommentList.forEach(element => {
+            element.createTime = element.createTime.substring(0, 16)
           })
         }
       })
@@ -344,5 +373,35 @@ export default {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   color: #728086;
+}
+.recent-comment-nickname {
+  display: inline;
+  font-size: 12px;
+  margin: 0;
+  font-weight: 700;
+}
+.recent-comment-time {
+  display: inline;
+  font-size: 14px;
+  margin: 0;
+  color: #01687c;
+  position: absolute;
+  right: 0;
+}
+
+.recent-comment-content {
+  font-size: 14px;
+  margin: 5px 0px 5px 0px;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.recent-comment-from {
+  margin: 0;
+  font-size: 12px;
+  color: #01687c;
 }
 </style>

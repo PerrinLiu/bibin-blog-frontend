@@ -12,5 +12,8 @@ export default {
 
     getDanmu() {
         return request.get(commentCommon + 'getDanMu')
+    },
+    getRecentComment() {
+        return request.get(commentCommon + 'getRecentComment')
     }
 }
