@@ -96,8 +96,8 @@ export default {
       // 用户自定义上传图片
       customUpload(file, insertFn) {
         //校验格式
-        if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
-          alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+        if (!/\.(jpg|jpeg|png|JPG|PNG|webp)$/.test(file.name)) {
+          alert("图片类型必须是.webp,jpeg,jpg,png中的一种");
           return;
         }
         //校验大小

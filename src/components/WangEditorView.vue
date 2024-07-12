@@ -126,8 +126,9 @@ export default Vue.extend({
       // 用户自定义上传图片
       customUpload(file, insertFn) {
         //校验格式
-        if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
-          alert("图片类型必须是.gif,jpeg,jpg,png中的一种");
+        //校验格式
+        if (!/\.(jpg|jpeg|png|JPG|PNG|webp)$/.test(file.name)) {
+          alert("图片类型必须是.webp,jpeg,jpg,png中的一种");
           return;
         }
         var axios = require("axios");
@@ -218,9 +219,9 @@ export default Vue.extend({
     // 上传前验证
     beforeAvatarUpload(file) {
       //校验格式
-      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
-        this.$message.warning('图片类型必须是.gif,jpeg,jpg,png中的一种');
-        return false;
+      if (!/\.(jpg|jpeg|png|JPG|PNG|webp)$/.test(file.name)) {
+        this.$message.warning('图片类型必须是.webp,jpeg,jpg,png中的一种!');
+        return false
       }
       //校验大小
       if (file.size > 10 * 1024 * 1024) {

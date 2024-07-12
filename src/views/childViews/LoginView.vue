@@ -904,8 +904,8 @@ export default {
     beforeAvatarUpload(file) {
       const isLt2M = file.size / 1024 / 1024 < 5;
       //校验格式
-      if (!/\.(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.name)) {
-        this.$message.warning('图片类型必须是.gif,jpeg,jpg,png中的一种!');
+      if (!/\.(jpg|jpeg|png|JPG|PNG|webp)$/.test(file.name)) {
+        this.$message.warning('图片类型必须是.webp,jpeg,jpg,png中的一种!');
         return false
       }
       if (!isLt2M) {

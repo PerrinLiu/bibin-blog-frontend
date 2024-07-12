@@ -16,7 +16,7 @@
           <!-- 推荐文章 -->
           <el-card class="box-card box-card1" shadow="always">
             <span style="font-weight: 600;position: relative;"><i class="iconfont icon-xiezuoyeshu"></i>&nbsp;推荐文章</span>
-            <div v-for="o in recommendArticleList " :key="o.id"
+            <div v-for="(o) in recommendArticleList " :key="o.id"
               style=" height: 30px;margin-top: 15px;line-height: 30px;padding:0 10px;border-radius: 10px;border: 1px solid #ebeef5;">
               <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;">
                 <el-popover placement="right-start" :title="o.articleTitle" width="300" trigger="hover" :content="o.des" :open-delay="200">
@@ -28,10 +28,22 @@
 
             <el-empty v-if="recommendArticleList.length == 0" style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
           </el-card>
-          <!-- todo 赞赏暂时关闭 -->
           <el-card class="box-card box-card3 item" shadow="always">
             <span style="font-weight: 900;"><i class="iconfont icon-pinglun"></i>&nbsp;最新留言</span>
-            <el-empty style="position: relative;top: -60px;" description="无任何记录"></el-empty>
+            <div v-for="o in recentCommentList" :key="o.id" style="margin-top: 15px;">
+              <el-row>
+                <el-col :span="4">
+                  <img :src="o.userImg" height="30" width="30">
+                </el-col>
+                <el-col :span="20" style="position: relative">
+                  <p class="recent-comment-nickname">{{ o.nickname }} </p>
+                  <p class="recent-comment-time">{{ o.createTime }}</p>
+                  <p class="recent-comment-content">{{ o.content}}</p>
+                  <p class="recent-comment-from">来自：<span style="color: red;">{{ o.articleTitle }}</span></p>
+                </el-col>
+              </el-row>
+            </div>
+            <el-empty v-if="recentCommentList.length == 0" style="position: relative;top: -60px;" description="暂无留言"></el-empty>
           </el-card>
 
           <!-- 文章分类 -->
@@ -156,10 +168,10 @@
                 </router-link>
                 <div v-else class="article-content" style="text-align: right;margin-right: 30px;">
                   <div style="height: 3cap;">
-                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;">{{ item.articleTitle }}</p>
+                    <p class="article-title" style="font-size: 25px;position: relative;top: -10px;width: 100%;">{{ item.articleTitle }}</p>
                   </div>
                   <div style="height: 90px;">
-                    <p class="article-text">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
+                    <p class="article-text" style="width: 100%;">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
                     <el-tag style="margin-left:16px" v-for="(o,index) in item.articleGroupId" :key="index">{{o}}</el-tag>
@@ -194,6 +206,7 @@
   
   <script>
 import articleApi from '@/api/articleApi'
+import commentApi from '@/api/commentApi'
 export default {
   data() {
     return {
@@ -205,12 +218,15 @@ export default {
       options: [],
       //推荐文章
       recommendArticleList: [],
+      //最近评论
+      recentCommentList: []
     }
   },
   mounted() {
     // 获取文章分组和数据
     this.getGroup()
     this.getRecommendArticle()
+    this.getComment()
   },
   computed: {
     isPhone() {
@@ -235,6 +251,18 @@ export default {
               })
             })
             element.articleGroupId = list
+          })
+        }
+      })
+    },
+    // 获取最近的评论
+    getComment() {
+      commentApi.getRecentComment().then((res) => {
+        const data = this.ifSuccess(res)
+        if (data != null) {
+          this.recentCommentList = data.data
+          this.recentCommentList.forEach(element => {
+            element.createTime = element.createTime.substring(0, 16)
           })
         }
       })
@@ -280,7 +308,6 @@ export default {
 }
 
 .box-card1 {
-  height: 300px;
   background-size: 300% 300%;
   background-image: linear-gradient(90deg, #8bc0d6, #61bae4, #1490d8);
   animation: colorChange 5s linear infinite;
@@ -344,5 +371,35 @@ export default {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   color: #728086;
+}
+.recent-comment-nickname {
+  display: inline;
+  font-size: 12px;
+  margin: 0;
+  font-weight: 700;
+}
+.recent-comment-time {
+  display: inline;
+  font-size: 14px;
+  margin: 0;
+  color: #01687c;
+  position: absolute;
+  right: 0;
+}
+
+.recent-comment-content {
+  font-size: 14px;
+  margin: 5px 0px 5px 0px;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.recent-comment-from {
+  margin: 0;
+  font-size: 12px;
+  color: #01687c;
 }
 </style>

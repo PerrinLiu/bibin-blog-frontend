@@ -65,7 +65,8 @@
       <div class="comment-head">
         <el-row :gutter="20">
           <el-col :span="4">
-            <el-image lazy class="comment-userImg" src="@/assets/images/defaul.jpg"></el-image>
+            <img v-if="userInfo =='userInfo'" class="comment-userImg" src="@/assets/images/defaul.jpg">
+            <img v-else class="comment-userImg" :src="userInfo.userImg">
           </el-col>
           <el-col :span="20">
             <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
@@ -81,7 +82,7 @@
           <el-row :gutter="20">
             <el-col :span="3">
               <div class="comment-userImg">
-                <el-image lazy src="@/assets/images/defaul.jpg" class="comment-userImg"></el-image>
+                <img v-lazy="item.userImg" class="comment-userImg">
               </div>
             </el-col>
             <el-col :span="20">
@@ -125,7 +126,7 @@
                   style="margin-top: 15px;">
                   <el-row :gutter="20">
                     <el-col :span="3">
-                      <el-image lazy class="comment-userImg" src="@/assets/images/defaul.jpg"></el-image>
+                      <img v-lazy="item.userImg" class="comment-userImg">
                     </el-col>
                     <el-col :span="20">
                       <div class="comment-body-top">
@@ -176,6 +177,7 @@
             </el-col>
           </el-row>
         </div>
+        <el-empty v-if="listComment.length == 0" :image-size="200" description="暂无评论~"></el-empty>
       </div>
       <div v-if="pages > commentSearch.pageNum && listComment.length > 0" style="width: 100%;text-align: center;margin-bottom: 30px;">
         <el-button type="success" size="small" @click="moreComment">查看更多</el-button>
@@ -202,16 +204,17 @@ export default {
       },
       checkHeightOffset: 9,
       drawer: false,
-      commentVo: {
-        articleId: 0,
-        content: '',
-        userId: null
-      },
+
       replyCommentVo: {
         articleId: 0,
         content: '',
         userId: null,
         parentId: null
+      },
+      commentVo: {
+        articleId: 0,
+        content: '',
+        userId: null
       },
       listComment: [],
       commentSearch: {
