@@ -16,7 +16,7 @@
           <!-- 推荐文章 -->
           <el-card class="box-card box-card1" shadow="always">
             <span style="font-weight: 600;position: relative;"><i class="iconfont icon-xiezuoyeshu"></i>&nbsp;推荐文章</span>
-            <div v-for="o in recommendArticleList " :key="o.id"
+            <div v-for="(o) in recommendArticleList " :key="o.id"
               style=" height: 30px;margin-top: 15px;line-height: 30px;padding:0 10px;border-radius: 10px;border: 1px solid #ebeef5;">
               <router-link :to="{ name: 'articleDetails', params: {id:o.id } }" style="text-decoration: none;">
                 <el-popover placement="right-start" :title="o.articleTitle" width="300" trigger="hover" :content="o.des" :open-delay="200">
@@ -28,7 +28,6 @@
 
             <el-empty v-if="recommendArticleList.length == 0" style="position: relative;top: -30px;" description="博主暂无推荐"></el-empty>
           </el-card>
-          <!-- todo 赞赏暂时关闭 -->
           <el-card class="box-card box-card3 item" shadow="always">
             <span style="font-weight: 900;"><i class="iconfont icon-pinglun"></i>&nbsp;最新留言</span>
             <div v-for="o in recentCommentList" :key="o.id" style="margin-top: 15px;">
@@ -309,7 +308,6 @@ export default {
 }
 
 .box-card1 {
-  height: 300px;
   background-size: 300% 300%;
   background-image: linear-gradient(90deg, #8bc0d6, #61bae4, #1490d8);
   animation: colorChange 5s linear infinite;
