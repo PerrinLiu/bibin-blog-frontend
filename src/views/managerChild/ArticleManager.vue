@@ -35,7 +35,7 @@
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small" style="margin-right: 10px">编辑</el-button>
-            <el-popconfirm @confirm="deleteArticle(scope.row)" title="确定删除改文章?" onfirm-button-type="success">
+            <el-popconfirm @confirm="deleteArticle(scope.row)" title="确定删除该文章?" onfirm-button-type="success">
               <el-button slot="reference" type="text" size="small">删除</el-button>
             </el-popconfirm>
           </template>

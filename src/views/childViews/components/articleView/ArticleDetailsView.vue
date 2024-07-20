@@ -61,7 +61,7 @@
     </div>
 
     <!-- 评论 -->
-    <el-drawer title="评论" :visible.sync="drawer" size="500px" custom-class="item" @close="resetComment">
+    <el-drawer title="评论" :visible.sync="drawer" :size="isPhone ? '300px' : '500px'" custom-class="item" @close="resetComment">
       <div class="comment-head">
         <el-row :gutter="20">
           <el-col :span="4">

@@ -18,7 +18,7 @@
             :style="isPhone ? 'width: 300px;' : 'width:30%;'"></el-input>
         </div>
         <el-row style="margin-top: 10px;width: 100%;">
-          <el-col :span="8" v-for="(o) in imgCounts" :key="o.userId" style="margin-top: 10px;">
+          <el-col :span="isPhone ? 24 : 8" v-for="(o) in imgCounts" :key="o.userId" style="margin-top: 10px;">
             <el-card class="item" :body-style="{ padding: '0px' }" style="margin: 20px">
               <el-image lazy style="height: 170px;width:100%" :src="o.userImg" class="image"></el-image>
               <div style="padding: 14px;">

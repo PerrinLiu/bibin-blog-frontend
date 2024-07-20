@@ -23,7 +23,7 @@
             </el-menu-item>
             <el-menu-item index="/manager/messageManager">
               <i class="el-icon-document"></i>
-              <span slot="title">评论</span>
+              <span slot="title">留言</span>
             </el-menu-item>
           </el-menu>
         </el-aside>

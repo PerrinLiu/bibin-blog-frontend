@@ -179,6 +179,14 @@ export default Vue.extend({
     },
     //发布文章
     insertText() {
+      if (this.articleDto.title == "") {
+        this.$message.warning("请输入文章标题");
+        return;
+      }
+      if (this.articleDto.groupIds.length == 0) {
+        this.$message.warning("请选择文章分类");
+        return;
+      }
       this.dialogVisible = true;
       const editor = this.editor; // 获取 editor 实例
       if (editor == null) {
@@ -189,6 +197,14 @@ export default Vue.extend({
       this.extractImages();
     },
     async add() {
+      if (this.articleDto.title == "") {
+        this.$message.warning("请输入文章标题");
+        return;
+      }
+      if (this.articleDto.groupIds.length == 0) {
+        this.$message.warning("请选择文章分类");
+        return;
+      }
       const res = await articleApi.addArticle(this.articleDto);
       const data_1 = this.ifSuccess(res);
       if (data_1 != null) {

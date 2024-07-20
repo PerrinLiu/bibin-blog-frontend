@@ -1,6 +1,6 @@
 <template>
   <div class="danmu-container">
-    <div style="height: 100vh;position: relative;z-index: 100;display: flex;justify-content: center;top: 35vh;">
+    <div style="height: 100vh;position: relative;z-index: 100;display: flex;justify-content: center;margin-top:  35vh;">
       <div style="position: relative;top: -15px;">
         <el-input placeholder="快来留言！！！" v-model="msgVo.text" clearable style="width: 300px;" @focus="showBtn = true">
         </el-input>&nbsp;&nbsp;&nbsp;

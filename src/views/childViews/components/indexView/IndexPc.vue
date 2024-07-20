@@ -86,14 +86,14 @@
                 <el-image lazy width="100%" height="100%" :src="item.cover" alt=""></el-image>
               </div>
               <router-link style="text-decoration: none" :to="{ name: 'articleDetails', params: {id:item.id } }">
-                <div class="article-content" style="text-shadow:0 0 10px red;">
-                  <div style="height: 3cap;">
+                <div class="article-content" style="margin-left: 15px;width: 90%;min-width: 0px">
+                  <div style="height: 3cap;text-shadow:0 0 10px white;">
                     <h1 style="color: #030303;">{{ item.articleTitle }}</h1>
                   </div>
-                  <div style="height: 90px;">
-                    <p class="article-text">{{item.des}}</p>
+                  <div style="height: 90px;text-shadow:2px 1px 0px white;">
+                    <p class="article-text" style="top: -5px;">{{item.des}}</p>
                   </div>
-                  <div style="height: 40px;line-height: 40px;">
+                  <div style="height: 40px;line-height: 60px;">
                     <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">
                       {{o}}
                     </el-tag>
@@ -101,10 +101,9 @@
                       无标签
                     </el-tag>
                   </div>
-                  <div style="height: 60px;line-height: 60px;">
+                  <div style="height: 60px;line-height: 60px;font-size: 12px;">
                     <span>
-                      <i class="iconfont icon-ico_yueduliang"
-                        style="font-size: 24px;color: green">&nbsp;</i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
+                      <i class="iconfont icon-ico_yueduliang" style="font-size: 24px;color: green"></i>{{item.readSum}}&nbsp;点击&nbsp;&nbsp;
                       <i class="iconfont icon-dianzan-yidianzan" style="font-size: 24px;"></i>&nbsp;{{item.likeSum}}&nbsp;点赞&nbsp;&nbsp;
                       <i class="iconfont icon-pinglun" style="font-size: 24px;"></i>&nbsp;{{ item.commentSum }}&nbsp;评论
                     </span>
@@ -141,7 +140,7 @@
                     <p class="article-title" style="font-size: 25px;position: relative;top: -10px;width: 100%;">{{ item.articleTitle }}</p>
                   </div>
                   <div style="height: 90px;">
-                    <p class="article-text" style="width: 100%;">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
+                    <p class="article-text" style="width: 100%;color: #545454">{{item.des == '' ? "作者很懒，什么也没留下...": item.des }}</p>
                   </div>
                   <div style="height: 40px;line-height: 40px;">
                     <el-tag style="margin-right:16px" v-for="(o,index) in item.articleGroupId" :key="index">{{o}}</el-tag>

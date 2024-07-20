@@ -46,7 +46,7 @@ body {
 }
 
 .appBtn {
-  bottom: 15px;
+  bottom: 45px;
   right: 1%;
   z-index: 10;
   position: fixed;

@@ -26,16 +26,19 @@
             </span>
           </el-menu-item>
           <!-- 导航栏 -->
-          <el-menu-item id="el-menu-item" index="/" @click="drawer = false"><i class="el-icon-school"></i>首页
+          <el-menu-item id="el-menu-item" index="/" @click="drawer = false"><i class="iconfont icon-a-appround36"></i>首页
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/article" @click="drawer = false"><i class="el-icon-notebook-1"></i>文章
+          <el-menu-item id="el-menu-item" index="/love" @click="drawer = false"><i class="iconfont icon-aiqing"></i>记恋
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/diary" @click="drawer = false"><i class="el-icon-edit"></i>碎片
+          <el-menu-item id="el-menu-item" index="/article" @click="drawer = false"><i class="iconfont icon-shuji"></i>文章
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
-          <el-menu-item id="el-menu-item" index="/photo" @click="drawer = false"><i class="el-icon-picture-outline"></i>照片墙
+          <el-menu-item id="el-menu-item" index="/diary" @click="drawer = false"><i class="iconfont icon-a-appround11"></i>碎片
+            <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
+          </el-menu-item>
+          <el-menu-item id="el-menu-item" index="/photo" @click="drawer = false"><i class="iconfont icon-a-appround32"></i>照片墙
             <div class="el-menu-item-line" style="position: relative; top: -15px;"></div>
           </el-menu-item>
           <el-menu-item id="el-menu-item" index="/message" @click="drawer = false"><i class="iconfont icon-pinglun"></i>留言
@@ -137,8 +140,9 @@
 
       <el-footer style="height: 40px;">
         <span v-if="currentPath !== '/login'">
-          <div id="footer" class="item">
-            <div style="position: absolute;width: 100vw;left: 25vw;text-align: center;">
+          <div id="footer" class="item" style="display: flex;justify-content: center;"
+            :style="isMobile ? 'font-size: 10px;left:-30vw' : 'font-size: 14px;'">
+            <div>
               <a href="https://beian.miit.gov.cn/" style="text-decoration: none;">粤ICP备2024274461号-1</a>
               Copyright © {{ new Date().getFullYear() }} LLPY
             </div>

@@ -15,11 +15,11 @@
       <div style="margin-top: 20px;width: 1024px;" class="content-before">
         <div class="comment-head">
           <el-row :gutter="20">
-            <el-col :span="2">
+            <el-col :span="isPhone ? 5: 2">
               <img v-if="userInfo =='userInfo'" class="comment-userImg" src="@/assets/images/defaul.jpg">
               <img v-else class="comment-userImg" v-lazy="userInfo.userImg">
             </el-col>
-            <el-col :span="20">
+            <el-col :span="isPhone ? 18: 20">
               <el-input type="textarea" :rows="6" resize="none" v-model="commentVo.content" placeholder="发布你的想法~" style="width: 100%;">
               </el-input>
               <div style="text-align: right;margin-top: 15px;">
@@ -32,20 +32,23 @@
           <div v-for="(item,index) in listComment" :key="index" @mouseenter="enter(item)" @mouseleave="leave(item)"
             style="margin-top: 25px;">
             <el-row :gutter="20">
-              <el-col :span="2">
+              <el-col :span="isPhone ? 5: 2">
                 <img v-lazy="item.userImg" class="comment-userImg-two">
               </el-col>
-              <el-col :span="20">
+              <el-col :span="isPhone ? 18: 20">
                 <div class="comment-body-top">
                   <div class="comment-body-name">
                     <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ item.nickname }}</p>
                     <p class="comment-body-name-p" style="width: 150px;">{{ item.createTime }}</p>
                   </div>
+                  <br v-if="isPhone" />
                   <div style="position: absolute;right: 0px;font-size: 14px;line-height: 39px;">
-                    <el-button v-if="item.userId == userInfo.userId && item.showDelete" @click="deleteComment(item.id)"
-                      icon="el-icon-delete" type="text" style="color: red;padding: 13px 0x;font-size: 12px">
-                      删除
-                    </el-button>
+                    <el-popconfirm @confirm="deleteComment(item.id)" title="确定删除该评论?" onfirm-button-type="success">
+                      <el-button slot="reference" v-show="item.userId == userInfo.userId && item.showDelete" icon="el-icon-delete"
+                        type="text" style="color: red;padding: 13px 0x;font-size: 12px">删除
+                      </el-button>
+                    </el-popconfirm>
+
                     <el-button icon="el-icon-chat-line-square" @click="changeReply(item)" type="text"
                       style="color: green;padding: 13px 0px;font-size: 12px">
                       {{item.showReply ? '收起' : '回复'}}
@@ -60,7 +63,7 @@
                 </div>
 
                 <div class="comment-body-content">
-                  <div>
+                  <div :style="isPhone ? 'margin-top: 20px;' : ''">
                     {{ item.content }}
                   </div>
                   <div v-show="item.showReply" style="margin-top: 20px;">
@@ -75,20 +78,21 @@
                   <div v-for="(sub,index) in item.subComment" :key="index" @mouseenter="enter(sub)" @mouseleave="leave(sub)"
                     style="margin-top: 15px;">
                     <el-row :gutter="20">
-                      <el-col :span="2">
+                      <el-col :span="isPhone ? 5: 2">
                         <img class="comment-userImg-two" v-lazy="sub.userImg">
                       </el-col>
-                      <el-col :span="20">
+                      <el-col :span="isPhone ? 18: 20">
                         <div class="comment-body-top">
                           <div class="comment-body-name">
-                            <p class="comment-body-name-p" style="max-width: 80px;margin-right: 10px;">{{ sub.nickname }}</p>
+                            <p class="comment-body-name-p" :style="isPhone ? 'max-width:40px' : 'max-width:80px'">{{ sub.nickname }}</p>
                             <el-tag size="mini" type="info" style="position: relative;top: -15px;">回复</el-tag>
-                            <p class="comment-body-name-p" style="max-width: 80px;margin-left: 10px;">{{ sub.replyNickname }} </p>
+                            <p class="comment-body-name-p" style="margin-left: 5px;" :style="isPhone ? 'max-width:35px' : 'max-width:80px'">
+                              {{ sub.replyNickname }} </p>
                           </div>
                           <div style="position: absolute;right: 0px;font-size: 14px;top:14px">
                             &nbsp;{{sub.likeSum == 0 ? '' : sub.likeSum}}
-                            <i @click="likeSubComment(sub.id,item.id)" class="iconfont icon-like" style="font-size: 14px;cursor: pointer;"
-                              :style="sub.liked ? 'color: red;' : 'color: #333'">
+                            <i @click="likeSubComment(sub.id,item.id)" class="iconfont" style="font-size: 14px;cursor: pointer;"
+                              :class="sub.liked ? 'icon-dianzan-yidianzan' : 'icon-dianzan-weidianzan'">
                             </i>
                           </div>
                         </div>
@@ -104,9 +108,13 @@
                                 {{ sub.createTime }}
                               </p>
                             </el-col>
-                            <el-col :span="12" style="line-height: 25px;">
-                              <el-button v-if="sub.userId == userInfo.userId && sub.showDelete" @click="deleteComment(sub.id)"
-                                icon="el-icon-delete" type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
+                            <br v-if="isPhone" />
+                            <el-col :span="24" style="line-height: 25px;">
+                              <el-popconfirm @confirm="deleteComment(sub.id)" title="确定删除该评论?" onfirm-button-type="success">
+                                <el-button slot="reference" v-show="sub.userId == userInfo.userId && sub.showDelete" icon="el-icon-delete"
+                                  type="text" style="color: red;padding: 5px 0px;font-size: 12px">删除</el-button>
+                              </el-popconfirm>
+
                               <el-button v-if="sub.showDelete" @click="changeReply(sub)" icon="el-icon-chat-line-square" type="text"
                                 style="color: green;padding: 0px 0px;font-size: 12px">{{sub.showReply ? '收起' : '回复'}}</el-button>
                             </el-col>
@@ -183,6 +191,9 @@ export default {
         return 'userInfo'
       }
       return this.$store.getters.user
+    },
+    isPhone() {
+      return this.$store.getters.isPhone
     }
   },
   mounted() {
